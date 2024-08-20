@@ -18,5 +18,5 @@ Route::get('/project/categories', function () {
     return view('pages.project.categoriesProject');
 });
 Route::get('/project/status', function () {
-    return view('pages.project.project');
+    return view('pages.project.statusProject');
 });
