@@ -31,7 +31,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="#">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
@@ -60,10 +60,10 @@
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="#">Project</a>
-                        <a class="collapse-item" href="#">Add New</a>
-                        <a class="collapse-item" href="#">Categories</a>
-                        <a class="collapse-item" href="#">Project Status</a>
+                        <a class="collapse-item" href="/project">Project</a>
+                        <a class="collapse-item" href="/project/add">Add New</a>
+                        <a class="collapse-item" href="/project/categories">Categories</a>
+                        <a class="collapse-item" href="/project/status">Project Status</a>
                     </div>
                 </div>
             </li>
