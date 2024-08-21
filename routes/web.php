@@ -9,9 +9,9 @@ Route::get('/', function () {
 Route::get('/dashboard', function () {
     return view('pages.dashboard');
 });
-Route::get('/project', function () {
-    return view('pages.project.project');
-});
+// Route::get('/project', function () {
+//     return view('pages.project.project');
+// });
 Route::get('/project/add', function () {
     return view('pages.project.addProject');
 })->name('project.add');
@@ -22,8 +22,4 @@ Route::get('/project/status', function () {
     return view('pages.project.statusProject');
 });
 
-<<<<<<< HEAD
-// Route::get('/project', ProjectController::class, 'index');
-=======
 Route::get('/project', [ProjectController::class, 'index']);
->>>>>>> b7103ef9b4dc450e4ec15c30e9cffd5681ff7c0b

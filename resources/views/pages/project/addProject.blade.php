@@ -320,7 +320,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @forelse ($categories as $category)
                                 <tr>
                                     <td>ici</td>
                                     <td>1</td>
