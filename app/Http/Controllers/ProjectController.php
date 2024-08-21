@@ -10,17 +10,17 @@ use Illuminate\Http\RedirectResponse;
 
 class ProjectController extends Controller
 {
-    public function index()
+    public function index(): View
     {
         //get all products
-        $products = Project::latest()->paginate(10);
+        $project = Project::latest()->paginate(10);
 
         //render view with products
-        return view('pages.project', compact('project'));
+        return view('pages.project.project', compact('project'));
     }
 
     public function create(): View
     {
-        return view('pages.addProject');
+        return view('pages.project.addProject');
     }
 }
