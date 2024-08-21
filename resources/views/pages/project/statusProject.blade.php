@@ -323,40 +323,10 @@
                                             </td>
                                             <td class='d-flex'>
                                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                                    data-bs-target="#editModal">
-                                                    Edit Data
-                                                </button>
-                                                <div class="modal fade" id="editModal" tabindex="-1"
-                                                    aria-labelledby="editModalLabel" aria-hidden="true">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <h5 class="modal-title" id="editModalLabel">Edit Data
-                                                                </h5>
-                                                                <button type="button" class="btn-close"
-                                                                    data-bs-dismiss="modal"
-                                                                    aria-label="Close"></button>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <form
-                                                                    action="{{ route('project_status.update', $item->id) }}"
-                                                                    method="POST">
-                                                                    @csrf
-                                                                    @method('PUT')
-                                                                    <div class="mb-3">
-                                                                        <label for="field_name"
-                                                                            class="form-label">Field Name</label>
-                                                                        <input type="text" class="form-control"
-                                                                            id="name" name="name"
-                                                                            value="{{ old('name', $item->name) }}">
-                                                                    </div>
-                                                                    <button type="submit"
-                                                                        class="btn btn-success">Update</button>
-                                                                </form>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
+                                                data-bs-target="#editModal{{ $item->id }}">
+                                                Edit Data
+                                            </button>
+                                               
                                                 <form action="{{ route('project_status.destroy', $item->id) }}"
                                                     method="POST">
                                                     @csrf
@@ -366,6 +336,37 @@
 
                                             </td>
                                         </tr>
+                                        <div class="modal fade" id="editModal{{ $item->id }}" tabindex="-1"
+                                            aria-labelledby="editModalLabel{{ $item->id }}" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="editModalLabel">Edit Data
+                                                    </h5>
+                                                    <button type="button" class="btn-close"
+                                                        data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form
+                                                        action="{{ route('project_status.update', $item->id) }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <div class="mb-3">
+                                                            <label for="field_name"
+                                                                class="form-label">Field Name</label>
+                                                            <input type="text" class="form-control"
+                                                                id="name" name="name"
+                                                                value="{{ old('name', $item->name) }}">
+                                                        </div>
+                                                        <button type="submit"
+                                                            class="btn btn-success">Update</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     @endforeach
 
                                 </tbody>
