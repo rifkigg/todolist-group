@@ -22,4 +22,5 @@ Route::get('/project/status', function () {
     return view('pages.project.statusProject');
 });
 
-Route::get('/project', [ProjectController::class, 'index']);
+Route::get('/project', [ProjectController::class, 'index'])->name('project.index');
+Route::post('/project', [ProjectController::class, 'store'])->name('project.store');
