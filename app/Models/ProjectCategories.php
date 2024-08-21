@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class project_status extends Model
+class ProjectCategories extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name',
+        'name', 'slug',
     ];
 
     public function projects()

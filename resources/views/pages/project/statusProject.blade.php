@@ -11,6 +11,8 @@
 
     <title>Dashboard</title>
 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
     <!-- Custom fonts for this template-->
     <link href="{{ asset('/assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
     <link
@@ -35,7 +37,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+                <div class="sidebar-brand-text mx-3">TODO-LIST <sup>GROUP</sup></div>
             </a>
 
             <!-- Divider -->
@@ -288,57 +290,148 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    Status project
+                    <h1 class="h3 mb-4 text-gray-800">Project Status</h1>
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Add New Status</h6>
+                        </div>
+                        <div class="card-body">
+                            <form action="{{ route('project_status.store') }}" method="POST"
+                                enctype="multipart/form-data">
+                                @csrf
+                                <div class="form-group">
+                                    <label for="statusName">Name</label>
+                                    <input type="text" class="form-control" id="name" name="name"
+                                        value="{{ old('name') }}" placeholder="Enter status name" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Add New Status</button>
+                            </form>
+                            <hr>
+                            <h6 class="m-0 font-weight-bold text-primary">Current Status</h6>
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($status as $item)
+                                        <tr>
+                                            <td>
+                                                {{ $item->name }}
+                                            </td>
+                                            <td class='d-flex'>
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                data-bs-target="#editModal{{ $item->id }}">
+                                                Edit Data
+                                            </button>
+                                               
+                                                <form action="{{ route('project_status.destroy', $item->id) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger">Hapus</button>
+                                                </form>
+
+                                            </td>
+                                        </tr>
+                                        <div class="modal fade" id="editModal{{ $item->id }}" tabindex="-1"
+                                            aria-labelledby="editModalLabel{{ $item->id }}" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="editModalLabel">Edit Data
+                                                    </h5>
+                                                    <button type="button" class="btn-close"
+                                                        data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form
+                                                        action="{{ route('project_status.update', $item->id) }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <div class="mb-3">
+                                                            <label for="field_name"
+                                                                class="form-label">Field Name</label>
+                                                            <input type="text" class="form-control"
+                                                                id="name" name="name"
+                                                                value="{{ old('name', $item->name) }}">
+                                                        </div>
+                                                        <button type="submit"
+                                                            class="btn btn-success">Update</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    @endforeach
+
+                                </tbody>
+                            </table>
+                            <p class="mt-3"><strong>Note:</strong> These status will appear on ticket, deleting a
+                                status can be effect on project/ticket.</p>
+                        </div>
+                    </div>
                 </div>
-            <!-- End of Main Content -->
+
+
+                <!-- End of Main Content -->
+
+            </div>
+            <!-- End of Content Wrapper -->
 
         </div>
-        <!-- End of Content Wrapper -->
+        <!-- End of Page Wrapper -->
 
-    </div>
-    <!-- End of Page Wrapper -->
+        <!-- Scroll to Top Button-->
+        <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fas fa-angle-up"></i>
+        </a>
 
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+        <!-- Logout Modal-->
+        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <a class="btn btn-primary" href="login.html">Logout</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="{{ asset('/assets/vendor/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="{{ asset('/assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+        <!-- Bootstrap core JavaScript-->
+        <script src="{{ asset('/assets/vendor/jquery/jquery.min.js') }}"></script>
+        <script src="{{ asset('/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="{{ asset('/assets/js/sb-admin-2.min.js') }}"></script>
+        <!-- Core plugin JavaScript-->
+        <script src="{{ asset('/assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
-    <!-- Page level plugins -->
-    <script src="{{ asset('/assets/vendor/chart.js/Chart.min.js') }}"></script>
+        <!-- Custom scripts for all pages-->
+        <script src="{{ asset('/assets/js/sb-admin-2.min.js') }}"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="{{ asset('/assets/js/demo/chart-area-demo.js') }}"></script>
-    <script src="{{ asset('/assets/js/demo/chart-pie-demo.js') }}"></script>
+        <!-- Page level plugins -->
+        <script src="{{ asset('/assets/vendor/chart.js/Chart.min.js') }}"></script>
+
+        <!-- Page level custom scripts -->
+        <script src="{{ asset('/assets/js/demo/chart-area-demo.js') }}"></script>
+        <script src="{{ asset('/assets/js/demo/chart-pie-demo.js') }}"></script>
+        <script>
+            CKEDITOR.replace('');
+        </script>
 
 </body>
 
