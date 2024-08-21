@@ -288,7 +288,96 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    add project
+                    
+                    <h1>Project Categories</h1>
+    
+                    <div class="col_container">
+                        <!-- form top start -->
+                        <div class="form_top">
+                            <p>Add New Category</p>
+                            <div class="name">
+                                <label for="name">Name</label>
+                                <input type="text" name="name" value size="40">
+                            </div>
+                            <div class="slug">
+                                <label for="slug">Slug</label>
+                                <input type="text" name="slug" value size="40">
+                            </div>
+                            <p>
+                                <input type="submit" name="submit" value="Add New Category">
+                            </p>
+                        </div>
+                        <!-- form top end -->
+
+                        <!-- form bottom start -->
+                    <div class="form-bottom">
+                        <table id="example">
+                            <thead>
+                                <tr>
+                                    <th>nama</th>
+                                    <th>no</th>
+                                    <th>email</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($categories as $category)
+                                <tr>
+                                    <td>ici</td>
+                                    <td>1</td>
+                                    <td>ici@gmail.com</td>
+                                </tr>
+                                <tr>
+                                    <td>ici</td>
+                                    <td>1</td>
+                                    <td>ici@gmail.com</td>
+                                </tr>
+                                <tr>
+                                    <td>ici</td>
+                                    <td>1</td>
+                                    <td>ici@gmail.com</td>
+                                </tr>
+                                <tr>
+                                    <td>ici</td>
+                                    <td>1</td>
+                                    <td>ici@gmail.com</td>
+                                    </tr>
+                                <tr>
+                                    <td>ici</td>
+                                    <td>1</td>
+                                    <td>ici@gmail.com</td>
+                                </tr>
+                                <tr>
+                                    <td>ici</td>
+                                    <td>1</td>
+                                    <td>ici@gmail.com</td>
+                                </tr>
+                                <tr>
+                                    <td>ici</td>
+                                    <td>1</td>
+                                    <td>ici@gmail.com</td>
+                                </tr>
+                                <tr>
+                                    <td>ici</td>
+                                    <td>1</td>
+                                    <td>ici@gmail.com</td>
+                                </tr>
+                                <tr>
+                                    <td>ici</td>
+                                    <td>1</td>
+                                    <td>ici@gmail.com</td>
+                                </tr>
+                            </tbody>
+                            </table>
+
+                        <p>
+                            <strong>Note:</strong>
+                            <br>
+                            Deleting a category does not delete the projects in that category.
+                        </p>
+                    </div>
+                    <!-- form bottom end -->
+
+                    </div>
                 </div>
             <!-- End of Main Content -->
 
