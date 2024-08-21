@@ -1,0 +1,7 @@
+table td, th {
+    text-align: left !important;
+}
+
+.icon-action:hover{
+    color: #007bff;
+}

@@ -53,7 +53,7 @@
             <hr class="sidebar-divider">
 
             <!-- Nav Item - Pages Collapse Menu -->
-            <li class="nav-item active">
+            <li class="nav-item ">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
                     aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
@@ -61,7 +61,7 @@
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item active" href="/project">Project</a>
+                        <a class="collapse-item " href="/project">Project</a>
                         <a class="collapse-item" href="/project/add">Add New</a>
                         <a class="collapse-item" href="/project/categories">Categories</a>
                         <a class="collapse-item" href="/project/status">Project Status</a>
@@ -134,142 +134,22 @@
 
                 <!-- Begin Page Content -->
                 <div class="container text-dark">
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                    </div>
-
                     <!-- Content Row -->
                     <div class="row">
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Total Projects</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $total_project }}
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fa-solid fa-list-check fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Boards</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">10</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fa-solid fa-display fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
-                                            </div>
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Pending Requests Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                People Involved</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
-                                        </div>
-                                        <div class="col-auto">
-                                            {{-- <i class="fas fa-comments fa-2x text-gray-300"></i> --}}
-                                            <i class="fa-solid fa-user fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <button onclick="history.back()" class="btn btn-primary w-auto"><i class="fa-solid fa-left-long"></i> Back</button>
+                        <h3>Project Name: </h3>
+                        <p>{{ $project->name }}</p>
+                        <h4>Project Detail: </h4>
+                        <p>{{ $project->project_detail }}</p>
+                        <h4>Project Category: </h4>
+                        <p>{{ $project->category_id }}</p>
+                        <h4>Project Status: </h4>
+                        <p>{{ $project->status_id }}</p>
+                        <h4>Project Due Date: </h4>
+                        <p>{{ $project->live_date }} </p>
+                        <h4>Project Created: </h4>
+                        <p>{{ $project->created_at }}</p>
                     </div>
-                    <form action="{{ route('project.add') }}" method="GET">
-                        <button type="submit" class="btn btn-primary d-flex gap-2 align-items-center"><i
-                                class="fa-solid fa-circle-plus fa-lg"></i> Add New</button>
-                    </form>
-                    <table id="example">
-                        <thead>
-                            <tr>
-                                <th>Project Name</th>
-                                <th>Category</th>
-                                <th>Status</th>
-                                <th>Live Date</th>
-                                <th>Created</th>
-                                {{-- <th>Project Detail</th> --}}
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($project as $item)
-                                <tr>
-                                    <td>{{ $item->name }}</td>
-                                    <td>{{ $item->category_id }}</td>
-                                    <td>{{ $item->status_id }}</td>
-                                    <td>{{ $item->live_date }}</td>
-                                    <td>{{ $item->created_at }}</td>
-                                    {{-- <td>{{ $item->project_detail }}</td> --}}
-                                    <td>
-                                        <form action="{{ route('project.destroy', $item->id) }}" method="POST"
-                                            onsubmit="return confirm('Are you sure you want to delete this item?');"  class="d-flex">
-
-                                            <a href="{{ route('project.show', $item->id) }}" class="btn"><i
-                                                    class="icon-action fa-solid fa-eye"></i></a>
-                                            <a href="#" class="btn"><i
-                                                    class="icon-action fa-solid fa-copy"></i></a>
-                                            <a href="#" class="btn"><i
-                                                    class="icon-action fa-solid fa-pencil"></i></a>
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn"><i
-                                                    class="icon-action fa-solid fa-trash-can"></i></button>
-                                        </form>
-                                    </td>
-                                </tr>
-
-                            @empty
-                                <div class="alert alert-danger">
-                                    Data Project belum Tersedia.
-                                </div>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
                 <!-- End of Main Content -->
 
             </div>

@@ -288,57 +288,142 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    add project
+                    <div class="wp-content">
+                        <form action="{{ route('project.store') }}" method="POST" enctype="multipart/form-data">
+                        <h1>Create A New Project</h1>
+                        <div class="wrapper">
+                            <div class="">
+                                <div class="form-input">
+                                    <h2 class="title">Project Name</h2>
+                                    <div class="input">
+                                        <!-- <span class="dashicons dashicons-image-filter"></span> -->
+                                        <input type="text" name="project_name" size="30" value=""
+                                            spellcheck="true" autocomplete="off">
+                                    </div>
+                                    <p>The name of the project - where you can define your project.</p>
+                                </div>
+                            </div>
+
+                            <div class="">
+                                <div class="form-select">
+                                    <h2 class="title">Project Category</h2>
+                                    <div class="select">
+                                        <!-- <span class="dashicons dashicons-schedule"></span> -->
+                                        <select id="" data-custom="" name="project_category">
+                                            <option value=""></option>
+                                            <option value=""></option>
+                                            <option value=""></option>
+                                            <option value=""></option>
+                                            <option value=""></option>
+                                        </select>
+                                    </div>
+                                    <p>The type of project you are creating.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="wrapper">
+                            <div class="">
+                                <div class="form-select">
+                                    <h2 class="title">Project Status</h2>
+                                    <div class="select">
+                                        <!-- <span class="dashicons dashicons-nametag"></span> -->
+                                        <select id="" data-custom="" name="project_status">
+                                            <option></option>
+                                            <option></option>
+                                            <option></option>
+                                            <option></option>
+                                        </select>
+                                    </div>
+                                    <p>The project status - current status of project.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="wrapper">
+                            <div class="textarea">
+                                <h2>Project Details</h2>
+                                <div>
+                                    <div>
+                                        <input id="description" type="textarea" name="description">
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- start --}}
+                            <div class="date">
+                                <h2 class="title">Project Will Go Live</h2>
+                                <div class="input">
+                                    {{-- <span class="dashicons dashicons-calendar-alt"></span> --}}
+                                    <input type="date">
+                                </div>
+                            </div>
+                            {{-- end --}}
+
+                        </div>
+
+                        <div class="submit">
+                            <div>
+                                <input type="submit" value="Create">
+                            </div>
+                        </div>
+                        </form>
+                    </div>
+                    <!-- End of Main Content -->
+
                 </div>
-            <!-- End of Main Content -->
+                <!-- End of Content Wrapper -->
 
-        </div>
-        <!-- End of Content Wrapper -->
+            </div>
+            <!-- End of Page Wrapper -->
 
-    </div>
-    <!-- End of Page Wrapper -->
+            <!-- Scroll to Top Button-->
+            <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fas fa-angle-up"></i>
+            </a>
 
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+            <!-- Logout Modal-->
+            <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">Select "Logout" below if you are ready to end your current session.
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                            <a class="btn btn-primary" href="login.html">Logout</a>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="{{ asset('/assets/vendor/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+            <script src="https://cdn.ckeditor.com/4.13.1/standard/ckeditor.js"></script>
+            <script>
+                CKEDITOR.replace('description');
+            </script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="{{ asset('/assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+            <!-- Bootstrap core JavaScript-->
+            <script src="{{ asset('/assets/vendor/jquery/jquery.min.js') }}"></script>
+            <script src="{{ asset('/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="{{ asset('/assets/js/sb-admin-2.min.js') }}"></script>
+            <!-- Core plugin JavaScript-->
+            <script src="{{ asset('/assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
-    <!-- Page level plugins -->
-    <script src="{{ asset('/assets/vendor/chart.js/Chart.min.js') }}"></script>
+            <!-- Custom scripts for all pages-->
+            <script src="{{ asset('/assets/js/sb-admin-2.min.js') }}"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="{{ asset('/assets/js/demo/chart-area-demo.js') }}"></script>
-    <script src="{{ asset('/assets/js/demo/chart-pie-demo.js') }}"></script>
+            <!-- Page level plugins -->
+            <script src="{{ asset('/assets/vendor/chart.js/Chart.min.js') }}"></script>
+
+            <!-- Page level custom scripts -->
+            <script src="{{ asset('/assets/js/demo/chart-area-demo.js') }}"></script>
+            <script src="{{ asset('/assets/js/demo/chart-pie-demo.js') }}"></script>
 
 </body>
 
