@@ -48,4 +48,27 @@ class ProjectCategoriesController extends Controller
         $category = ProjectCategories::findOrFail($id);
         return view('pages.project.editCategoriesProject', compact('category')); 
     }
+
+    public function update(Request $request, $id): RedirectResponse
+    {
+        //validate form
+        $request->validate([
+            'name' => 'required',
+            'slug' => 'required'
+        ]);
+
+        //get product by ID
+        $category = ProjectCategories::findOrFail($id);
+
+        //update product without image
+        $category->update([
+            'name' => $request->name,
+            'slug' => $request->slug,
+        ]);
+
+        //redirect to index
+        return redirect()
+            ->route('projectcategories.index')
+            ->with(['success' => 'Data Berhasil Diubah!']);
+    }
 }
