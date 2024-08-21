@@ -15,8 +15,9 @@ class ProjectController extends Controller
         //get all products
         $project = Project::latest()->paginate(10);
 
+        $total_project = Project::count();
         //render view with products
-        return view('pages.project.project', compact('project'));
+        return view('pages.project.project', compact('project', 'total_project'));
     }
 
     public function create(): View
