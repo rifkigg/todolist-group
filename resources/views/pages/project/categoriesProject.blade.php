@@ -317,7 +317,7 @@
                                     <td>{{ $category->name }}</td>
                                     <td>{{ $category->slug }}</td>
                                     <td>
-                                        <a href="" class="btn btn-warning">Edit</a>
+                                        <a href="{{ route('projectcategories.show', $category->id) }}" class="btn btn-warning">Edit</a>
                                         <form action="{{ route('projectcategories.destroy', $category->id) }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')

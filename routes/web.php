@@ -38,3 +38,4 @@ Route::delete('/project/{id}', [ProjectController::class, 'destroy'])->name('pro
 Route::get('/project/categories', [ProjectCategoriesController::class, 'index'])->name('projectcategories.index');
 Route::post('/project/categories', [ProjectCategoriesController::class, 'store'])->name('projectcategories.store');
 Route::delete('/project/categories/{id}', [ProjectCategoriesController::class, 'destroy'])->name('projectcategories.destroy');
+Route::get('/project/categories/{id}', [ProjectCategoriesController::class, 'show'])->name('projectcategories.show');
