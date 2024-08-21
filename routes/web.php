@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\project_categories;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
