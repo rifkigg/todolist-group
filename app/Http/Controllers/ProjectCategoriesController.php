@@ -33,4 +33,16 @@ class ProjectCategoriesController extends Controller
          //redirect to index
          return redirect()->route('projectcategories.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
+
+    public function destroy($id) 
+    {
+        // Temukan kategori berdasarkan ID
+        $category = ProjectCategories::findOrFail($id); // Perbaiki pemanggilan model
+        
+        // Hapus kategori
+        $category->delete();
+    
+        // Redirect kembali dengan pesan sukses
+        return redirect()->route('projectcategories.index')->with('success', 'Kategori berhasil dihapus.');
+    }
 }

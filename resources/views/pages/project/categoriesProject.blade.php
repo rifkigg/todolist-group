@@ -302,8 +302,8 @@
                         <button type="submit" class="btn btn-primary">Tambah</button>
                     </form>
 
-                    <!-- Tabel untuk Menampilkan Daftar -->
-                    <table class="table mt-4">
+                    <!-- Tabel untuk Menampilkan Daftar -->  
+                    <table class="table table-bordered mt-4">
                         <thead>
                             <tr>
                                 <th>Nama</th>
@@ -318,7 +318,7 @@
                                     <td>{{ $category->slug }}</td>
                                     <td>
                                         <a href="" class="btn btn-warning">Edit</a>
-                                        <form action="" method="POST" style="display:inline;">
+                                        <form action="{{ route('projectcategories.destroy', $category->id) }}" method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-danger">Delete</button>
