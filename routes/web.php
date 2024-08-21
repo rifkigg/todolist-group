@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\project_categories;
+use App\Http\Controllers\ProjectCategoriesController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -29,3 +29,5 @@ Route::post('/project', [ProjectController::class, 'store'])->name('project.stor
 Route::get('/project', [ProjectController::class, 'index'])->name('project.index');
 Route::get('/project/{id}', [ProjectController::class, 'show'])->name('project.show');
 Route::delete('/project/{id}', [ProjectController::class, 'destroy'])->name('project.destroy');
+
+Route::get('/project/categories', [ProjectCategoriesController::class, 'index'])->name('projectcategories.index');
