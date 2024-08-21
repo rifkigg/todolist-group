@@ -22,4 +22,6 @@ Route::get('/project/status', function () {
     return view('pages.project.statusProject');
 });
 
-Route::get('/project', [ProjectController::class, 'index']);
+Route::get('/project', [ProjectController::class, 'index'])->name('project.index');
+Route::get('/project/{id}', [ProjectController::class, 'show'])->name('project.show');
+Route::delete('/project/{id}', [ProjectController::class, 'destroy'])->name('project.destroy');

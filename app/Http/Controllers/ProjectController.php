@@ -24,4 +24,17 @@ class ProjectController extends Controller
     {
         return view('pages.project.addProject');
     }
+
+    public function show(string $id): View
+    {
+        $project = Project::find($id);
+        return view('pages.project.showProject', compact('project'));
+    }
+
+    public function destroy($id): RedirectResponse
+    {
+        $project = Project::find($id);
+        $project->delete();
+        return redirect()->route('project.index');
+    }
 }
