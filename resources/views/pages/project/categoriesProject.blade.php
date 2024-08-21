@@ -288,15 +288,16 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
+                    <form action="{{route('projectcategories.store')}}" method="POST" enctype="multipart/form-data">
                     <!-- Input Form -->
                         @csrf
                         <div class="form-group">
                             <label for="name">Nama</label>
-                            <input type="text" class="form-control" id="name" name="name" required>
+                            <input type="text" class="form-control" id="name" name="name" required value="{{ old('name') }}">
                         </div>
                         <div class="form-group">
                             <label for="slug">Slug</label>
-                            <input type="text" class="form-control" id="slug" name="slug" required>
+                            <input type="text" class="form-control" id="slug" name="slug" required value="{{ old('slug') }}">
                         </div>
                         <button type="submit" class="btn btn-primary">Tambah</button>
                     </form>
