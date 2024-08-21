@@ -36,13 +36,39 @@ class ProjectCategoriesController extends Controller
 
     public function destroy($id) 
     {
-        // Temukan kategori berdasarkan ID
-        $category = ProjectCategories::findOrFail($id); // Perbaiki pemanggilan model
+        $category = ProjectCategories::findOrFail($id);
         
-        // Hapus kategori
         $category->delete();
     
-        // Redirect kembali dengan pesan sukses
         return redirect()->route('projectcategories.index')->with('success', 'Kategori berhasil dihapus.');
+    }
+
+    public function show(string $id): View
+    {
+        $category = ProjectCategories::findOrFail($id);
+        return view('pages.project.editCategoriesProject', compact('category')); 
+    }
+
+    public function update(Request $request, $id): RedirectResponse
+    {
+        //validate form
+        $request->validate([
+            'name' => 'required',
+            'slug' => 'required'
+        ]);
+
+        //get product by ID
+        $category = ProjectCategories::findOrFail($id);
+
+        //update product without image
+        $category->update([
+            'name' => $request->name,
+            'slug' => $request->slug,
+        ]);
+
+        //redirect to index
+        return redirect()
+            ->route('projectcategories.index')
+            ->with(['success' => 'Data Berhasil Diubah!']);
     }
 }
