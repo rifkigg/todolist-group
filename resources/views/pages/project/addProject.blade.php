@@ -289,8 +289,11 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <div class="wp-content">
-                        <form action="{{ route('project.store') }}" method="POST" enctype="multipart/form-data">
-                        <h1>Create A New Project</h1>
+                        <form action="{{ route('project.store') }}" method="POST" enctype="multipart/form-data" >
+                            @csrf
+                        <div class="d-sm-flex align-items-center justify-content-between mb-4">
+                            <h1 class="h3 mb-0 text-gray-800">Create A New Project</h1>
+                        </div>
                         <div class="wrapper">
                             <div class="">
                                 <div class="form-input">
@@ -309,12 +312,11 @@
                                     <h2 class="title">Project Category</h2>
                                     <div class="select">
                                         <!-- <span class="dashicons dashicons-schedule"></span> -->
-                                        <select id="" data-custom="" name="project_category">
-                                            <option value=""></option>
-                                            <option value=""></option>
-                                            <option value=""></option>
-                                            <option value=""></option>
-                                            <option value=""></option>
+                                        <select id="category" name="project_category">
+                                            {{-- @endforeach ($category as $item) --}}
+                                            {{-- <option value="{{ $item->id }}">{{ $item->id }}</option> --}}
+                                                
+                                            {{-- @endforeach --}}
                                         </select>
                                     </div>
                                     <p>The type of project you are creating.</p>

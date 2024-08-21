@@ -58,6 +58,6 @@ class ProjectController extends Controller
         ]);
 
          //redirect to index
-         return redirect()->route('project.index')->with(['success' => 'Data Berhasil Disimpan!']);
+        return redirect()->route('project.index')->with(['success' => 'Data Berhasil Disimpan!']);
 }
 }
