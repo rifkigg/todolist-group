@@ -14,7 +14,7 @@ Route::get('/dashboard', function () {
 // });
 Route::get('/project/add', function () {
     return view('pages.project.addProject');
-});
+})->name('project.add');
 Route::get('/project/categories', function () {
     return view('pages.project.categoriesProject');
 });
@@ -22,4 +22,4 @@ Route::get('/project/status', function () {
     return view('pages.project.statusProject');
 });
 
-Route::get('/project', ProjectController::class, 'index');
+Route::get('/project', [ProjectController::class, 'index']);

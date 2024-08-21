@@ -217,62 +217,40 @@
                             </div>
                         </div>
                     </div>
-                    <button class="btn btn-primary d-flex gap-2 align-items-center"><i
-                            class="fa-solid fa-circle-plus fa-lg"></i> Add New</button>
+                    <form action="{{ route('project.add') }}" method="GET">
+                        <button type="submit" class="btn btn-primary d-flex gap-2 align-items-center"><i
+                                class="fa-solid fa-circle-plus fa-lg"></i> Add New</button>
+                    </form>
                     <table id="example">
                         <thead>
                             <tr>
                                 <th>nama</th>
-                                <th>no</th>
-                                <th>email</th>
+                                <th>Category</th>
+                                <th>Status</th>
+                                <th>Live Date</th>
+                                <th>Project Detail</th>
+                                <th>Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>ici</td>
-                                <td>12</td>
-                                <td>ici@gmail.com</td>
-                            </tr>
-                            <tr>
-                                <td>ici</td>
-                                <td>1</td>
-                                <td>ici@gmail.com</td>
-                            </tr>
-                            <tr>
-                                <td>ici</td>
-                                <td>1</td>
-                                <td>ici@gmail.com</td>
-                            </tr>
-                            <tr>
-                                <td>ici</td>
-                                <td>1</td>
-                                <td>ici@gmail.com</td>
-                            </tr>
-                            <tr>
-                                <td>ici</td>
-                                <td>1</td>
-                                <td>ici@gmail.com</td>
-                            </tr>
-                            <tr>
-                                <td>ici</td>
-                                <td>1</td>
-                                <td>ici@gmail.com</td>
-                            </tr>
-                            <tr>
-                                <td>ici</td>
-                                <td>1</td>
-                                <td>ici@gmail.com</td>
-                            </tr>
-                            <tr>
-                                <td>ici</td>
-                                <td>1</td>
-                                <td>ici@gmail.com</td>
-                            </tr>
-                            <tr>
-                                <td>ici</td>
-                                <td>1</td>
-                                <td>ici@gmail.com</td>
-                            </tr>
+                            @forelse ($project as $item)
+                                <tr>
+                                    <td>{{ $item->name }}</td>
+                                    <td>{{ $item->category_id }}</td>
+                                    <td>{{ $item->status_id }}</td>
+                                    <td>{{ $item->live_date }}</td>
+                                    <td>{{ $item->project_detail }}</td>
+                                    <td>
+                                        <button>Edit</button>
+                                        <button>Delete</button>
+                                    </td>
+                                </tr>
+
+                            @empty
+                                <div class="alert alert-danger">
+                                    Data Project belum Tersedia.
+                                </div>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
