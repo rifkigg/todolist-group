@@ -35,7 +35,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+                <div class="sidebar-brand-text mx-3">TODO-LIST <sup>GROUP</sup></div>
             </a>
 
             <!-- Divider -->
@@ -288,7 +288,35 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    Status project
+                    <h1 class="h3 mb-4 text-gray-800">Project Status</h1>
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Add New Status</h6>
+                        </div>
+                        <div class="card-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="statusName">Name</label>
+                                    <input type="text" class="form-control" id="statusName" placeholder="Enter status name">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Add New Status</button>
+                            </form>
+                            <hr>
+                            <h6 class="m-0 font-weight-bold text-primary">Current Status</h6>
+                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                        
+                                </tbody>
+                            </table>
+                            <p class="mt-3"><strong>Note:</strong> These status will appear on ticket, deleting a status can be effect on project/ticket.</p>
+                        </div>
+                    </div>
                 </div>
             <!-- End of Main Content -->
 
@@ -339,6 +367,9 @@
     <!-- Page level custom scripts -->
     <script src="{{ asset('/assets/js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('/assets/js/demo/chart-pie-demo.js') }}"></script>
+    <script>
+        CKEDITOR.replace( '' );
+    </script>
 
 </body>
 
