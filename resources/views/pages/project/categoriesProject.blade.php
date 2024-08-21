@@ -288,7 +288,46 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    Categories
+                    <form action="{{route('projectcategories.store')}}" method="POST" enctype="multipart/form-data">
+                    <!-- Input Form -->
+                        @csrf
+                        <div class="form-group">
+                            <label for="name">Nama</label>
+                            <input type="text" class="form-control" id="name" name="name" required value="{{ old('name') }}">
+                        </div>
+                        <div class="form-group">
+                            <label for="slug">Slug</label>
+                            <input type="text" class="form-control" id="slug" name="slug" required value="{{ old('slug') }}">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Tambah</button>
+                    </form>
+
+                    <!-- Tabel untuk Menampilkan Daftar -->  
+                    <table class="table table-bordered mt-4">
+                        <thead>
+                            <tr>
+                                <th>Nama</th>
+                                <th>Slug</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($categories as $category)
+                                <tr>
+                                    <td>{{ $category->name }}</td>
+                                    <td>{{ $category->slug }}</td>
+                                    <td>
+                                        <a href="" class="btn btn-warning">Edit</a>
+                                        <form action="{{ route('projectcategories.destroy', $category->id) }}" method="POST" style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             <!-- End of Main Content -->
 

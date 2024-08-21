@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\project_categories;
+use App\Http\Controllers\ProjectCategoriesController;
 use App\Http\Controllers\StatusController;
 use Illuminate\Support\Facades\Route;
 
@@ -37,3 +37,7 @@ Route::put('/project/status/{id}', [StatusController::class, 'update'])->name('p
 Route::get('/project', [ProjectController::class, 'index'])->name('project.index');
 Route::get('/project/{id}', [ProjectController::class, 'show'])->name('project.show');
 Route::delete('/project/{id}', [ProjectController::class, 'destroy'])->name('project.destroy');
+
+Route::get('/project/categories', [ProjectCategoriesController::class, 'index'])->name('projectcategories.index');
+Route::post('/project/categories', [ProjectCategoriesController::class, 'store'])->name('projectcategories.store');
+Route::delete('/project/categories/{id}', [ProjectCategoriesController::class, 'destroy'])->name('projectcategories.destroy');
