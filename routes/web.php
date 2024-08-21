@@ -25,3 +25,7 @@ Route::get('/project/status', function () {
 
 Route::get('/project', [ProjectController::class, 'index'])->name('project.index');
 Route::post('/project', [ProjectController::class, 'store'])->name('project.store');
+
+Route::get('/project', [ProjectController::class, 'index'])->name('project.index');
+Route::get('/project/{id}', [ProjectController::class, 'show'])->name('project.show');
+Route::delete('/project/{id}', [ProjectController::class, 'destroy'])->name('project.destroy');
