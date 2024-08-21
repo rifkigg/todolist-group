@@ -21,7 +21,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('category_id')->references('id')->on('project_categories');
-            $table->foreign('status_id')->references('id')->on('project_status');
+            $table->foreign('status_id')->references('id')->on('project_statuses');
         });
     }
 
