@@ -322,10 +322,10 @@
                                             data-bs-target="#editModal{{ $category->id }}">
                                             Edit Data
                                         </button>
-                                        <form action="{{ route('projectcategories.destroy', $category->id) }}" method="POST" style="display:inline;">
+                                        <form action="{{ route('projectcategories.destroy', $category->id) }}" method="POST" style="display:inline;" >
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
                                         </form>
                                     </td>
                                 </tr>
