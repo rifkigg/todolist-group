@@ -61,10 +61,10 @@
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item active" href="/project">Project</a>
-                        <a class="collapse-item" href="/project/add">Add New</a>
-                        <a class="collapse-item" href="/project/categories">Categories</a>
-                        <a class="collapse-item" href="/project/status">Project Status</a>
+                        <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
+                        <a class="collapse-item " href="{{ route('project.create') }}">Add New</a>
+                        <a class="collapse-item " href="{{ route('projectcategories.index') }}">Categories</a>
+                        <a class="collapse-item" href="{{ route('project_status.index') }}">Project Status</a>
                     </div>
                 </div>
             </li>
@@ -134,9 +134,6 @@
 
                 <!-- Begin Page Content -->
                 <div class="container text-dark">
-                    <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                        <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
-                    </div>
 
                     <!-- Content Row -->
                     <div class="row">
@@ -219,56 +216,65 @@
                             </div>
                         </div>
                     </div>
-                    <form action="{{ route('project.add') }}" method="GET">
-                        <button type="submit" class="btn btn-primary d-flex gap-2 align-items-center"><i
-                                class="fa-solid fa-circle-plus fa-lg"></i> Add New</button>
-                    </form>
-                    <table id="example">
-                        <thead>
-                            <tr>
-                                <th>Project Name</th>
-                                <th>Category</th>
-                                <th>Status</th>
-                                <th>Live Date</th>
-                                <th>Created</th>
-                                {{-- <th>Project Detail</th> --}}
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($project as $item)
-                                <tr>
-                                    <td>{{ $item->name }}</td>
-                                    <td>{{ $item->category_id }}</td>
-                                    <td>{{ $item->status_id }}</td>
-                                    <td>{{ $item->live_date }}</td>
-                                    <td>{{ $item->created_at }}</td>
-                                    {{-- <td>{{ $item->project_detail }}</td> --}}
-                                    <td>
-                                        <form action="{{ route('project.destroy', $item->id) }}" method="POST"
-                                            onsubmit="return confirm('Are you sure you want to delete this item?');"  class="d-flex">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
+                        </div>
+                        <div class="card-body">
+                            <form action="{{ route('project.create') }}" method="GET">
+                                <button type="submit" class="btn btn-primary d-flex gap-2 align-items-center"><i
+                                        class="fa-solid fa-circle-plus fa-lg"></i> Add New</button>
+                            </form>
+                            <table id="example" class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Project Name</th>
+                                        <th>Category</th>
+                                        <th>Status</th>
+                                        <th>Live Date</th>
+                                        <th>Created</th>
+                                        {{-- <th>Project Detail</th> --}}
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @forelse ($project as $item)
+                                        <tr>
+                                            <td>{{ $item->name }}</td>
+                                            <td>{{ $item->category->name }}</td>
+                                            <td>{{ $item->status->name }}</td>
+                                            <td>{{ $item->live_date }}</td>
+                                            <td>{{ $item->created_at }}</td>
+                                            {{-- <td>{{ $item->project_detail }}</td> --}}
+                                            <td>
+                                                <form action="{{ route('project.destroy', $item->id) }}"
+                                                    method="POST"
+                                                    onsubmit="return confirm('Are you sure you want to delete this item?');"
+                                                    class="d-flex">
 
-                                            <a href="{{ route('project.show', $item->id) }}" class="btn"><i
-                                                    class="icon-action fa-solid fa-eye"></i></a>
-                                            <a href="#" class="btn"><i
-                                                    class="icon-action fa-solid fa-copy"></i></a>
-                                            <a href="#" class="btn"><i
-                                                    class="icon-action fa-solid fa-pencil"></i></a>
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn"><i
-                                                    class="icon-action fa-solid fa-trash-can"></i></button>
-                                        </form>
-                                    </td>
-                                </tr>
+                                                    <a href="{{ route('project.show', $item->id) }}"
+                                                        class="btn"><i class="icon-action fa-solid fa-eye"></i></a>
+                                                    <a href="#" class="btn"><i
+                                                            class="icon-action fa-solid fa-copy"></i></a>
+                                                    <a href="#" class="btn"><i
+                                                            class="icon-action fa-solid fa-pencil"></i></a>
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn"><i
+                                                            class="icon-action fa-solid fa-trash-can"></i></button>
+                                                </form>
+                                            </td>
+                                        </tr>
 
-                            @empty
-                                <div class="alert alert-danger">
-                                    Data Project belum Tersedia.
-                                </div>
-                            @endforelse
-                        </tbody>
-                    </table>
+                                    @empty
+                                        <div class="alert alert-danger">
+                                            Data Project belum Tersedia.
+                                        </div>
+                                    @endforelse
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
                 <!-- End of Main Content -->
 

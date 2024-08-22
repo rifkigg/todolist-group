@@ -60,13 +60,20 @@
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item " href="/project">Project</a>
-                        <a class="collapse-item active" href="/project/add">Add New</a>
-                        <a class="collapse-item " href="/project/categories">Categories</a>
-                        <a class="collapse-item" href="/project/status">Project Status</a>
+                        <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
+                        <a class="collapse-item active" href="{{ route('project.create') }}">Add New</a>
+                        <a class="collapse-item " href="{{ route('projectcategories.index') }}">Categories</a>
+                        <a class="collapse-item" href="{{ route('project_status.index') }}">Project Status</a>
                     </div>
                 </div>
             </li>
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
         </ul>
 
         <!-- End of Sidebar -->
@@ -85,169 +92,8 @@
                         <i class="fa fa-bars"></i>
                     </button>
 
-                    <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search">
-                        <div class="input-group">
-                            <input type="text" class="form-control bg-light border-0 small"
-                                placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
-                                    <i class="fas fa-search fa-sm"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
-
-                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                        <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-search fa-fw"></i>
-                            </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                aria-labelledby="searchDropdown">
-                                <form class="form-inline mr-auto w-100 navbar-search">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Search for..." aria-label="Search"
-                                            aria-describedby="basic-addon2">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">
-                                                <i class="fas fa-search fa-sm"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </li>
-
-                        <!-- Nav Item - Alerts -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw"></i>
-                                <!-- Counter - Alerts -->
-                                <span class="badge badge-danger badge-counter">3+</span>
-                            </a>
-                            <!-- Dropdown - Alerts -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="alertsDropdown">
-                                <h6 class="dropdown-header">
-                                    Alerts Center
-                                </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-primary">
-                                            <i class="fas fa-file-alt text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 12, 2019</div>
-                                        <span class="font-weight-bold">A new monthly report is ready to
-                                            download!</span>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-success">
-                                            <i class="fas fa-donate text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 7, 2019</div>
-                                        $290.29 has been deposited into your account!
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-warning">
-                                            <i class="fas fa-exclamation-triangle text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">December 2, 2019</div>
-                                        Spending Alert: We've noticed unusually high spending for your account.
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All
-                                    Alerts</a>
-                            </div>
-                        </li>
-
-                        <!-- Nav Item - Messages -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-envelope fa-fw"></i>
-                                <!-- Counter - Messages -->
-                                <span class="badge badge-danger badge-counter">7</span>
-                            </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="messagesDropdown">
-                                <h6 class="dropdown-header">
-                                    Message Center
-                                </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle"
-                                            src="{{ asset('/assets/img/undraw_profile_1.svg') }}" alt="...">
-                                        <div class="status-indicator bg-success"></div>
-                                    </div>
-                                    <div class="font-weight-bold">
-                                        <div class="text-truncate">Hi there! I am wondering if you can help me with a
-                                            problem I've been having.</div>
-                                        <div class="small text-gray-500">Emily Fowler · 58m</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle"
-                                            src="{{ asset('/assets/img/undraw_profile_2.svg') }}" alt="...">
-                                        <div class="status-indicator"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">I have the photos that you ordered last month, how
-                                            would you like them sent to you?</div>
-                                        <div class="small text-gray-500">Jae Chun · 1d</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle"
-                                            src="{{ asset('/assets/img/undraw_profile_3.svg') }}" alt="...">
-                                        <div class="status-indicator bg-warning"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">Last month's report looks great, I am very happy
-                                            with
-                                            the progress so far, keep up the good work!</div>
-                                        <div class="small text-gray-500">Morgan Alvarez · 2d</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle"
-                                            src="https://source.unsplash.com/Mv9hjnEUHR4/60x60" alt="...">
-                                        <div class="status-indicator bg-success"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">Am I a good boy? The reason I ask is because someone
-                                            told me that people say this to all dogs, even if they aren't good...</div>
-                                        <div class="small text-gray-500">Chicken the Dog · 2w</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Read More
-                                    Messages</a>
-                            </div>
-                        </li>
-
-                        <div class="topbar-divider d-none d-sm-block"></div>
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
@@ -273,8 +119,7 @@
                                     Activity Log
                                 </a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#" data-toggle="modal"
-                                    data-target="#logoutModal">
+                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Logout
                                 </a>
@@ -287,143 +132,166 @@
                 <!-- End of Topbar -->
 
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
-                    <div class="wp-content">
-                        <form action="{{ route('project.store') }}" method="POST" enctype="multipart/form-data">
-                        <h1>Create A New Project</h1>
-                        <div class="wrapper">
-                            <div class="">
-                                <div class="form-input">
-                                    <h2 class="title">Project Name</h2>
-                                    <div class="input">
-                                        <!-- <span class="dashicons dashicons-image-filter"></span> -->
-                                        <input type="text" name="project_name" size="30" value=""
-                                            spellcheck="true" autocomplete="off">
-                                    </div>
-                                    <p>The name of the project - where you can define your project.</p>
-                                </div>
-                            </div>
-
-                            <div class="">
-                                <div class="form-select">
-                                    <h2 class="title">Project Category</h2>
-                                    <div class="select">
-                                        <!-- <span class="dashicons dashicons-schedule"></span> -->
-                                        <select id="" data-custom="" name="project_category">
-                                            <option value=""></option>
-                                            <option value=""></option>
-                                            <option value=""></option>
-                                            <option value=""></option>
-                                            <option value=""></option>
-                                        </select>
-                                    </div>
-                                    <p>The type of project you are creating.</p>
-                                </div>
-                            </div>
+                <div class="container-fluid text-dark">
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Add New Projects</h6>
                         </div>
+                        <div class="card-body">
+                            <div class="wp-content">
+                                <form action="{{ route('project.store') }}" method="POST"
+                                    enctype="multipart/form-data">
+                                    @csrf
+                                    <div class="wrapper">
 
-                        <div class="wrapper">
-                            <div class="">
-                                <div class="form-select">
-                                    <h2 class="title">Project Status</h2>
-                                    <div class="select">
-                                        <!-- <span class="dashicons dashicons-nametag"></span> -->
-                                        <select id="" data-custom="" name="project_status">
-                                            <option></option>
-                                            <option></option>
-                                            <option></option>
-                                            <option></option>
-                                        </select>
+                                        <div class="form-input">
+                                            <label for="name">Project Name:</label>
+                                            <input type="text"
+                                                class="form-control @error('name') is-invalid @enderror"
+                                                name="name" value="{{ old('name') }}"
+                                                placeholder="Enter Project Name">
+                                            @error('name')
+                                                <div class="alert alert-danger mt-2">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+
+                                            <p>The name of the project - where you can define your project.</p>
+                                        </div>
                                     </div>
-                                    <p>The project status - current status of project.</p>
+                                    <div class="date mb-3">
+                                        <label for="live_date">Project Live Date: </label>
+                                        <input type="date" id="live_date"
+                                            class="form-control @error('live_date') is-invalid @enderror"
+                                            name="live_date" value="{{ old('live_date') }}"
+                                            placeholder="Masukkan Judul Product">
+                                        @error('live_date')
+                                            <div class="alert alert-danger mt-2">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="form-select">
+
+                                            <label for="category_id">Project Category: </label>
+                                            <select id="category_id" name="category_id"
+                                                class=" form-control @error('category_id') is-invalid @enderror"
+                                                value="{{ old('category_id') }}">
+                                                <option disabled>Pilih Category:</option>
+                                                @foreach ($categories as $items)
+                                                    <option value="{{ $items->id }}">{{ $items->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('category_id')
+                                                <div class="alert alert-danger mt-2">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+
+                                            <p>The type of project you are creating.</p>
+                                        </div>
+                                    </div>
+                            </div>
+
+                            <div class="wrapper">
+                                <div class="">
+                                    <div class="form-select">
+                                        <label for="status_id">Project Status</label>
+                                        <select id="status_id" name="status_id"
+                                            class="form-control @error('status_id') is-invalid @enderror"
+                                            value="{{ old('status_id') }}">
+                                            <option disabled>Pilih Status:</option>
+                                            @foreach ($status as $items)
+                                                <option value="{{ $items->id }}">{{ $items->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                        @error('status_id')
+                                            <div class="alert alert-danger mt-2">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+
+                                        <p>The project status - current status of project.</p>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="wrapper">
-                            <div class="textarea">
-                                <h2>Project Details</h2>
+                            {{-- project details start --}}
+                            <div class="wrapper mb-3">
+                                <div class="textarea">
+                                    <label for="project_detail">Project Details: </label>
+                                    <textarea id="project_detail" class="form-control @error('project_detail') is-invalid @enderror"
+                                        name="project_detail" value="{{ old('project_detail') }}" placeholder="Masukkan Judul Product">
+                                            </textarea>
+                                    @error('project_detail')
+                                        <div class="alert alert-danger mt-2">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+
+                                </div>
+                            </div>
+
+                            <div class="submit">
                                 <div>
-                                    <div>
-                                        <input id="description" type="textarea" name="description">
-                                    </div>
+                                    <button type="submit" class="btn btn-primary w-100">Create Project</button>
                                 </div>
                             </div>
-
-                            {{-- start --}}
-                            <div class="date">
-                                <h2 class="title">Project Will Go Live</h2>
-                                <div class="input">
-                                    {{-- <span class="dashicons dashicons-calendar-alt"></span> --}}
-                                    <input type="date">
-                                </div>
-                            </div>
-                            {{-- end --}}
-
+                            </form>
                         </div>
-
-                        <div class="submit">
-                            <div>
-                                <input type="submit" value="Create">
-                            </div>
-                        </div>
-                        </form>
                     </div>
                     <!-- End of Main Content -->
-
                 </div>
-                <!-- End of Content Wrapper -->
-
             </div>
-            <!-- End of Page Wrapper -->
+            <!-- End of Content Wrapper -->
 
-            <!-- Scroll to Top Button-->
-            <a class="scroll-to-top rounded" href="#page-top">
-                <i class="fas fa-angle-up"></i>
-            </a>
+        </div>
+        <!-- End of Page Wrapper -->
 
-            <!-- Logout Modal-->
-            <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
-                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">Select "Logout" below if you are ready to end your current session.
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                            <a class="btn btn-primary" href="login.html">Logout</a>
-                        </div>
+        <!-- Scroll to Top Button-->
+        <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fas fa-angle-up"></i>
+        </a>
+
+        <!-- Logout Modal-->
+        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">Select "Logout" below if you are ready to end your current session.
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <a class="btn btn-primary" href="login.html">Logout</a>
                     </div>
                 </div>
             </div>
+        </div>
 
-            <script src="https://cdn.ckeditor.com/4.13.1/standard/ckeditor.js"></script>
-            <script>
-                CKEDITOR.replace('description');
-            </script>
+        <script src="https://cdn.ckeditor.com/4.22.0/full/ckeditor.js"></script>
+        <script>
+            CKEDITOR.replace('project_detail');
+        </script>
 
-            <!-- Bootstrap core JavaScript-->
-            <script src="{{ asset('/assets/vendor/jquery/jquery.min.js') }}"></script>
-            <script src="{{ asset('/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <!-- Bootstrap core JavaScript-->
+        <script src="{{ asset('/assets/vendor/jquery/jquery.min.js') }}"></script>
+        <script src="{{ asset('/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
-            <!-- Core plugin JavaScript-->
-            <script src="{{ asset('/assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+        <!-- Core plugin JavaScript-->
+        <script src="{{ asset('/assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
-            <!-- Custom scripts for all pages-->
-            <script src="{{ asset('/assets/js/sb-admin-2.min.js') }}"></script>
-
-            <!-- Page level plugins -->
-            <script src="{{ asset('/assets/vendor/chart.js/Chart.min.js') }}"></script>
-
-            <!-- Page level custom scripts -->
-            <script src="{{ asset('/assets/js/demo/chart-area-demo.js') }}"></script>
-            <script src="{{ asset('/assets/js/demo/chart-pie-demo.js') }}"></script>
+        <!-- Custom scripts for all pages-->
+        <script src="{{ asset('/assets/js/sb-admin-2.min.js') }}"></script>
 
 </body>
 

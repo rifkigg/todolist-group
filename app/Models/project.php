@@ -15,7 +15,7 @@ class project extends Model
 
     public function category()
     {
-        return $this->belongsTo(ProjectCategory::class);
+        return $this->belongsTo(ProjectCategories::class);
     }
 
     public function status()

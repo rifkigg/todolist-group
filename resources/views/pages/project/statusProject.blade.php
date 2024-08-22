@@ -63,10 +63,10 @@
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item " href="/project">Project</a>
-                        <a class="collapse-item" href="/project/add">Add New</a>
-                        <a class="collapse-item " href="/project/categories">Categories</a>
-                        <a class="collapse-item active" href="/project/status">Project Status</a>
+                        <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
+                        <a class="collapse-item " href="{{ route('project.create') }}">Add New</a>
+                        <a class="collapse-item " href="{{ route('projectcategories.index') }}">Categories</a>
+                        <a class="collapse-item active" href="{{ route('project_status.index') }}">Project Status</a>
                     </div>
                 </div>
             </li>
@@ -153,7 +153,7 @@
                             </form>
                             <hr>
                             <h6 class="m-0 font-weight-bold text-primary">Current Status</h6>
-                            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
                                         <th>Name</th>

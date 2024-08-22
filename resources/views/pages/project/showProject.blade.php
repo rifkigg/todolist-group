@@ -61,10 +61,10 @@
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item " href="/project">Project</a>
-                        <a class="collapse-item" href="/project/add">Add New</a>
-                        <a class="collapse-item" href="/project/categories">Categories</a>
-                        <a class="collapse-item" href="/project/status">Project Status</a>
+                        <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
+                        <a class="collapse-item " href="{{ route('project.create') }}">Add New</a>
+                        <a class="collapse-item " href="{{ route('projectcategories.index') }}">Categories</a>
+                        <a class="collapse-item" href="{{ route('project_status.index') }}">Project Status</a>
                     </div>
                 </div>
             </li>
@@ -135,72 +135,79 @@
                 <!-- Begin Page Content -->
                 <div class="container text-dark">
                     <!-- Content Row -->
-                    <div class="row">
-                        <button onclick="history.back()" class="btn btn-primary w-auto"><i class="fa-solid fa-left-long"></i> Back</button>
-                        <h3>Project Name: </h3>
-                        <p>{{ $project->name }}</p>
-                        <h4>Project Detail: </h4>
-                        <p>{{ $project->project_detail }}</p>
-                        <h4>Project Category: </h4>
-                        <p>{{ $project->category_id }}</p>
-                        <h4>Project Status: </h4>
-                        <p>{{ $project->status_id }}</p>
-                        <h4>Project Due Date: </h4>
-                        <p>{{ $project->live_date }} </p>
-                        <h4>Project Created: </h4>
-                        <p>{{ $project->created_at }}</p>
+                    <button onclick="history.back()" class="btn btn-primary w-auto mb-3"><i
+                        class="fa-solid fa-left-long"></i> Back to Project</button>
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Project Detail</h6>
+                        </div>
+                        <div class="card-body">
+                            <h3>Project Name: </h3>
+                            <p>{{ $project->name }}</p>
+                            <h4>Project Detail: </h4>
+                            <p>{{ $project->project_detail }}</p>
+                            <h4>Project Category: </h4>
+                            <p>{{ $project->category->name }}</p>
+                            <h4>Project Status: </h4>
+                            <p>{{ $project->status->name }}</p>
+                            <h4>Project Due Date: </h4>
+                            <p>{{ $project->live_date }} </p>
+                            <h4>Project Created: </h4>
+                            <p>{{ $project->created_at }}</p>
+                        </div>
                     </div>
-                <!-- End of Main Content -->
+                    <!-- End of Main Content -->
+
+                </div>
+                <!-- End of Content Wrapper -->
 
             </div>
-            <!-- End of Content Wrapper -->
+            <!-- End of Page Wrapper -->
 
-        </div>
-        <!-- End of Page Wrapper -->
+            <!-- Scroll to Top Button-->
+            <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fas fa-angle-up"></i>
+            </a>
 
-        <!-- Scroll to Top Button-->
-        <a class="scroll-to-top rounded" href="#page-top">
-            <i class="fas fa-angle-up"></i>
-        </a>
-
-        <!-- Logout Modal-->
-        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-            aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">×</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                    <div class="modal-footer">
-                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                        <a class="btn btn-primary" href="login.html">Logout</a>
+            <!-- Logout Modal-->
+            <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">Select "Logout" below if you are ready to end your current session.
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                            <a class="btn btn-primary" href="login.html">Logout</a>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
 
 
-        <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
-        <script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
-        <script src="https://cdn.datatables.net/2.1.4/js/dataTables.bootstrap5.js"></script>
-        <script>
-            new DataTable('#example');
-        </script>
-        <script src="https://kit.fontawesome.com/87dd173a0d.js" crossorigin="anonymous"></script>
-        <!-- Bootstrap core JavaScript-->
-        <script src="{{ asset('/assets/vendor/jquery/jquery.min.js') }}"></script>
-        <script src="{{ asset('/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+            <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+            <script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
+            <script src="https://cdn.datatables.net/2.1.4/js/dataTables.bootstrap5.js"></script>
+            <script>
+                new DataTable('#example');
+            </script>
+            <script src="https://kit.fontawesome.com/87dd173a0d.js" crossorigin="anonymous"></script>
+            <!-- Bootstrap core JavaScript-->
+            <script src="{{ asset('/assets/vendor/jquery/jquery.min.js') }}"></script>
+            <script src="{{ asset('/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
-        <!-- Core plugin JavaScript-->
-        <script src="{{ asset('/assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+            <!-- Core plugin JavaScript-->
+            <script src="{{ asset('/assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
-        <!-- Custom scripts for all pages-->
-        <script src="{{ asset('/assets/js/sb-admin-2.min.js') }}"></script>
+            <!-- Custom scripts for all pages-->
+            <script src="{{ asset('/assets/js/sb-admin-2.min.js') }}"></script>
 
 
 </body>
