@@ -15,7 +15,7 @@ class ProjectController extends Controller
     public function index(): View
     {
         //get all products
-        $project = Project::with('category', 'status')->latest()->paginate();
+        $project = Project::with('category', 'status')->latest()->get();
 
         $total_project = Project::count();
 
