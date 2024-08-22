@@ -28,6 +28,7 @@ Route::get('/project/{id}', [ProjectController::class, 'show'])->name('project.s
 Route::get('/project/edit/{id}', [ProjectController::class, 'edit'])->name('project.edit');
 Route::put('/project/edit/{id}', [ProjectController::class, 'update'])->name('project.update');
 Route::delete('/project/{id}', [ProjectController::class, 'destroy'])->name('project.destroy');
+Route::post('/project/duplicate/{id}', [ProjectController::class, 'duplicate'])->name('project.duplicate');
 
 Route::get('/project/status', [StatusController::class, 'index'])->name('project_status.index');
 Route::post('/project/status', [StatusController::class, 'store'])->name('project_status.store');

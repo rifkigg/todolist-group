@@ -233,7 +233,6 @@
                                         <th>Status</th>
                                         <th>Live Date</th>
                                         <th>Created</th>
-                                        {{-- <th>Project Detail</th> --}}
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -245,34 +244,53 @@
                                             <td>{{ $item->status->name }}</td>
                                             <td>{{ $item->live_date }}</td>
                                             <td>{{ $item->created_at }}</td>
-                                            {{-- <td>{{ $item->project_detail }}</td> --}}
                                             <td>
+
+                                                <!-- Form untuk duplikasi -->
+                                                <form id="duplicate-form-{{ $item->id }}"
+                                                    action="{{ route('project.duplicate', $item->id) }}"
+                                                    method="POST" style="display: none;">
+                                                    @csrf
+                                                </form>
+                                                <!-- Ikon copy dengan event click -->
+                                                <a href="#" class="btn"
+                                                    onclick="event.preventDefault(); document.getElementById('duplicate-form-{{ $item->id }}').submit();">
+                                                    <i class="icon-action fa-solid fa-copy"></i>
+                                                </a>
+
+                                                <!-- Ikon view -->
+                                                <a href="{{ route('project.show', $item->id) }}" class="btn">
+                                                    <i class="icon-action fa-solid fa-eye"></i>
+                                                </a>
+
+                                                <!-- Ikon edit -->
+                                                <a href="{{ route('project.edit', $item->id) }}" class="btn">
+                                                    <i class="icon-action fa-solid fa-pencil"></i>
+                                                </a>
+
+                                                <!-- Form untuk delete -->
                                                 <form action="{{ route('project.destroy', $item->id) }}"
                                                     method="POST"
                                                     onsubmit="return confirm('Are you sure you want to delete this item?');"
-                                                    class="d-flex">
-
-                                                    <a href="{{ route('project.show', $item->id) }}"
-                                                        class="btn"><i class="icon-action fa-solid fa-eye"></i></a>
-                                                    <a href="#" class="btn"><i
-                                                            class="icon-action fa-solid fa-copy"></i></a>
-                                                    <a href="{{ route('project.edit', $item->id) }}" class="btn"><i
-                                                            class="icon-action fa-solid fa-pencil"></i></a>
+                                                    class="d-inline">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn"><i
-                                                            class="icon-action fa-solid fa-trash-can"></i></button>
+                                                    <button type="submit" class="btn">
+                                                        <i class="icon-action fa-solid fa-trash-can"></i>
+                                                    </button>
                                                 </form>
                                             </td>
                                         </tr>
-
                                     @empty
-                                        <div class="alert alert-danger">
-                                            Data Project belum Tersedia.
-                                        </div>
+                                        <tr>
+                                            <td colspan="6" class="alert alert-danger">
+                                                Data Project belum Tersedia.
+                                            </td>
+                                        </tr>
                                     @endforelse
                                 </tbody>
                             </table>
+
                         </div>
                     </div>
                 </div>
