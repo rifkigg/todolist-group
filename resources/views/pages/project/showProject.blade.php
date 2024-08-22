@@ -36,7 +36,7 @@
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3">SB Admin <sup>2</sup></div>
+                <div class="sidebar-brand-text mx-3">TODO-LIST <sup>GROUP</sup></div>
             </a>
 
             <!-- Divider -->
@@ -202,12 +202,6 @@
         <!-- Custom scripts for all pages-->
         <script src="{{ asset('/assets/js/sb-admin-2.min.js') }}"></script>
 
-        <!-- Page level plugins -->
-        <script src="{{ asset('/assets/vendor/chart.js/Chart.min.js') }}"></script>
-
-        <!-- Page level custom scripts -->
-        <script src="{{ asset('/assets/js/demo/chart-area-demo.js') }}"></script>
-        <script src="{{ asset('/assets/js/demo/chart-pie-demo.js') }}"></script>
 
 </body>
 
