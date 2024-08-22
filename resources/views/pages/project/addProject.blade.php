@@ -20,10 +20,17 @@
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
-                        <a class="collapse-item active" href="{{ route('project.create') }}">Add New</a>
-                        <a class="collapse-item " href="{{ route('projectcategories.index') }}">Categories</a>
-                        <a class="collapse-item" href="{{ route('project_status.index') }}">Project Status</a>
+                        @if (auth()->user()->role == 'admin')
+                            <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
+                            <a class="collapse-item active" href="{{ route('project.create') }}">Add New</a>
+                            <a class="collapse-item " href="{{ route('projectcategories.index') }}">Categories</a>
+                            <a class="collapse-item" href="{{ route('project_status.index') }}">Project Status</a>
+                        @elseif (auth()->user()->role == 'manajer')
+                            <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
+                            <a class="collapse-item active" href="{{ route('project.create') }}">Add New</a>
+                        @else
+                            <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
+                        @endif
                     </div>
                 </div>
             </li>

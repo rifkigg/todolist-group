@@ -33,7 +33,7 @@
             <!-- Main Content -->
             <div id="content">
 
-                <x-navabr-topbar></x-navabr-topbar>
+                <x-navbar-topbar></x-navbar-topbar>
 
                 <!-- Begin Page Content -->
                 <div class="container text-dark">
