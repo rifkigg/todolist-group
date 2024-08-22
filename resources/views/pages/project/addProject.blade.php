@@ -218,7 +218,7 @@
                                         <p>The project status - current status of project.</p>
                                     </div>
                                 </div>
-                            </div>
+                                {{--  --}}
 
                             {{-- project details start --}}
                             <div class="wrapper mb-3">
