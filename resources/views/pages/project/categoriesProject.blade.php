@@ -10,7 +10,8 @@
     <meta name="author" content="">
 
     <title>Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <!-- Custom fonts for this template-->
     <link href="{{ asset('/assets/vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
@@ -68,6 +69,13 @@
                     </div>
                 </div>
             </li>
+            <!-- Divider -->
+            <hr class="sidebar-divider d-none d-md-block">
+
+            <!-- Sidebar Toggler (Sidebar) -->
+            <div class="text-center d-none d-md-inline">
+                <button class="rounded-circle border-0" id="sidebarToggle"></button>
+            </div>
         </ul>
 
         <!-- End of Sidebar -->
@@ -289,21 +297,24 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    <form action="{{route('projectcategories.store')}}" method="POST" enctype="multipart/form-data">
-                    <!-- Input Form -->
+                    <form action="{{ route('projectcategories.store') }}" method="POST"
+                        enctype="multipart/form-data">
+                        <!-- Input Form -->
                         @csrf
                         <div class="form-group">
                             <label for="name">Nama</label>
-                            <input type="text" class="form-control" id="name" name="name" required value="{{ old('name') }}">
+                            <input type="text" class="form-control" id="name" name="name" required
+                                value="{{ old('name') }}">
                         </div>
                         <div class="form-group">
                             <label for="slug">Slug</label>
-                            <input type="text" class="form-control" id="slug" name="slug" required value="{{ old('slug') }}">
+                            <input type="text" class="form-control" id="slug" name="slug" required
+                                value="{{ old('slug') }}">
                         </div>
                         <button type="submit" class="btn btn-primary">Tambah</button>
                     </form>
 
-                    <!-- Tabel untuk Menampilkan Daftar -->  
+                    <!-- Tabel untuk Menampilkan Daftar -->
                     <table class="table table-bordered mt-4">
                         <thead>
                             <tr>
@@ -313,7 +324,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($categories as $category)
+                            @foreach ($categories as $category)
                                 <tr>
                                     <td>{{ $category->name }}</td>
                                     <td>{{ $category->slug }}</td>
@@ -322,103 +333,102 @@
                                             data-bs-target="#editModal{{ $category->id }}">
                                             Edit Data
                                         </button>
-                                        <form action="{{ route('projectcategories.destroy', $category->id) }}" method="POST" style="display:inline;" >
+                                        <form action="{{ route('projectcategories.destroy', $category->id) }}"
+                                            method="POST" style="display:inline;">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
+                                            <button type="submit" class="btn btn-danger"
+                                                onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
                                         </form>
                                     </td>
                                 </tr>
                                 <div class="modal fade" id="editModal{{ $category->id }}" tabindex="-1"
-                                            aria-labelledby="editModalLabel{{ $category->id }}" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="editModalLabel">Edit Data
-                                                    </h5>
-                                                    <button type="button" class="btn-close"
-                                                        data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form
-                                                        action="{{ route('projectcategories.update', $category->id) }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <div class="mb-3">
-                                                            <label for="field_name"
-                                                                class="form-label">Field Name</label>
-                                                            <input type="text" class="form-control"
-                                                                id="name" name="name"
-                                                                value="{{ old('name', $category->name) }}">
-                                                            <label for="field_slug"
-                                                                class="form-label">Field Slug</label>
-                                                            <input type="text" class="form-control"
-                                                                id="slug" name="slug"
-                                                                value="{{ old('slug', $category->slug) }}">
-                                                        </div>
-                                                        <button type="submit"
-                                                            class="btn btn-success">Update</button>
-                                                    </form>
-                                                </div>
+                                    aria-labelledby="editModalLabel{{ $category->id }}" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="editModalLabel">Edit Data
+                                                </h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form action="{{ route('projectcategories.update', $category->id) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    @method('PUT')
+                                                    <div class="mb-3">
+                                                        <label for="field_name" class="form-label">Field Name</label>
+                                                        <input type="text" class="form-control" id="name"
+                                                            name="name"
+                                                            value="{{ old('name', $category->name) }}">
+                                                        <label for="field_slug" class="form-label">Field Slug</label>
+                                                        <input type="text" class="form-control" id="slug"
+                                                            name="slug"
+                                                            value="{{ old('slug', $category->slug) }}">
+                                                    </div>
+                                                    <button type="submit" class="btn btn-success">Update</button>
+                                                </form>
                                             </div>
                                         </div>
                                     </div>
+                                </div>
                             @endforeach
                         </tbody>
                     </table>
                 </div>
-            <!-- End of Main Content -->
+                <!-- End of Main Content -->
+
+            </div>
+            <!-- End of Content Wrapper -->
 
         </div>
-        <!-- End of Content Wrapper -->
+        <!-- End of Page Wrapper -->
 
-    </div>
-    <!-- End of Page Wrapper -->
+        <!-- Scroll to Top Button-->
+        <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fas fa-angle-up"></i>
+        </a>
 
-    <!-- Scroll to Top Button-->
-    <a class="scroll-to-top rounded" href="#page-top">
-        <i class="fas fa-angle-up"></i>
-    </a>
-
-    <!-- Logout Modal-->
-    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-        aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                    </button>
-                </div>
-                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-                <div class="modal-footer">
-                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                    <a class="btn btn-primary" href="login.html">Logout</a>
+        <!-- Logout Modal-->
+        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <a class="btn btn-primary" href="login.html">Logout</a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous">
+        </script>
 
-    <!-- Bootstrap core JavaScript-->
-    <script src="{{ asset('/assets/vendor/jquery/jquery.min.js') }}"></script>
-    <script src="{{ asset('/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+        <!-- Bootstrap core JavaScript-->
+        <script src="{{ asset('/assets/vendor/jquery/jquery.min.js') }}"></script>
+        <script src="{{ asset('/assets/vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
-    <!-- Core plugin JavaScript-->
-    <script src="{{ asset('/assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+        <!-- Core plugin JavaScript-->
+        <script src="{{ asset('/assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
-    <!-- Custom scripts for all pages-->
-    <script src="{{ asset('/assets/js/sb-admin-2.min.js') }}"></script>
+        <!-- Custom scripts for all pages-->
+        <script src="{{ asset('/assets/js/sb-admin-2.min.js') }}"></script>
 
-    <!-- Page level plugins -->
-    <script src="{{ asset('/assets/vendor/chart.js/Chart.min.js') }}"></script>
+        <!-- Page level plugins -->
+        <script src="{{ asset('/assets/vendor/chart.js/Chart.min.js') }}"></script>
 
-    <!-- Page level custom scripts -->
-    <script src="{{ asset('/assets/js/demo/chart-area-demo.js') }}"></script>
-    <script src="{{ asset('/assets/js/demo/chart-pie-demo.js') }}"></script>
+        <!-- Page level custom scripts -->
+        <script src="{{ asset('/assets/js/demo/chart-area-demo.js') }}"></script>
+        <script src="{{ asset('/assets/js/demo/chart-pie-demo.js') }}"></script>
 
 </body>
 
