@@ -177,7 +177,8 @@
                                                     method="POST">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger">Hapus</button>
+                                                    <button type="submit" class="btn btn-danger"
+                                                onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
                                                 </form>
 
                                             </td>
