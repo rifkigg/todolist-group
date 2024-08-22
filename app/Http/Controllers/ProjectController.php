@@ -30,19 +30,6 @@ class ProjectController extends Controller
         return view('pages.project.addProject', compact('categories','status'));
     }
 
-    public function show(string $id): View
-    {
-        $project = Project::find($id);
-        return view('pages.project.showProject', compact('project'));
-    }
-
-    public function destroy($id): RedirectResponse
-    {
-        $project = Project::find($id);
-        $project->delete();
-        return redirect()->route('project.index');
-    }
-
     public function store(Request $request): RedirectResponse
     {
         // Validate form
@@ -70,5 +57,57 @@ class ProjectController extends Controller
         return redirect()
             ->route('project.index')
             ->with(['success' => 'Data Berhasil Disimpan!']);
+    }
+
+    public function show(string $id): View
+    {
+        $project = Project::find($id);
+        return view('pages.project.showProject', compact('project'));
+    }
+
+    public function edit(string $id): View
+    {
+        $project = Project::find($id);
+        $categories = ProjectCategories::all();
+        $status = ProjectStatus::all();
+        return view('pages.project.editProject', compact('project','categories','status'));
+    }
+
+    public function update(Request $request, $id): RedirectResponse
+    {
+        // Validate form
+        $request->validate([
+            'name' => 'required|min:5',
+            'category_id' => 'required',
+            'status_id' => 'required',
+            'live_date' => 'required',
+            'project_detail' => 'required|min:5',
+        ]);
+
+        //get product by ID
+        $project = Project::findOrFail($id);
+
+        $cleanText = strip_tags($request->input('project_detail'));
+
+        //update product without image
+        $project->update([
+            'name' => $request->name,
+            'category_id' => $request->category_id,
+            'status_id' => $request->status_id,
+            'live_date' => $request->live_date,
+            'project_detail' => $cleanText,
+        ]);
+
+        //redirect to index
+        return redirect()
+            ->route('project.index')
+            ->with(['success' => 'Data Berhasil Diubah!']);
+    }
+
+    public function destroy($id): RedirectResponse
+    {
+        $project = Project::find($id);
+        $project->delete();
+        return redirect()->route('project.index');
     }
 }

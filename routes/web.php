@@ -25,6 +25,8 @@ Route::get('/project', [ProjectController::class, 'index'])->name('project.index
 Route::get('/project/create', [ProjectController::class, 'create'])->name('project.create');
 Route::post('/project/add', [ProjectController::class, 'store'])->name('project.store');
 Route::get('/project/{id}', [ProjectController::class, 'show'])->name('project.show');
+Route::get('/project/edit/{id}', [ProjectController::class, 'edit'])->name('project.edit');
+Route::put('/project/edit/{id}', [ProjectController::class, 'update'])->name('project.update');
 Route::delete('/project/{id}', [ProjectController::class, 'destroy'])->name('project.destroy');
 
 Route::get('/project/status', [StatusController::class, 'index'])->name('project_status.index');

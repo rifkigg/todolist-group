@@ -256,7 +256,7 @@
                                                         class="btn"><i class="icon-action fa-solid fa-eye"></i></a>
                                                     <a href="#" class="btn"><i
                                                             class="icon-action fa-solid fa-copy"></i></a>
-                                                    <a href="#" class="btn"><i
+                                                    <a href="{{ route('project.edit', $item->id) }}" class="btn"><i
                                                             class="icon-action fa-solid fa-pencil"></i></a>
                                                     @csrf
                                                     @method('DELETE')
