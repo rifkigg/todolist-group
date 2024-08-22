@@ -25,9 +25,9 @@ class ProjectController extends Controller
 
     public function create(): View
     {
-        $category = ProjectCategories::all();
+        $categories = ProjectCategories::all();
         $status = ProjectStatus::all();
-        return view('pages.project.addProject', compact('category','status'));
+        return view('pages.project.addProject', compact('categories','status'));
     }
 
     public function show(string $id): View
@@ -45,24 +45,28 @@ class ProjectController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        //validate form
+        // Validate form
         $request->validate([
-            'name'              => 'required|min:5',
-            'category_id'       => 'required',
-            'status_id'         => 'required',
-            'live_date'         => 'required',
-            'project_detail'    => 'required|min:5',
+            'name' => 'required|min:5',
+            'category_id' => 'required',
+            'status_id' => 'required',
+            'live_date' => 'required',
+            'project_detail' => 'required|min:5',
         ]);
-
+    
+        // Menghapus tag HTML dari textarea
+        $cleanText = strip_tags($request->input('project_detail'));
+    
+        // Create a new project with sanitized data
         Project::create([
-            'name'              => $request->name,
-            'category_id'       => $request->category_id,
-            'status_id'         => $request->status_id,
-            'live_date'         => $request->live_date,
-            'project_detail'    => $request->project_detail,
+            'name' => $request->name,
+            'category_id' => $request->category_id,
+            'status_id' => $request->status_id,
+            'live_date' => $request->live_date,
+            'project_detail' => $cleanText,
         ]);
-
-        //redirect to index
+    
+        // Redirect to index
         return redirect()
             ->route('project.index')
             ->with(['success' => 'Data Berhasil Disimpan!']);
