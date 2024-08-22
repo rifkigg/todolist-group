@@ -9,6 +9,8 @@ class ProjectStatus extends Model
 {
     use HasFactory;
 
+    protected $table = 'project_statuses';
+
     protected $fillable = [
         'name',
     ];

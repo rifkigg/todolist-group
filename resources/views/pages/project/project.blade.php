@@ -219,7 +219,7 @@
                             </div>
                         </div>
                     </div>
-                    <form action="{{ route('project.add') }}" method="GET">
+                    <form action="{{ route('project.create') }}" method="GET">
                         <button type="submit" class="btn btn-primary d-flex gap-2 align-items-center"><i
                                 class="fa-solid fa-circle-plus fa-lg"></i> Add New</button>
                     </form>
@@ -239,8 +239,8 @@
                             @forelse ($project as $item)
                                 <tr>
                                     <td>{{ $item->name }}</td>
-                                    <td>{{ $item->category_id }}</td>
-                                    <td>{{ $item->status_id }}</td>
+                                    <td>{{ $item->category->name }}</td>
+                                    <td>{{ $item->status->name }}</td>
                                     <td>{{ $item->live_date }}</td>
                                     <td>{{ $item->created_at }}</td>
                                     {{-- <td>{{ $item->project_detail }}</td> --}}

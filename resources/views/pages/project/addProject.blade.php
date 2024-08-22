@@ -289,86 +289,122 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
                     <div class="wp-content">
-                        <form action="{{ route('project.store') }}" method="POST" enctype="multipart/form-data" >
+                        <form action="{{ route('project.store') }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                        <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                            <h1 class="h3 mb-0 text-gray-800">Create A New Project</h1>
-                        </div>
-                        <div class="wrapper">
                             <div class="">
-                                <div class="form-input">
-                                    <h2 class="title">Project Name</h2>
-                                    <div class="input">
-                                        <!-- <span class="dashicons dashicons-image-filter"></span> -->
-                                        <input type="text" name="project_name" size="30" value=""
-                                            spellcheck="true" autocomplete="off">
+                                <h1 class="">Create A New Project</h1>
+                            </div>
+                            <div class="wrapper">
+                                <div class="">
+                                    <div class="form-input">
+                                        <h2 class="title">Project Name</h2>
+                                        <div class="input">
+                                            <input type="text"
+                                                class="form-control @error('name') is-invalid @enderror"
+                                                name="name" value="{{ old('name') }}"
+                                                placeholder="Masukkan Judul Product">
+
+                                            <!-- error message untuk name -->
+                                            @error('name')
+                                                <div class="alert alert-danger mt-2">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <p>The name of the project - where you can define your project.</p>
                                     </div>
-                                    <p>The name of the project - where you can define your project.</p>
+                                </div>
+
+                                <div class="">
+                                    <div class="form-select">
+                                        <h2 class="title">Project Category</h2>
+                                        <div class="select">
+                                            <!-- <span class="dashicons dashicons-schedule"></span> -->
+                                            <select id="category_id" name="category_id"
+                                                class="@error('category_id') is-invalid @enderror"
+                                                value="{{ old('category_id') }}">
+                                                <option disabled>Pilih Category:</option>
+                                                @foreach ($category as $items)
+                                                    <option value="{{ $items->id }}">{{ $items->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('category_id')
+                                                <div class="alert alert-danger mt-2">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <p>The type of project you are creating.</p>
+                                    </div>
                                 </div>
                             </div>
 
-                            <div class="">
-                                <div class="form-select">
-                                    <h2 class="title">Project Category</h2>
-                                    <div class="select">
-                                        <!-- <span class="dashicons dashicons-schedule"></span> -->
-                                        <select id="category" name="project_category">
-                                            {{-- @endforeach ($category as $item) --}}
-                                            {{-- <option value="{{ $item->id }}">{{ $item->id }}</option> --}}
-                                                
-                                            {{-- @endforeach --}}
-                                        </select>
+                            <div class="wrapper">
+                                <div class="">
+                                    <div class="form-select">
+                                        <h2 class="title">Project Status</h2>
+                                        <div class="select">
+                                            <select id="status_id" name="status_id"
+                                                class="@error('status_id') is-invalid @enderror"
+                                                value="{{ old('status_id') }}">
+                                                <option disabled>Pilih Status:</option>
+                                                @foreach ($category as $items)
+                                                    <option value="{{ $items->id }}">{{ $items->name }}</option>
+                                                @endforeach
+                                            </select>
+                                            @error('status_id')
+                                                <div class="alert alert-danger mt-2">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
+                                        <p>The project status - current status of project.</p>
                                     </div>
-                                    <p>The type of project you are creating.</p>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="wrapper">
-                            <div class="">
-                                <div class="form-select">
-                                    <h2 class="title">Project Status</h2>
-                                    <div class="select">
-                                        <!-- <span class="dashicons dashicons-nametag"></span> -->
-                                        <select id="" data-custom="" name="project_status">
-                                            <option></option>
-                                            <option></option>
-                                            <option></option>
-                                            <option></option>
-                                        </select>
-                                    </div>
-                                    <p>The project status - current status of project.</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="wrapper">
-                            <div class="textarea">
-                                <h2>Project Details</h2>
-                                <div>
+                            {{-- project details start --}}
+                            <div class="wrapper">
+                                <div class="textarea">
+                                    <h2>Project Details</h2>
                                     <div>
-                                        <input id="description" type="textarea" name="description">
+                                        <div>
+                                            <textarea id="project_detail" class="form-control @error('project_detail') is-invalid @enderror"
+                                                name="project_detail" value="{{ old('project_detail') }}" placeholder="Masukkan Judul Product">
+                                            </textarea>
+                                            @error('project_detail')
+                                                <div class="alert alert-danger mt-2">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+                                        </div>
                                     </div>
                                 </div>
+                                {{--  --}}
+
+                                {{-- input date start --}}
+                                <div class="date">
+                                    <h2 class="title">Project Will Go Live</h2>
+                                    <div class="input">
+                                        <input type="date" id="live_date"
+                                            class="form-control @error('live_date') is-invalid @enderror"
+                                            name="live_date" value="{{ old('live_date') }}"
+                                            placeholder="Masukkan Judul Product">
+                                        @error('live_date')
+                                            <div class="alert alert-danger mt-2">
+                                                {{ $message }}
+                                            </div>
+                                        @enderror
+                                    </div>
+                                </div>
+                                {{-- input date end --}}
                             </div>
 
-                            {{-- start --}}
-                            <div class="date">
-                                <h2 class="title">Project Will Go Live</h2>
-                                <div class="input">
-                                    {{-- <span class="dashicons dashicons-calendar-alt"></span> --}}
-                                    <input type="date">
+                            <div class="submit">
+                                <div>
+                                    <button type="submit">Create</button>
                                 </div>
                             </div>
-                            {{-- end --}}
-
-                        </div>
-
-                        <div class="submit">
-                            <div>
-                                <input type="submit" value="Create">
-                            </div>
-                        </div>
                         </form>
                     </div>
                     <!-- End of Main Content -->
@@ -407,7 +443,7 @@
 
             <script src="https://cdn.ckeditor.com/4.13.1/standard/ckeditor.js"></script>
             <script>
-                CKEDITOR.replace('description');
+                CKEDITOR.replace('project_detail');
             </script>
 
             <!-- Bootstrap core JavaScript-->
