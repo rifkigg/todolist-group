@@ -10,8 +10,6 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskPrioritiesController;
 use App\Http\Controllers\ProjectCategoriesController;
-use App\Http\Controllers\TaskPrioritiesController;
-use App\Http\Controllers\TaskController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -81,7 +79,6 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/task', [TaskController::class, 'index'])->name('task.index');
     
-    Route::post('/task', [TaskPrioritiesController::class, 'index'])->name('priorities.index');
     Route::get('/task/priorities', [TaskPrioritiesController::class, 'index'])->name('priorities.index');
     Route::post('/task/priorities', [TaskPrioritiesController::class, 'store'])->name('priorities.store');
     Route::delete('/task/priorities/{id}', [TaskPrioritiesController::class, 'destroy'])->name('priorities.destroy');
