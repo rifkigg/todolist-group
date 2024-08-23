@@ -1,12 +1,14 @@
 <?php
 
+use App\Models\task;
 use App\Models\User;
 use App\Models\project;
-use App\Models\task;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TaskPrioritiesController;
 use App\Http\Controllers\ProjectCategoriesController;
 
 // Route::get('/', function () {
@@ -75,7 +77,7 @@ Route::middleware('auth')->group(function () {
         return view('pages.task.statustask');
     });
 
-    Route::get('/task', [taskController::class, 'index'])->name('task.index');
+    Route::get('/task', [TaskController::class, 'index'])->name('task.index');
     
     Route::post('/task/priorities', [TaskPrioritiesController::class, 'index'])->name('priorities.index');
 
