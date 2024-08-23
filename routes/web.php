@@ -1,17 +1,21 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProjectCategoriesController;
-use App\Http\Controllers\ProjectController;
-use App\Http\Controllers\StatusController;
+use App\Models\User;
+use App\Models\project;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\StatusController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ProjectCategoriesController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', function () {
+//     return view('welcome');
+// });
 
 Route::get('/dashboard', function () {
-    return view('pages.dashboard');
+    $total_project = Project::count();
+    $total_user = User::count();
+    return view('pages.dashboard', compact('total_project', 'total_user'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
@@ -20,7 +24,9 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/', function () {
-        return view('pages.dashboard');
+        $total_project = Project::count();
+        $total_user = User::count();
+        return view('pages.dashboard', compact('total_project', 'total_user'));
     });
     // Route::get('/dashboard', function () {
     //     return view('pages.dashboard');

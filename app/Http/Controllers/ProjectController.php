@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use App\Models\Project;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
@@ -18,9 +19,10 @@ class ProjectController extends Controller
         $project = Project::with('category', 'status')->latest()->get();
 
         $total_project = Project::count();
+        $total_user = User::count();
 
         //render view with products
-        return view('pages.project.project', compact('project', 'total_project'));
+        return view('pages.project.project', compact('project', 'total_project', 'total_user'));
     }
 
     public function create(): View
