@@ -8,6 +8,7 @@ use App\Models\task_priority;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
 
+
 class TaskPrioritiesController extends Controller
 {
     public function index():View
@@ -15,4 +16,5 @@ class TaskPrioritiesController extends Controller
         $priorities = TaskPriorities::all();
         return view('pages.task.prioritiesTask', compact('priorities'));
     }
+    
 }
