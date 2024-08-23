@@ -88,6 +88,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/task/status', function () {
         return view('pages.task.statustask');
     });
+    Route::get('/task/label', function () {
+        return view('pages.task.statustask')->name('labels.index');
+    });
 
     Route::get('/task', [TaskController::class, 'index'])->name('task.index');
     
@@ -99,16 +102,16 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/task/status', [taskController::class, 'index'])->name('status.index');
 
-    Route::get('/task/labels', [taskController::class, 'edit'])->name('labels.index');
-    Route::put('/task/edit/{id}', [taskController::class, 'update'])->name('task.update');
-    Route::delete('/task/{id}', [taskController::class, 'destroy'])->name('task.destroy');
-    Route::post('/task/duplicate/{id}', [taskController::class, 'duplicate'])->name('task.duplicate');
+    // Route::get('/task/labels', [taskController::class, 'edit'])->name('labels.index');
+    // Route::put('/task/edit/{id}', [taskController::class, 'update'])->name('task.update');
+    // Route::delete('/task/{id}', [taskController::class, 'destroy'])->name('task.destroy');
+    // Route::post('/task/duplicate/{id}', [taskController::class, 'duplicate'])->name('task.duplicate');
 
-    Route::get('/task/labels', [LabelsController::class, 'index'])->name('task_labels.index');
-    Route::post('/task/labels', [LabelsController::class, 'store'])->name('task_labels.store');
-    Route::delete('/task/labels/{id}', [LabelsController::class, 'destroy'])->name('task_labels.destroy');
-    Route::get('/task/labels/{id}', [LabelsController::class, 'edit'])->name('task_labels.edit');
-    Route::put('/task/labels/{id}', [LabelsController::class, 'update'])->name('task_labels.update');
+    // Route::get('/task/labels', [LabelsController::class, 'index'])->name('task_labels.index');
+    // Route::post('/task/labels', [LabelsController::class, 'store'])->name('task_labels.store');
+    // Route::delete('/task/labels/{id}', [LabelsController::class, 'destroy'])->name('task_labels.destroy');
+    // Route::get('/task/labels/{id}', [LabelsController::class, 'edit'])->name('task_labels.edit');
+    // Route::put('/task/labels/{id}', [LabelsController::class, 'update'])->name('task_labels.update');
 
 
 

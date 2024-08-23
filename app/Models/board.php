@@ -10,16 +10,16 @@ class board extends Model
     use HasFactory;
 
     protected $fillable = [
-        'board_name', 'project_id', 'task_id',
+        'board_name', 'project_id',
     ];
 
     public function project()
     {
-        return $this->belongsTo(Project::class);
+        return $this->belongsTo(Project::class, 'project_id');
     }
 
-    public function task()
+    public function tasks()
     {
-        return $this->belongsTo(Task::class);
+        return $this->hasMany(Task::class);
     }
 }

@@ -10,7 +10,18 @@ class task extends Model
     use HasFactory;
 
     protected $fillable = [
-        'name', 'project_name', 'status_id', 'priority_id', 'task_label_id', 'user_id', 'due_date',
+        'name',
+        'board_id',
+        'project_id',
+        'status_id',
+        'priority_id',
+        'task_label_id',
+        'description',
+        'attachments',
+        'activities',
+        'checklist',
+        'time_count',
+        'due_date',
     ];
 
     public function project()
@@ -33,13 +44,13 @@ class task extends Model
         return $this->belongsTo(TaskLabel::class);
     }
 
-    public function user()
+    public function users()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsToMany(User::class, 'task_user');
     }
 
     public function board()
     {
-        return $this->hasMany(Board::class);
+        return $this->belongsTo(Board::class, 'board_id');
     }
 }
