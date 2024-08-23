@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskPrioritiesController;
 use App\Http\Controllers\ProjectCategoriesController;
+use App\Http\Controllers\StatusTaskController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -44,7 +45,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/project/status', function () {
         return view('pages.project.statusProject');
     });
+
     
+    Route::get('/task/status', function () {
+        return view('pages.task.statusTask');
+    });
+    
+
     Route::get('/project', [ProjectController::class, 'index'])->name('project.index');
     Route::get('/project/create', [ProjectController::class, 'create'])->name('project.create');
     Route::post('/project/add', [ProjectController::class, 'store'])->name('project.store');
@@ -66,6 +73,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/project/categories/{id}', [ProjectCategoriesController::class, 'show'])->name('projectcategories.show');
     Route::put('/project/categories/{id}', [ProjectCategoriesController::class, 'update'])->name('projectcategories.update');
 });
+    Route::get('/task/status', [StatusTaskController::class, 'index'])->name('task_status.index');
+    Route::post('/task/status', [StatusTaskController::class, 'store'])->name('task_status.store');
+    Route::delete('/task/status/{id}', [StatusTaskController::class, 'destroy'])->name('task_status.destroy');
+    Route::get('/task/status/{id}', [StatusTaskController::class, 'show'])->name('task_status.show');
+    Route::put('/task/status/{id}', [StatusTaskController::class, 'update'])->name('task_status.update');
 
     Route::get('/task', function () {
         return view('pages.task.task');

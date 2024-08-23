@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class task_status extends Model
+class TaskStatus extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'name', 'group_name',
+        'name', 'status_group', 
     ];
 
     public function tasks()
