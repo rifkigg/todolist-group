@@ -94,7 +94,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/task/priorities', [TaskPrioritiesController::class, 'index'])->name('priorities.index');
     Route::post('/task/priorities', [TaskPrioritiesController::class, 'store'])->name('priorities.store');
     Route::delete('/task/priorities/{id}', [TaskPrioritiesController::class, 'destroy'])->name('priorities.destroy');
-    Route::get('/task/priorities/{id}', [TaskPrioritiesController::class, 'show'])->name('priorities.show');
     Route::put('/task/priorities/{id}', [TaskPrioritiesController::class, 'update'])->name('priorities.update');
 
     Route::get('/task/status', [taskController::class, 'index'])->name('status.index');
