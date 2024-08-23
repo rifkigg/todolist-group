@@ -73,7 +73,7 @@
                             <h6 class="m-0 font-weight-bold text-primary">Add New Categories</h6>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('projectcategories.store') }}" method="POST"
+                            <form action="{{ route('projectcategories.store') }}" method=""
                                 enctype="multipart/form-data">
                                 <!-- Input Form -->
                                 @csrf
@@ -100,61 +100,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($categories as $category)
-                                        <tr>
-                                            <td>{{ $category->name }}</td>
-                                            <td>{{ $category->slug }}</td>
-                                            <td>
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                                    data-bs-target="#editModal{{ $category->id }}">
-                                                    Edit Data
-                                                </button>
-                                                <form action="{{ route('projectcategories.destroy', $category->id) }}"
-                                                    method="POST" style="display:inline;">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger"
-                                                        onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
-                                                </form>
-                                            </td>
-                                        </tr>
-                                        <div class="modal fade" id="editModal{{ $category->id }}" tabindex="-1"
-                                            aria-labelledby="editModalLabel{{ $category->id }}" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="editModalLabel">Edit Data
-                                                        </h5>
-                                                        <button type="button" class="btn-close"
-                                                            data-bs-dismiss="modal" aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <form
-                                                            action="{{ route('projectcategories.update', $category->id) }}"
-                                                            method="POST">
-                                                            @csrf
-                                                            @method('PUT')
-                                                            <div class="mb-3">
-                                                                <label for="field_name" class="form-label">Field
-                                                                    Name</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="name" name="name"
-                                                                    value="{{ old('name', $category->name) }}">
-                                                                <label for="field_slug" class="form-label">Field
-                                                                    Slug</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="slug" name="slug"
-                                                                    value="{{ old('slug', $category->slug) }}">
-                                                            </div>
-                                                            <button type="submit"
-                                                                class="btn btn-success">Update</button>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                </tbody>
                             </table>
 
                         </div>
