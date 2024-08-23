@@ -44,7 +44,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         @if (auth()->user()->role == 'admin')
                             <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
-                            <a class="collapse-item" href="{{ route('status.index') }}">Task Status</a>
+                            <a class="collapse-item" href="{{ route('task_status.index') }}">Task Status</a>
                             <a class="collapse-item " href="{{ route('priorities.index') }}">Task Priorities</a>
                             <a class="collapse-item " href="{{ route('labels.index') }}">Task Labels/Tags</a>
                             
