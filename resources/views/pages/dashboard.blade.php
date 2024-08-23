@@ -45,7 +45,7 @@
                             <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
                             <a class="collapse-item" href="{{ route('status.index') }}">Task Status</a>
                             <a class="collapse-item " href="{{ route('priorities.index') }}">Task Priorities</a>
-                            <a class="collapse-item" href="{{ route('task_labels.index') }}">Task Labels/Tags</a>
+                            <a class="collapse-item" href="{{ route('labels.index') }}">Task Labels/Tags</a>
                         @elseif (auth()->user()->role == 'manajer')
                             <a class="collapse-item active" href="{{ route('task.index') }}">Project</a>
                             <!-- <a class="collapse-item" href="{{ route('add.create') }}">Task Status</a> -->

@@ -11,6 +11,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\TaskPrioritiesController;
 use App\Http\Controllers\ProjectCategoriesController;
 use App\Http\Controllers\StatusTaskController;
+use App\Http\Controllers\LabelsController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -104,11 +105,11 @@ Route::middleware('auth')->group(function () {
     Route::delete('/task/{id}', [taskController::class, 'destroy'])->name('task.destroy');
     Route::post('/task/duplicate/{id}', [taskController::class, 'duplicate'])->name('task.duplicate');
 
-    Route::get('/task/labels', [LabelsController::class, 'index'])->name('task_labels.index');
-    Route::post('/task/labels', [LabelsController::class, 'store'])->name('task_labels.store');
-    Route::delete('/task/labels/{id}', [LabelsController::class, 'destroy'])->name('task_labels.destroy');
-    Route::get('/task/labels/{id}', [LabelsController::class, 'edit'])->name('task_labels.edit');
-    Route::put('/task/labels/{id}', [LabelsController::class, 'update'])->name('task_labels.update');
+    Route::get('/task/labels', [LabelsController::class, 'index'])->name('labels.index');
+    Route::post('/task/labels', [LabelsController::class, 'store'])->name('labels.store');
+    Route::delete('/task/labels/{id}', [LabelsController::class, 'destroy'])->name('labels.destroy');
+    Route::get('/task/labels/{id}', [LabelsController::class, 'edit'])->name('labels.edit');
+    Route::put('/task/labels/{id}', [LabelsController::class, 'update'])->name('labels.update');
 
 
 
