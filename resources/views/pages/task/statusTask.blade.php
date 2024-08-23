@@ -35,18 +35,18 @@
                 </div>
             </li>
             <li class="nav-item ">
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseThree"
                     aria-bs-expanded="true" aria-bs-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Task</span>
                 </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
+                <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         @if (auth()->user()->role == 'admin')
                             <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
                             <a class="collapse-item" href="{{ route('task_status.index') }}">Task Status</a>
                             <a class="collapse-item " href="{{ route('priorities.index') }}">Task Priorities</a>
-                            <a class="collapse-item" href="{{ route('labels.index') }}">Task Labels/Tags</a>
+                            {{-- <a class="collapse-item" href="{{ route('labels.index') }}">Task Labels/Tags</a> --}}
                         @elseif (auth()->user()->role == 'manajer')
                             <a class="collapse-item active" href="{{ route('task.index') }}">Project</a>
                             <!-- <a class="collapse-item" href="{{ route('add.create') }}">Task Status</a> -->
@@ -68,48 +68,49 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
+                    <h1 class="h3 mb-4 text-gray-800">Task Status</h1>
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Add New Categories</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Add New Task Status</h6>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('projectcategories.store') }}" method="POST"
+                            <form action="{{ route('task_status.store') }}" method="POST"
                                 enctype="multipart/form-data">
                                 <!-- Input Form -->
                                 @csrf
                                 <div class="form-group">
-                                    <label for="name">Nama</label>
+                                    <label for="name">Name</label>
                                     <input type="text" class="form-control" id="name" name="name"
                                         required value="{{ old('name') }}">
                                 </div>
                                 <div class="form-group">
-                                    <label for="slug">Slug</label>
-                                    <input type="text" class="form-control" id="slug" name="slug"
-                                        required value="{{ old('slug') }}">
+                                    <label for="status_group">Status Group</label>
+                                    <input type="text" class="form-control" id="status_group" name="status_group"
+                                        required value="{{ old('status_group') }}">
                                 </div>
-                                <button type="submit" class="btn btn-primary">Tambah</button>
+                                <button type="submit" class="btn btn-primary">Add New Status</button>
                             </form>
 
                             <!-- Tabel untuk Menampilkan Daftar -->
                             <table class="table table-striped mt-4">
                                 <thead>
                                     <tr>
-                                        <th>Nama</th>
-                                        <th>Slug</th>
-                                        <th>Aksi</th>
+                                        <th>Name</th>
+                                        <th>Group Name</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($categories as $category)
+                                    @foreach ($status as $statuses)
                                         <tr>
-                                            <td>{{ $category->name }}</td>
-                                            <td>{{ $category->slug }}</td>
+                                            <td>{{ $statuses->name }}</td>
+                                            <td>{{ $statuses->task_group }}</td>
                                             <td>
                                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                                    data-bs-target="#editModal{{ $category->id }}">
-                                                    Edit Data
+                                                    data-bs-target="#editModal{{ $statuses->id }}">
+                                                    Modify Task Status
                                                 </button>
-                                                <form action="{{ route('projectcategories.destroy', $category->id) }}"
+                                                <form action="{{ route('task_status.destroy', $statuses->id) }}"
                                                     method="POST" style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')
@@ -118,19 +119,19 @@
                                                 </form>
                                             </td>
                                         </tr>
-                                        <div class="modal fade" id="editModal{{ $category->id }}" tabindex="-1"
-                                            aria-labelledby="editModalLabel{{ $category->id }}" aria-hidden="true">
+                                        <div class="modal fade" id="editModal{{ $statuses->id }}" tabindex="-1"
+                                            aria-labelledby="editModalLabel{{ $statuses->id }}" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="editModalLabel">Edit Data
+                                                        <h5 class="modal-title" id="editModalLabel">Modify Task Status
                                                         </h5>
                                                         <button type="button" class="btn-close"
                                                             data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
                                                         <form
-                                                            action="{{ route('projectcategories.update', $category->id) }}"
+                                                            action="{{ route('task_status.update', $category->id) }}"
                                                             method="POST">
                                                             @csrf
                                                             @method('PUT')
@@ -139,12 +140,12 @@
                                                                     Name</label>
                                                                 <input type="text" class="form-control"
                                                                     id="name" name="name"
-                                                                    value="{{ old('name', $category->name) }}">
-                                                                <label for="field_slug" class="form-label">Field
-                                                                    Slug</label>
+                                                                    value="{{ old('name', $statuses->name) }}">
+                                                                <label for="field_status_group" class="form-label">Field
+                                                                    Status</label>
                                                                 <input type="text" class="form-control"
-                                                                    id="slug" name="slug"
-                                                                    value="{{ old('slug', $category->slug) }}">
+                                                                    id="status_group" name="status_group"
+                                                                    value="{{ old('status_group', $statuses->slug) }}">
                                                             </div>
                                                             <button type="submit"
                                                                 class="btn btn-success">Update</button>
