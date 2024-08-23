@@ -1,11 +1,14 @@
 <?php
 
+use App\Models\task;
 use App\Models\User;
 use App\Models\project;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\TaskController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\TaskPrioritiesController;
 use App\Http\Controllers\ProjectCategoriesController;
 use App\Http\Controllers\StatusTaskController;
 
@@ -16,6 +19,7 @@ use App\Http\Controllers\StatusTaskController;
 Route::get('/dashboard', function () {
     $total_project = Project::count();
     $total_user = User::count();
+    $total_task = task::count();
     return view('pages.dashboard', compact('total_project', 'total_user'));
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -74,6 +78,27 @@ Route::middleware('auth')->group(function () {
     Route::delete('/task/status/{id}', [StatusTaskController::class, 'destroy'])->name('task_status.destroy');
     Route::get('/task/status/{id}', [StatusTaskController::class, 'show'])->name('task_status.show');
     Route::put('/task/status/{id}', [StatusTaskController::class, 'update'])->name('task_status.update');
+
+    Route::get('/task', function () {
+        return view('pages.task.task');
+    });
+    Route::get('/task/categories', function () {
+        return view('pages.task.prioritiestask');
+    });
+    Route::get('/task/status', function () {
+        return view('pages.task.statustask');
+    });
+
+    Route::get('/task', [TaskController::class, 'index'])->name('task.index');
+    
+    Route::post('/task/priorities', [TaskPrioritiesController::class, 'index'])->name('priorities.index');
+
+    Route::get('/task/status', [taskController::class, 'index'])->name('status.index');
+
+    Route::get('/task/labels', [taskController::class, 'edit'])->name('labels.index');
+    Route::put('/task/edit/{id}', [taskController::class, 'update'])->name('task.update');
+    Route::delete('/task/{id}', [taskController::class, 'destroy'])->name('task.destroy');
+    Route::post('/task/duplicate/{id}', [taskController::class, 'duplicate'])->name('task.duplicate');
 
 
 

@@ -164,21 +164,23 @@
                             <table id="example" class="table table-striped">
                                 <thead>
                                     <tr>
+                                        <th>Name</th>
                                         <th>Project Name</th>
-                                        <th>Category</th>
-                                        <th>Status</th>
-                                        <th>Live Date</th>
-                                        <th>Created</th>
+                                        <th>Task Status</th>
+                                        <th>Task Priority</th>
+                                        <th>Due Date</th>
+                                        <th>Created At</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($project as $item)
+                                    @forelse ($task as $item)
                                         <tr>
                                             <td>{{ $item->name }}</td>
-                                            <td>{{ $item->category->name }}</td>
-                                            <td>{{ $item->status->name }}</td>
-                                            <td>{{ $item->live_date }}</td>
+                                            <td>{{ $item->project_id }}</td>
+                                            <td>{{ $item->status_id }}</td>
+                                            <td>{{ $item->priority_id }}</td>
+                                            <td>{{ $item->task_label_id }}</td>
                                             <td>{{ $item->created_at }}</td>
                                             <td>
                                                 @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')

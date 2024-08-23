@@ -12,22 +12,53 @@
                 </li>
             </x-slot>
 
-            <li class="nav-item active">
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseThree"
+            <li class="nav-item ">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                    aria-bs-expanded="true" aria-bs-controls="collapseTwo">
+                    <i class="fas fa-fw fa-cog"></i>
+                    <span>Project</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        @if (auth()->user()->role == 'admin')
+                            <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
+                            <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
+                            <a class="collapse-item " href="{{ route('projectcategories.index') }}">Categories</a>
+                            <a class="collapse-item" href="{{ route('project_status.index') }}">Project Status</a>
+                        @elseif (auth()->user()->role == 'manajer')
+                            <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
+                            <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
+                        @else
+                            <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
+                        @endif
+                    </div>
+                </div>
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
                     aria-bs-expanded="true" aria-bs-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Task</span>
                 </a>
-                <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
-                        <a class="collapse-item" href="{{ route('task_status.index') }}">Task Status</a>
-                        <a class="collapse-item active" href="{{ route('.index') }}">Task Priorities</a>
-                        <a class="collapse-item" href="{{ route('.index') }}">Task Labels/Tags</a>
+                        @if (auth()->user()->role == 'admin')
+                            <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
+                            <a class="collapse-item" href="{{ route('status.index') }}">Task Status</a>
+                            <a class="collapse-item " href="{{ route('priorities.index') }}">Task Priorities</a>
+                            <a class="collapse-item" href="{{ route('labels.index') }}">Task Labels/Tags</a>
+                        @elseif (auth()->user()->role == 'manajer')
+                            <a class="collapse-item active" href="{{ route('task.index') }}">Project</a>
+                            <!-- <a class="collapse-item" href="{{ route('add.create') }}">Task Status</a> -->
+                        @else
+                            <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
+                        @endif
                     </div>
                 </div>
             </li>
         </x-navbar>
+
+        <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -39,58 +70,55 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
+                    <h1 class="h3 mb-4 text-gray-800">Project Status</h1>
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Add New Categories</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Add New Status</h6>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('task_status.store') }}" method="POST"
+                            <form action="{{ route('project_status.store') }}" method="POST"
                                 enctype="multipart/form-data">
-                                <!-- Input Form -->
                                 @csrf
                                 <div class="form-group">
-                                    <label for="name">Name</label>
-                                    <input type="text" class="form-control" id="name" name="name" required
-                                        value="{{ old('name') }}">
-                                </div>
-                                <div class="form-group">
-                                    <label for="status_group">Status Group</label>
-                                    <input type="text" class="form-control" id="status_group" name="status_group"
-                                        required value="{{ old('status_group') }}">
+                                    <label for="statusName">Name</label>
+                                    <input type="text" class="form-control" id="name" name="name"
+                                        value="{{ old('name') }}" placeholder="Enter status name" required>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Add New Status</button>
                             </form>
-
-                            <!-- Tabel untuk Menampilkan Daftar -->
-                            <table class="table table-striped mt-4">
+                            <hr>
+                            <h6 class="m-0 font-weight-bold text-primary">Current Status</h6>
+                            <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Group Name</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($status as $statuses)
+                                    @foreach ($status as $item)
                                         <tr>
-                                            <td>{{ $statuses->name }}</td>
-                                            <td>{{ $statuses->task_group }}</td>
                                             <td>
+                                                {{ $item->name }}
+                                            </td>
+                                            <td class='d-flex'>
                                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                                    data-bs-target="#editModal{{ $statuses->id }}">
+                                                    data-bs-target="#editModal{{ $item->id }}">
                                                     Edit Data
                                                 </button>
-                                                <form action="{{ route('task_status.destroy', $statuses->id) }}"
-                                                    method="POST" style="display:inline;">
+
+                                                <form action="{{ route('project_status.destroy', $item->id) }}"
+                                                    method="POST">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger"
                                                         onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
                                                 </form>
+
                                             </td>
                                         </tr>
-                                        <div class="modal fade" id="editModal{{ $statuses->id }}" tabindex="-1"
-                                            aria-labelledby="editModalLabel{{ $statuses->id }}" aria-hidden="true">
+                                        <div class="modal fade" id="editModal{{ $item->id }}" tabindex="-1"
+                                            aria-labelledby="editModalLabel{{ $item->id }}" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
@@ -100,7 +128,7 @@
                                                             aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form action="{{ route('task_status.update', $statuses->id) }}"
+                                                        <form action="{{ route('project_status.update', $item->id) }}"
                                                             method="POST">
                                                             @csrf
                                                             @method('PUT')
@@ -109,12 +137,7 @@
                                                                     Name</label>
                                                                 <input type="text" class="form-control"
                                                                     id="name" name="name"
-                                                                    value="{{ old('name', $statuses->name) }}">
-                                                                <label for="field_slug" class="form-label">Field
-                                                                    Group Name</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="slug" name="slug"
-                                                                    value="{{ old('slug', $statuses->slug) }}">
+                                                                    value="{{ old('name', $item->name) }}">
                                                             </div>
                                                             <button type="submit"
                                                                 class="btn btn-success">Update</button>
@@ -124,12 +147,16 @@
                                             </div>
                                         </div>
                                     @endforeach
+
                                 </tbody>
                             </table>
-
+                            <p class="mt-3"><strong>Note:</strong> These status will appear on ticket, deleting a
+                                status can be effect on project/ticket.</p>
                         </div>
                     </div>
                 </div>
+
+
                 <!-- End of Main Content -->
 
             </div>

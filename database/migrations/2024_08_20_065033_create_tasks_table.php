@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->string('project_name');
+            $table->unsignedBigInteger('project_id');
             $table->unsignedBigInteger('status_id');
             $table->unsignedBigInteger('priority_id');
             $table->unsignedBigInteger('task_label_id');
@@ -22,6 +22,7 @@ return new class extends Migration
             $table->date('due_date');
             $table->timestamps();
 
+            $table->foreign('project_id')->references('id')->on('projects');
             $table->foreign('status_id')->references('id')->on('task_status');
             $table->foreign('priority_id')->references('id')->on('task_priorities');
             $table->foreign('task_label_id')->references('id')->on('task_labels');

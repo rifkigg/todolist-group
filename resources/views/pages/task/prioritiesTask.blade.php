@@ -58,8 +58,6 @@
             </li>
         </x-navbar>
 
-        <!-- End of Sidebar -->
-
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
 
@@ -70,93 +68,43 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    <h1 class="h3 mb-4 text-gray-800">Project Status</h1>
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Add New Status</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Add New Categories</h6>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('project_status.store') }}" method="POST"
+                            <form action="{{ route('projectcategories.store') }}" method=""
                                 enctype="multipart/form-data">
+                                <!-- Input Form -->
                                 @csrf
                                 <div class="form-group">
-                                    <label for="statusName">Name</label>
+                                    <label for="name">Nama</label>
                                     <input type="text" class="form-control" id="name" name="name"
-                                        value="{{ old('name') }}" placeholder="Enter status name" required>
+                                        required value="{{ old('name') }}">
                                 </div>
-                                <button type="submit" class="btn btn-primary">Add New Status</button>
+                                <div class="form-group">
+                                    <label for="slug">Slug</label>
+                                    <input type="text" class="form-control" id="slug" name="slug"
+                                        required value="{{ old('slug') }}">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Tambah</button>
                             </form>
-                            <hr>
-                            <h6 class="m-0 font-weight-bold text-primary">Current Status</h6>
-                            <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
+
+                            <!-- Tabel untuk Menampilkan Daftar -->
+                            <table class="table table-striped mt-4">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        <th>Action</th>
+                                        <th>Nama</th>
+                                        <th>Slug</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($status as $item)
-                                        <tr>
-                                            <td>
-                                                {{ $item->name }}
-                                            </td>
-                                            <td class='d-flex'>
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                                    data-bs-target="#editModal{{ $item->id }}">
-                                                    Edit Data
-                                                </button>
-
-                                                <form action="{{ route('project_status.destroy', $item->id) }}"
-                                                    method="POST">
-                                                    @csrf
-                                                    @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger"
-                                                        onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
-                                                </form>
-
-                                            </td>
-                                        </tr>
-                                        <div class="modal fade" id="editModal{{ $item->id }}" tabindex="-1"
-                                            aria-labelledby="editModalLabel{{ $item->id }}" aria-hidden="true">
-                                            <div class="modal-dialog">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="editModalLabel">Edit Data
-                                                        </h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <form action="{{ route('project_status.update', $item->id) }}"
-                                                            method="POST">
-                                                            @csrf
-                                                            @method('PUT')
-                                                            <div class="mb-3">
-                                                                <label for="field_name" class="form-label">Field
-                                                                    Name</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="name" name="name"
-                                                                    value="{{ old('name', $item->name) }}">
-                                                            </div>
-                                                            <button type="submit"
-                                                                class="btn btn-success">Update</button>
-                                                        </form>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    @endforeach
-
-                                </tbody>
                             </table>
-                            <p class="mt-3"><strong>Note:</strong> These status will appear on ticket, deleting a
-                                status can be effect on project/ticket.</p>
+
                         </div>
                     </div>
                 </div>
-
-
                 <!-- End of Main Content -->
 
             </div>
