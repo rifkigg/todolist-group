@@ -13,6 +13,11 @@ class task extends Model
         'name', 'project_name', 'status_id', 'priority_id', 'task_label_id', 'user_id', 'due_date',
     ];
 
+    public function project()
+    {
+        return $this->belongsTo(Project::class);
+    }
+
     public function status()
     {
         return $this->belongsTo(TaskStatus::class);
