@@ -95,7 +95,14 @@
                             </div>
                             <button type="submit" class="btn btn-primary">Tambah</button>
                         </form>
-
+                        <script>
+                            function selectIcon(value, id) {
+                                var iconInput = document.getElementById('selectedIcon' + (id ? id : ''));
+                                if (iconInput) {
+                                    iconInput.value = value; // Set the hidden input value
+                                }
+                            }
+                        </script>
                             <!-- Tabel untuk Menampilkan Daftar -->
                             <table class="table table-striped mt-4">
                                 <thead>
@@ -155,11 +162,6 @@
                                                             </div>
                                                             <button type="submit" class="btn btn-success">Update</button>
                                                         </form>
-                                                        <script>
-                                                            function selectIcon(value, id) {
-                                                                document.getElementById('selectedIcon' + id).value = value; // Set the hidden input value
-                                                            }
-                                                        </script>
                                                     </div>
                                                 </div>
                                             </div>

@@ -30,7 +30,6 @@ class TaskPrioritiesController extends Controller
             'icon' => $request->icon
         ]);
 
-        //redirect to index
         return redirect()->route('priorities.index')->with(['success' => 'Data Berhasil Disimpan!']);
     }
 
