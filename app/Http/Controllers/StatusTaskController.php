@@ -63,7 +63,7 @@ class StatusTaskController extends Controller
         //update product without image
         $status->update([
             'name' => $request->name,
-            'task_group' => $request->task_group,
+            'status_group' => $request->status_group,
         ]);
 
         //redirect to index

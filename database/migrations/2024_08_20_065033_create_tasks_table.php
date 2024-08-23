@@ -23,7 +23,7 @@ return new class extends Migration
             $table->timestamps();
 
             $table->foreign('project_id')->references('id')->on('projects');
-            $table->foreign('status_id')->references('id')->on('task_status');
+            $table->foreign('status_id')->references('id')->on('task_statuses');
             $table->foreign('priority_id')->references('id')->on('task_priorities');
             $table->foreign('task_label_id')->references('id')->on('task_labels');
             $table->foreign('user_id')->references('id')->on('users');

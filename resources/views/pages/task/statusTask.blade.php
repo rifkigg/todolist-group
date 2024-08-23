@@ -40,7 +40,8 @@
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Task</span>
                 </a>
-                <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
+                <div id="collapseThree" class="collapse" aria-labelledby="headingTwo"
+                    data-bs-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         @if (auth()->user()->role == 'admin')
                             <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
@@ -80,13 +81,16 @@
                                 @csrf
                                 <div class="form-group">
                                     <label for="name">Name</label>
-                                    <input type="text" class="form-control" id="name" name="name"
-                                        required value="{{ old('name') }}">
+                                    <input type="text" class="form-control" id="name" name="name" required
+                                        value="{{ old('name') }}">
                                 </div>
                                 <div class="form-group">
                                     <label for="status_group">Status Group</label>
-                                    <input type="text" class="form-control" id="status_group" name="status_group"
-                                        required value="{{ old('status_group') }}">
+                                    <select name="status_group" id="status_group" class="form-control">
+                                        <option value="open">Open</option>
+                                        <option value="done">Done</option>
+                                        <option value="close">Close</option>
+                                    </select>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Add New Status</button>
                             </form>
@@ -101,51 +105,54 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($status as $statuses)
+                                    @foreach ($status as $item)
                                         <tr>
-                                            <td>{{ $statuses->name }}</td>
-                                            <td>{{ $statuses->task_group }}</td>
+                                            <td>{{ $item->name }}</td>
+                                            <td>{{ $item->status_group }}</td>
                                             <td>
                                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                                    data-bs-target="#editModal{{ $statuses->id }}">
-                                                    Modify Task Status
+                                                    data-bs-target="#editModal{{ $item->id }}">
+                                                    Edit
                                                 </button>
-                                                <form action="{{ route('task_status.destroy', $statuses->id) }}"
+                                                <form action="{{ route('task_status.destroy', $item->id) }}"
                                                     method="POST" style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn btn-danger"
-                                                        onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
+                                                        onclick="return confirm('Are you sure you want to delete this status?');">Delete</button>
                                                 </form>
                                             </td>
                                         </tr>
-                                        <div class="modal fade" id="editModal{{ $statuses->id }}" tabindex="-1"
-                                            aria-labelledby="editModalLabel{{ $statuses->id }}" aria-hidden="true">
+                                        <div class="modal fade" id="editModal{{ $item->id }}" tabindex="-1"
+                                            aria-labelledby="editModalLabel{{ $item->id }}" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="editModalLabel">Modify Task Status
+                                                        <h5 class="modal-title" id="editModalLabel">Edit
                                                         </h5>
                                                         <button type="button" class="btn-close"
                                                             data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form
-                                                            action="{{ route('task_status.update', $category->id) }}"
+                                                        <form action="{{ route('task_status.update', $item->id) }}"
                                                             method="POST">
                                                             @csrf
                                                             @method('PUT')
                                                             <div class="mb-3">
                                                                 <label for="field_name" class="form-label">Field
-                                                                    Name</label>
+                                                                    Name:</label>
                                                                 <input type="text" class="form-control"
                                                                     id="name" name="name"
-                                                                    value="{{ old('name', $statuses->name) }}">
-                                                                <label for="field_status_group" class="form-label">Field
-                                                                    Status</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="status_group" name="status_group"
-                                                                    value="{{ old('status_group', $statuses->slug) }}">
+                                                                    value="{{ old('name', $item->name) }}">
+                                                                <label for="field_status_group"
+                                                                    class="form-label">Field
+                                                                    Status:</label>
+                                                                <select name="status_group" id="status_group"
+                                                                    class="form-control">
+                                                                    <option value="open">Open</option>
+                                                                    <option value="done">Done</option>
+                                                                    <option value="close">Close</option>
+                                                                </select>
                                                             </div>
                                                             <button type="submit"
                                                                 class="btn btn-success">Update</button>
