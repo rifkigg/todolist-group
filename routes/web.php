@@ -8,6 +8,8 @@ use App\Http\Controllers\StatusController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ProjectCategoriesController;
+use App\Http\Controllers\TaskPrioritiesController;
+use App\Http\Controllers\TaskController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -69,23 +71,24 @@ Route::middleware('auth')->group(function () {
         return view('pages.task.task');
     });
     Route::get('/task/categories', function () {
-        return view('pages.task.prioritiestask');
+        return view('pages.task.prioritiesTask');
     });
     Route::get('/task/status', function () {
         return view('pages.task.statustask');
     });
 
-    Route::get('/task', [taskController::class, 'index'])->name('task.index');
+    Route::get('/task', [TaskController::class, 'index'])->name('task.index');
     
-    Route::post('/task/priorities', [TaskPrioritiesController::class, 'index'])->name('priorities.index');
+    Route::post('/task', [TaskPrioritiesController::class, 'index'])->name('priorities.index');
+    Route::get('/task/priorities', [TaskPrioritiesController::class, 'index'])->name('priorities.index');
+    Route::post('/task/priorities', [TaskPrioritiesController::class, 'store'])->name('priorities.store');
+    Route::delete('/task/priorities/{id}', [TaskPrioritiesController::class, 'destroy'])->name('priorities.destroy');
+    Route::get('/task/priorities/{id}', [TaskPrioritiesController::class, 'show'])->name('priorities.show');
+    Route::put('/task/priorities/{id}', [TaskPrioritiesController::class, 'update'])->name('priorities.update');
 
     Route::get('/task/status', [taskController::class, 'index'])->name('status.index');
 
     Route::get('/task/labels', [taskController::class, 'edit'])->name('labels.index');
-    Route::put('/task/edit/{id}', [taskController::class, 'update'])->name('task.update');
-    Route::delete('/task/{id}', [taskController::class, 'destroy'])->name('task.destroy');
-    Route::post('/task/duplicate/{id}', [taskController::class, 'duplicate'])->name('task.duplicate');
-
 
 
 
