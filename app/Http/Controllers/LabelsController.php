@@ -5,27 +5,28 @@ namespace App\Http\Controllers;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use App\Models\task_label;
+use App\Models\TaskLabel;
 use Illuminate\Http\RedirectResponse;
-class StatusController extends Controller
+
+class LabelsController extends Controller // {{ edit_1 }}
 {
     public function index()
     {
-        $labels = task_label::all();
+        $labels = TaskLabel::all();
         // Logika untuk menampilkan status
-        return view('pages.task.labels', compact('status'));
+        return view('pages.task.labelsTask', compact('labels')); // {{ edit_2 }}
     }
 
     public function create(): View
     {
-        return view('pages.task.labels');
+        return view('pages.task.labelsTask');
     }
 
     public function destroy($id): RedirectResponse
     {
-        $labels = task_label::find($id);
+        $labels = TaskLabel::find($id);
         $labels->delete();
-        return redirect()->route('task_labels.index');
+        return redirect()->route('labels.index');
     }
 
     public function store(Request $request): RedirectResponse
@@ -36,20 +37,20 @@ class StatusController extends Controller
         ]);
 
         //create product
-        task_label::create([
+        TaskLabel::create([
             'name' => $request->name,
         ]);
 
         return redirect()
-            ->route('task_labels.index')
+            ->route('labels.index')
             ->with(['success' => 'Data Berhasil Disimpan!']);
     }
 
     public function edit(string $id): View
     {
-        $labels = task_label::findOrFail($id);
+        $labels = TaskLabel::findOrFail($id);
 
-        return view('pages.project.edittask_labels', compact('status'));
+        return view('pages.task.editlabelsTask', compact('labels')); // {{ edit_3 }}
     }
 
     public function update(Request $request, $id): RedirectResponse
@@ -60,7 +61,7 @@ class StatusController extends Controller
         ]);
 
         //get product by ID
-        $labels = task_label::findOrFail($id);
+        $labels = TaskLabel::findOrFail($id);
 
         //update product without image
         $labels->update([
@@ -69,7 +70,7 @@ class StatusController extends Controller
 
         //redirect to index
         return redirect()
-            ->route('task_labels.index')
+            ->route('labels.index')
             ->with(['success' => 'Data Berhasil Diubah!']);
     }
 }

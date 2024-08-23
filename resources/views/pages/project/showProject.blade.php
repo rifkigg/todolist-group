@@ -11,7 +11,7 @@
             </x-slot>
 
             <li class="nav-item ">
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseThree"
                     aria-bs-expanded="true" aria-bs-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Project</span>
@@ -33,7 +33,7 @@
                 </div>
             </li>
             <li class="nav-item ">
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseThree"
                     aria-bs-expanded="true" aria-bs-controls="collapseTwo">
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Task</span>

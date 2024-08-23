@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class task_label extends Model
+class TaskLabel extends Model
 {
     use HasFactory;
 
