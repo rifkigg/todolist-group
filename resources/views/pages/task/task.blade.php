@@ -15,7 +15,7 @@
             <li class="nav-item ">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
                     aria-bs-expanded="true" aria-bs-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
+                    <i class="fa-solid fa-list-check"></i>
                     <span>Project</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
@@ -37,21 +37,19 @@
             <li class="nav-item active">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseThree"
                     aria-bs-expanded="true" aria-bs-controls="collapseThree">
-                    <i class="fas fa-fw fa-cog"></i>
+                    <i class="fas fa-clipboard-list"></i>
                     <span>Task</span>
                 </a>
-                <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-bs-parent="#accordionSidebar"> 
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                    data-bs-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         @if (auth()->user()->role == 'admin')
                             <a class="collapse-item active" href="{{ route('task.index') }}">Task</a>
-                            <a class="collapse-item" href="{{ route('status.index') }}">Task Status</a>
+                            <a class="collapse-item" href="{{ route('task_status.index') }}">Task Status</a>
                             <a class="collapse-item " href="{{ route('priorities.index') }}">Task Priorities</a>
-                            {{-- <a class="collapse-item" href="{{ route('labels.index') }}">Task Labels/Tags</a> --}}
-                        @elseif (auth()->user()->role == 'manajer')
-                            <a class="collapse-item active" href="{{ route('task.index') }}">Project</a>
-                            <!-- <a class="collapse-item" href="{{ route('add.create') }}">Task Status</a> -->
+                            <a class="collapse-item" href="{{ route('labels.index') }}">Task Labels/Tags</a>
                         @else
-                            <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
+                            <a class="collapse-item active" href="{{ route('task.index') }}">Task</a>
                         @endif
                     </div>
                 </div>
@@ -118,7 +116,7 @@
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50</div>
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ $total_task }}</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -138,7 +136,8 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                                 People Involved</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $total_user }}</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $total_user }}
+                                            </div>
                                         </div>
                                         <div class="col-auto">
                                             {{-- <i class="fas fa-comments fa-2x text-gray-300"></i> --}}
@@ -151,7 +150,7 @@
                     </div>
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Tasks</h6>
                         </div>
                         <div class="card-body">
                             @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
@@ -177,16 +176,16 @@
                                     @forelse ($task as $item)
                                         <tr>
                                             <td>{{ $item->name }}</td>
-                                            <td>{{ $item->project_id }}</td>
-                                            <td>{{ $item->status_id }}</td>
-                                            <td>{{ $item->priority_id }}</td>
-                                            <td>{{ $item->task_label_id }}</td>
+                                            <td>{{ $item->project->name }}</td>
+                                            <td>{{ $item->status->name }}</td>
+                                            <td>{{ $item->priority->name }}</td>
+                                            <td>{{ $item->due_date }}</td>
                                             <td>{{ $item->created_at }}</td>
                                             <td>
                                                 @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
                                                     <!-- Form untuk duplikasi -->
                                                     <form id="duplicate-form-{{ $item->id }}"
-                                                        action="{{ route('project.duplicate', $item->id) }}"
+                                                        action="{{ route('task.duplicate', $item->id) }}"
                                                         method="POST" style="display: none;">
                                                         @csrf
                                                     </form>
@@ -201,13 +200,8 @@
                                                         <i class="icon-action fa-solid fa-eye"></i>
                                                     </a>
 
-                                                    <!-- Ikon edit -->
-                                                    <a href="{{ route('project.edit', $item->id) }}" class="btn">
-                                                        <i class="icon-action fa-solid fa-pencil"></i>
-                                                    </a>
-
                                                     <!-- Form untuk delete -->
-                                                    <form action="{{ route('project.destroy', $item->id) }}"
+                                                    <form action="{{ route('task.destroy', $item->id) }}"
                                                         method="POST"
                                                         onsubmit="return confirm('Are you sure you want to delete this item?');"
                                                         class="d-inline">

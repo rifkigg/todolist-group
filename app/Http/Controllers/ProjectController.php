@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Models\ProjectStatus;
 use App\Models\ProjectCategories;
 use App\Http\Controllers\Controller;
+use App\Models\task;
 use Illuminate\Http\RedirectResponse;
 
 class ProjectController extends Controller
@@ -20,9 +21,10 @@ class ProjectController extends Controller
 
         $total_project = Project::count();
         $total_user = User::count();
+        $total_task = task::count();
 
         //render view with products
-        return view('pages.project.project', compact('project', 'total_project', 'total_user'));
+        return view('pages.project.project', compact('project', 'total_project', 'total_user', 'total_task'));
     }
 
     public function create(): View

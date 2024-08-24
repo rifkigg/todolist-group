@@ -14,7 +14,7 @@
             <li class="nav-item ">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
                     aria-bs-expanded="true" aria-bs-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
+                    <i class="fa-solid fa-list-check"></i>
                     <span>Project</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
@@ -36,21 +36,18 @@
             <li class="nav-item ">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
                     aria-bs-expanded="true" aria-bs-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
+                    <i class="fas fa-clipboard-list"></i>
                     <span>Task</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         @if (auth()->user()->role == 'admin')
                             <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
-                            <a class="collapse-item" href="{{ route('status.index') }}">Task Status</a>
+                            <a class="collapse-item" href="{{ route('task_status.index') }}">Task Status</a>
                             <a class="collapse-item " href="{{ route('priorities.index') }}">Task Priorities</a>
                             <a class="collapse-item" href="{{ route('labels.index') }}">Task Labels/Tags</a>
-                        @elseif (auth()->user()->role == 'manajer')
-                            <a class="collapse-item active" href="{{ route('task.index') }}">Project</a>
-                            <!-- <a class="collapse-item" href="{{ route('add.create') }}">Task Status</a> -->
                         @else
-                            <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
+                            <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
                         @endif
                     </div>
                 </div>
@@ -76,59 +73,59 @@
                                 <form action="{{ route('project.update', $project->id) }}" method="POST"
                                     enctype="multipart/form-data">
                                     @csrf
-                                    @method('PUT')           
-                                        <div class="wrapper">
+                                    @method('PUT')
+                                    <div class="wrapper">
 
-                                            <div class="form-input">
-                                                <label for="name">Project Name:</label>
-                                                <input type="text"
-                                                    class="form-control @error('name') is-invalid @enderror"
-                                                    name="name" value="{{ old('name', $project->name) }}"
-                                                    placeholder="Enter Project Name">
-                                                @error('name')
-                                                    <div class="alert alert-danger mt-2">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-
-                                                <p>The name of the project - where you can define your project.</p>
-                                            </div>
-                                        </div>
-                                        <div class="date mb-3">
-                                            <label for="live_date">Project Live Date: </label>
-                                            <input type="date" id="live_date"
-                                                class="form-control @error('live_date') is-invalid @enderror"
-                                                name="live_date" value="{{ old('live_date', $project->live_date) }}"
-                                                placeholder="Masukkan Judul Product">
-                                            @error('live_date')
+                                        <div class="form-input">
+                                            <label for="name">Project Name:</label>
+                                            <input type="text"
+                                                class="form-control @error('name') is-invalid @enderror" name="name"
+                                                value="{{ old('name', $project->name) }}"
+                                                placeholder="Enter Project Name">
+                                            @error('name')
                                                 <div class="alert alert-danger mt-2">
                                                     {{ $message }}
                                                 </div>
                                             @enderror
 
+                                            <p>The name of the project - where you can define your project.</p>
                                         </div>
-                                        <div class="mb-3">
-                                            <div class="form-select">
-
-                                                <label for="category_id">Project Category: </label>
-                                                <select id="category_id" name="category_id"
-                                                    class=" form-control @error('category_id') is-invalid @enderror"
-                                                    value="{{ old('category_id', $project->category_id) }}">
-                                                    <option disabled>Pilih Category:</option>
-                                                    @foreach ($categories as $items)
-                                                        <option value="{{ $items->id }}">{{ $items->name }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                                @error('category_id')
-                                                    <div class="alert alert-danger mt-2">
-                                                        {{ $message }}
-                                                    </div>
-                                                @enderror
-
-                                                <p>The type of project you are creating.</p>
+                                    </div>
+                                    <div class="date mb-3">
+                                        <label for="live_date">Project Live Date: </label>
+                                        <input type="date" id="live_date"
+                                            class="form-control @error('live_date') is-invalid @enderror"
+                                            name="live_date" value="{{ old('live_date', $project->live_date) }}"
+                                            placeholder="Masukkan Judul Product">
+                                        @error('live_date')
+                                            <div class="alert alert-danger mt-2">
+                                                {{ $message }}
                                             </div>
+                                        @enderror
+
+                                    </div>
+                                    <div class="mb-3">
+                                        <div class="form-select">
+
+                                            <label for="category_id">Project Category: </label>
+                                            <select id="category_id" name="category_id"
+                                                class=" form-control @error('category_id') is-invalid @enderror"
+                                                value="{{ old('category_id', $project->category_id) }}">
+                                                <option disabled>Pilih Category:</option>
+                                                @foreach ($categories as $items)
+                                                    <option value="{{ $items->id }}">{{ $items->name }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                            @error('category_id')
+                                                <div class="alert alert-danger mt-2">
+                                                    {{ $message }}
+                                                </div>
+                                            @enderror
+
+                                            <p>The type of project you are creating.</p>
                                         </div>
+                                    </div>
                             </div>
 
                             <div class="wrapper">
@@ -160,7 +157,8 @@
                                     <div class="textarea">
                                         <label for="project_detail">Project Details: </label>
                                         <textarea id="project_detail" class="form-control @error('project_detail') is-invalid @enderror"
-                                            name="project_detail" value="{{ old('project_detail', $project->project_detail) }}" placeholder="Masukkan Judul Product">
+                                            name="project_detail" value="{{ old('project_detail', $project->project_detail) }}"
+                                            placeholder="Masukkan Judul Product">
                                             </textarea>
                                         @error('project_detail')
                                             <div class="alert alert-danger mt-2">
@@ -176,7 +174,7 @@
                                         <button type="submit" class="btn btn-primary w-100">Edit Project</button>
                                     </div>
                                 </div>
-                            
+
                                 </form>
                             </div>
                         </div>
@@ -194,4 +192,4 @@
             </a>
 
 
-        </x-layout>
+</x-layout>

@@ -21,7 +21,7 @@ Route::get('/dashboard', function () {
     $total_project = Project::count();
     $total_user = User::count();
     $total_task = task::count();
-    return view('pages.dashboard', compact('total_project', 'total_user'));
+    return view('pages.dashboard', compact('total_project', 'total_user', 'total_task'));
 })
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
@@ -34,7 +34,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/', function () {
         $total_project = Project::count();
         $total_user = User::count();
-        return view('pages.dashboard', compact('total_project', 'total_user'));
+        $total_task = task::count();
+        return view('pages.dashboard', compact('total_project', 'total_user', 'total_task'));
     });
     // Route::get('/dashboard', function () {
     //     return view('pages.dashboard');
@@ -73,9 +74,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/project/categories/{id}', [ProjectCategoriesController::class, 'destroy'])->name('projectcategories.destroy');
     Route::get('/project/categories/{id}', [ProjectCategoriesController::class, 'show'])->name('projectcategories.show');
     Route::put('/project/categories/{id}', [ProjectCategoriesController::class, 'update'])->name('projectcategories.update');
-});
 
-<<<<<<< HEAD
     Route::get('/task', function () {
         return view('pages.task.task');
     });
@@ -88,55 +87,34 @@ Route::middleware('auth')->group(function () {
     Route::get('/task/label', function () {
         return view('pages.task.statustask')->name('labels.index');
     });
-=======
-Route::get('/task', function () {
-    return view('pages.task.task');
+
+    Route::get('/task', [TaskController::class, 'index'])->name('task.index');
+    Route::delete('/task/{id}', [TaskController::class, 'destroy'])->name('task.destroy');
+    Route::post('/task/duplicate/{id}', [TaskController::class, 'duplicate'])->name('task.duplicate');
+    Route::get('/status', [StatusController::class, 'index'])->name('status.index');
+
+    Route::get('/task/status', [StatusTaskController::class, 'index'])->name('task_status.index');
+    Route::post('/task/status', [StatusTaskController::class, 'store'])->name('task_status.store');
+    Route::delete('/task/status/{id}', [StatusTaskController::class, 'destroy'])->name('task_status.destroy');
+    Route::get('/task/status/{id}', [StatusTaskController::class, 'show'])->name('task_status.show');
+    Route::put('/task/status/{id}', [StatusTaskController::class, 'update'])->name('task_status.update');
+
+    Route::get('/task/priorities', [TaskPrioritiesController::class, 'index'])->name('priorities.index');
+    Route::post('/task/priorities', [TaskPrioritiesController::class, 'store'])->name('priorities.store');
+    Route::delete('/task/priorities/{id}', [TaskPrioritiesController::class, 'destroy'])->name('priorities.destroy');
+    Route::get('/task/priorities/{id}', [TaskPrioritiesController::class, 'show'])->name('priorities.show');
+    Route::put('/task/priorities/{id}', [TaskPrioritiesController::class, 'update'])->name('priorities.update');
+
+    Route::get('/task/labels', [taskController::class, 'edit'])->name('labels.index');
+    Route::put('/task/edit/{id}', [taskController::class, 'update'])->name('task.update');
+    Route::delete('/task/{id}', [taskController::class, 'destroy'])->name('task.destroy');
+    Route::post('/task/duplicate/{id}', [taskController::class, 'duplicate'])->name('task.duplicate');
+
+    Route::get('/task/labels', [LabelsController::class, 'index'])->name('labels.index');
+    Route::post('/task/labels', [LabelsController::class, 'store'])->name('labels.store');
+    Route::delete('/task/labels/{id}', [LabelsController::class, 'destroy'])->name('labels.destroy');
+    Route::get('/task/labels/{id}', [LabelsController::class, 'edit'])->name('labels.edit');
+    Route::put('/task/labels/{id}', [LabelsController::class, 'update'])->name('labels.update');
 });
-Route::get('/task/categories', function () {
-    return view('pages.task.prioritiesTask');
-});
-Route::get('/task/status', function () {
-    return view('pages.task.statusTask');
-});
->>>>>>> 46a65819f6e14ce58097224bc9827bba13ff65fd
-
-Route::get('/task', [TaskController::class, 'index'])->name('task.index');
-
-Route::get('/task/status', [StatusTaskController::class, 'index'])->name('task_status.index');
-Route::post('/task/status', [StatusTaskController::class, 'store'])->name('task_status.store');
-Route::delete('/task/status/{id}', [StatusTaskController::class, 'destroy'])->name('task_status.destroy');
-Route::get('/task/status/{id}', [StatusTaskController::class, 'show'])->name('task_status.show');
-Route::put('/task/status/{id}', [StatusTaskController::class, 'update'])->name('task_status.update');
-
-<<<<<<< HEAD
-    // Route::get('/task/labels', [taskController::class, 'edit'])->name('labels.index');
-    // Route::put('/task/edit/{id}', [taskController::class, 'update'])->name('task.update');
-    // Route::delete('/task/{id}', [taskController::class, 'destroy'])->name('task.destroy');
-    // Route::post('/task/duplicate/{id}', [taskController::class, 'duplicate'])->name('task.duplicate');
-
-    // Route::get('/task/labels', [LabelsController::class, 'index'])->name('task_labels.index');
-    // Route::post('/task/labels', [LabelsController::class, 'store'])->name('task_labels.store');
-    // Route::delete('/task/labels/{id}', [LabelsController::class, 'destroy'])->name('task_labels.destroy');
-    // Route::get('/task/labels/{id}', [LabelsController::class, 'edit'])->name('task_labels.edit');
-    // Route::put('/task/labels/{id}', [LabelsController::class, 'update'])->name('task_labels.update');
-=======
-Route::get('/task/priorities', [TaskPrioritiesController::class, 'index'])->name('priorities.index');
-Route::post('/task/priorities', [TaskPrioritiesController::class, 'store'])->name('priorities.store');
-Route::delete('/task/priorities/{id}', [TaskPrioritiesController::class, 'destroy'])->name('priorities.destroy');
-Route::get('/task/priorities/{id}', [TaskPrioritiesController::class, 'show'])->name('priorities.show');
-Route::put('/task/priorities/{id}', [TaskPrioritiesController::class, 'update'])->name('priorities.update');
-
-Route::get('/task/labels', [taskController::class, 'edit'])->name('labels.index');
-Route::put('/task/edit/{id}', [taskController::class, 'update'])->name('task.update');
-Route::delete('/task/{id}', [taskController::class, 'destroy'])->name('task.destroy');
-Route::post('/task/duplicate/{id}', [taskController::class, 'duplicate'])->name('task.duplicate');
-
-Route::get('/task/labels', [LabelsController::class, 'index'])->name('labels.index');
-Route::post('/task/labels', [LabelsController::class, 'store'])->name('labels.store');
-Route::delete('/task/labels/{id}', [LabelsController::class, 'destroy'])->name('labels.destroy');
-Route::get('/task/labels/{id}', [LabelsController::class, 'edit'])->name('labels.edit');
-Route::put('/task/labels/{id}', [LabelsController::class, 'update'])->name('labels.update');
->>>>>>> 46a65819f6e14ce58097224bc9827bba13ff65fd
-
 
 require __DIR__ . '/auth.php';
