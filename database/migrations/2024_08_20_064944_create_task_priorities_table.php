@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('task_priorities', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->string('icon');
             $table->timestamps();
         });
