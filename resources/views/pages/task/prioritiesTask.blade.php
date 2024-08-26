@@ -108,7 +108,7 @@
                                 }
                             </script>
                             <!-- Tabel untuk Menampilkan Daftar -->
-                            <table class="table table-striped mt-4">
+                            <table id="example" class="table table-striped mt-4">
                                 <thead>
                                     <tr>
                                         <th>Nama</th>

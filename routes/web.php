@@ -12,6 +12,7 @@ use App\Http\Controllers\TaskPrioritiesController;
 use App\Http\Controllers\ProjectCategoriesController;
 use App\Http\Controllers\StatusTaskController;
 use App\Http\Controllers\LabelsController;
+use App\Models\board;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -21,7 +22,8 @@ Route::get('/dashboard', function () {
     $total_project = Project::count();
     $total_user = User::count();
     $total_task = task::count();
-    return view('pages.dashboard', compact('total_project', 'total_user', 'total_task'));
+    $total_board = board::count();
+    return view('pages.dashboard', compact('total_project', 'total_user', 'total_task', 'total_board'));
 })
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
@@ -35,7 +37,8 @@ Route::middleware('auth')->group(function () {
         $total_project = Project::count();
         $total_user = User::count();
         $total_task = task::count();
-        return view('pages.dashboard', compact('total_project', 'total_user', 'total_task'));
+        $total_board = board::count();
+        return view('pages.dashboard', compact('total_project', 'total_user', 'total_task', 'total_board'));
     });
     // Route::get('/dashboard', function () {
     //     return view('pages.dashboard');
@@ -90,6 +93,7 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/task', [TaskController::class, 'index'])->name('task.index');
     Route::post('/task/create', [TaskController::class, 'store'])->name('task.store');
+    Route::put('/task/{id}', [TaskController::class, 'update'])->name('task.update');
     Route::delete('/task/{id}', [TaskController::class, 'destroy'])->name('task.destroy');
     Route::post('/task/duplicate/{id}', [TaskController::class, 'duplicate'])->name('task.duplicate');
     Route::get('/status', [StatusController::class, 'index'])->name('status.index');
@@ -107,8 +111,6 @@ Route::middleware('auth')->group(function () {
     Route::put('/task/priorities/{id}', [TaskPrioritiesController::class, 'update'])->name('priorities.update');
 
     Route::get('/task/labels', [taskController::class, 'edit'])->name('labels.index');
-    Route::put('/task/edit/{id}', [taskController::class, 'update'])->name('task.update');
-    Route::delete('/task/{id}', [taskController::class, 'destroy'])->name('task.destroy');
     Route::post('/task/duplicate/{id}', [taskController::class, 'duplicate'])->name('task.duplicate');
 
     Route::get('/task/labels', [LabelsController::class, 'index'])->name('labels.index');

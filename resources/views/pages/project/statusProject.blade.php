@@ -87,7 +87,7 @@
                             </form>
                             <hr>
                             <h6 class="m-0 font-weight-bold text-primary">Current Status</h6>
-                            <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
+                            <table class="table table-striped" id="example" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
                                         <th>Name</th>
