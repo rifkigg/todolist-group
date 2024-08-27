@@ -350,25 +350,22 @@
                                                                             </option>
                                                                         @endforeach
                                                                     </select>
-                                                                    <p class="text-danger">Press
-                                                                        ctrl to select more than one</p>
 
-
-                                                                    <!-- Display selected assignees in flex -->
-                                                                    <div id="selected-assignees"
-                                                                        class="d-flex flex-wrap gap-2 mb-3">
-                                                                        @foreach ($item->users as $user)
-                                                                            <div class="selected-user d-flex align-items-center bg-light p-2 rounded"
-                                                                                data-id="{{ $user->id }}">
-                                                                                <span
-                                                                                    class="me-2">{{ $user->username }}</span>
-                                                                                <button type="button"
-                                                                                    class="btn btn-sm btn-danger ms-2 remove-assignee"
-                                                                                    aria-label="Remove">x</button>
-                                                                            </div>
-                                                                        @endforeach
+                                                                    <!-- Tempat untuk menampilkan hasil pilihan -->
+                                                                    <div id="selected-assignees">
+                                                                        <p>Selected Assignees:</p>
+                                                                        <ul
+                                                                            class="d-flex flex-wrap gap-2 list-unstyled">
+                                                                            @foreach ($item->users as $user)
+                                                                                <li
+                                                                                    class="d-flex align-items-center border rounded px-2 py-1">
+                                                                                    {{ $user->username }}
+                                                                                </li>
+                                                                            @endforeach
+                                                                        </ul>
                                                                     </div>
-                                                                    
+
+
                                                                     <div class="task-row"
                                                                         data-task-id="{{ $item->id }}">
                                                                         <p for="time_count_{{ $item->id }}"
@@ -541,11 +538,11 @@
         </script>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
-                const selectElement = document.getElementById('assignees');
-                const selectedAssigneesContainer = document.getElementById('selected-assignees');
+                const selectElements = document.querySelectorAll('[id^="assignees"]');
+                const selectedAssigneesContainers = document.querySelectorAll('[id^="selected-assignees"]');
 
-                // Function to update selected assignees display
-                function updateSelectedAssignees() {
+                // Function to update selected assignees display for a specific pair of select and container
+                function updateSelectedAssignees(selectElement, selectedAssigneesContainer) {
                     const selectedOptions = Array.from(selectElement.selectedOptions);
                     selectedAssigneesContainer.innerHTML = '';
 
@@ -557,38 +554,55 @@
                         userDiv.classList.add('selected-user');
                         userDiv.dataset.id = userId;
                         userDiv.innerHTML = `
-                <span class="me-2">${userName}</span>
-                <button type="button" class="btn btn-sm btn-danger ms-2 remove-assignee" aria-label="Remove">x</button>
-            `;
+                        <span class="me-2">${userName}</span>
+                        <button type="button" class="btn btn-sm btn-danger ms-2 remove-assignee" aria-label="Remove">x</button>
+                    `;
                         selectedAssigneesContainer.appendChild(userDiv);
                     });
                 }
 
-                // Event listener for when the select value changes
-                selectElement.addEventListener('change', updateSelectedAssignees);
+                // Iterate over all select elements and attach event listeners
+                selectElements.forEach((selectElement, index) => {
+                    const selectedAssigneesContainer = selectedAssigneesContainers[index];
 
-                // Event delegation to handle removal of assignees
-                selectedAssigneesContainer.addEventListener('click', function(event) {
-                    if (event.target.classList.contains('remove-assignee')) {
-                        const userDiv = event.target.closest('.selected-user');
-                        const userId = userDiv.dataset.id;
+                    // Event listener for when the select value changes
+                    selectElement.addEventListener('change', function() {
+                        updateSelectedAssignees(selectElement, selectedAssigneesContainer);
+                    });
 
-                        // Remove the user from the select
-                        const optionToRemove = Array.from(selectElement.options).find(option => option.value ===
-                            userId);
-                        if (optionToRemove) {
-                            optionToRemove.selected = false;
+                    // Event delegation to handle removal of assignees
+                    selectedAssigneesContainer.addEventListener('click', function(event) {
+                        if (event.target.classList.contains('remove-assignee')) {
+                            const userDiv = event.target.closest('.selected-user');
+                            const userId = userDiv.dataset.id;
+
+                            // Remove the user from the select
+                            const optionToRemove = Array.from(selectElement.options).find(option =>
+                                option.value === userId);
+                            if (optionToRemove) {
+                                optionToRemove.selected = false;
+                            }
+
+                            // Remove the user div from the display
+                            userDiv.remove();
                         }
+                    });
 
-                        // Remove the user div from the display
-                        userDiv.remove();
-                    }
+                    // Initialize display on page load
+                    updateSelectedAssignees(selectElement, selectedAssigneesContainer);
+
+                    // Ensure that changes in data after load are reflected in the UI
+                    new MutationObserver(() => updateSelectedAssignees(selectElement,
+                        selectedAssigneesContainer)).observe(selectElement, {
+                        childList: true,
+                        subtree: true,
+                        attributes: true,
+                        characterData: true
+                    });
                 });
-
-                // Initialize display on page load
-                updateSelectedAssignees();
             });
         </script>
+
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 document.querySelectorAll('.task-row').forEach(function(row) {

@@ -111,6 +111,9 @@ class TaskController extends Controller
             'attachments' => $task->attachments, // Pastikan kolom attachments di-update
         ]);
 
+        // Update assignees
+        $task->users()->sync($request->assignees);
+
         return redirect()->route('task.index')->with('success', 'Task updated successfully.');
     }
 
