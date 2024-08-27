@@ -12,19 +12,21 @@
                 </li>
             </x-slot>
 
-            <li class="nav-item ">
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-                    aria-bs-expanded="true" aria-bs-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
+            <li class="nav-item active">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseThree"
+                    aria-bs-expanded="true" aria-bs-controls="collapseThree">
+                    <i class="fa-solid fa-list-check"></i>
                     <span>Project</span>
                 </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                    data-bs-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         @if (auth()->user()->role == 'admin')
                             <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
                             <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
                             <a class="collapse-item " href="{{ route('projectcategories.index') }}">Categories</a>
-                            <a class="collapse-item" href="{{ route('project_status.index') }}">Project Status</a>
+                            <a class="collapse-item active" href="{{ route('project_status.index') }}">Project
+                                Status</a>
                         @elseif (auth()->user()->role == 'manajer')
                             <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
                             <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
@@ -37,21 +39,18 @@
             <li class="nav-item ">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
                     aria-bs-expanded="true" aria-bs-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
+                    <i class="fas fa-clipboard-list"></i>
                     <span>Task</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         @if (auth()->user()->role == 'admin')
                             <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
-                            <a class="collapse-item" href="{{ route('status.index') }}">Task Status</a>
+                            <a class="collapse-item" href="{{ route('task_status.index') }}">Task Status</a>
                             <a class="collapse-item " href="{{ route('priorities.index') }}">Task Priorities</a>
                             <a class="collapse-item" href="{{ route('labels.index') }}">Task Labels/Tags</a>
-                        @elseif (auth()->user()->role == 'manajer')
-                            <a class="collapse-item active" href="{{ route('task.index') }}">Project</a>
-                            <!-- <a class="collapse-item" href="{{ route('add.create') }}">Task Status</a> -->
                         @else
-                            <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
+                            <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
                         @endif
                     </div>
                 </div>
@@ -124,8 +123,8 @@
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="editModalLabel">Edit Data
                                                         </h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
+                                                        <button type="button" class="btn-close"
+                                                            data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
                                                         <form action="{{ route('project_status.update', $item->id) }}"

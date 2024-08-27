@@ -15,7 +15,7 @@
             <li class="nav-item ">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
                     aria-bs-expanded="true" aria-bs-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
+                    <i class="fa-solid fa-list-check"></i>
                     <span>Project</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
@@ -34,24 +34,22 @@
                     </div>
                 </div>
             </li>
-            <li class="nav-item ">
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-                    aria-bs-expanded="true" aria-bs-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
+            <li class="nav-item active">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseThree"
+                    aria-bs-expanded="true" aria-bs-controls="collapseThree">
+                    <i class="fas fa-clipboard-list"></i>
                     <span>Task</span>
                 </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                    data-bs-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         @if (auth()->user()->role == 'admin')
-                            <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
-                            <a class="collapse-item" href="{{ route('status.index') }}">Task Status</a>
+                            <a class="collapse-item active" href="{{ route('task.index') }}">Task</a>
+                            <a class="collapse-item" href="{{ route('task_status.index') }}">Task Status</a>
                             <a class="collapse-item " href="{{ route('priorities.index') }}">Task Priorities</a>
                             <a class="collapse-item" href="{{ route('labels.index') }}">Task Labels/Tags</a>
-                        @elseif (auth()->user()->role == 'manajer')
-                            <a class="collapse-item active" href="{{ route('task.index') }}">Project</a>
-                            <!-- <a class="collapse-item" href="{{ route('add.create') }}">Task Status</a> -->
                         @else
-                            <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
+                            <a class="collapse-item active" href="{{ route('task.index') }}">Task</a>
                         @endif
                     </div>
                 </div>
@@ -98,7 +96,8 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Boards</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">10</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $total_board }}
+                                            </div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fa-solid fa-display fa-2x text-gray-300"></i>
@@ -118,7 +117,8 @@
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50</div>
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                                                        {{ $total_task }}</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -138,7 +138,8 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                                 People Involved</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $total_user }}</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $total_user }}
+                                            </div>
                                         </div>
                                         <div class="col-auto">
                                             {{-- <i class="fas fa-comments fa-2x text-gray-300"></i> --}}
@@ -151,14 +152,14 @@
                     </div>
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Tasks</h6>
                         </div>
                         <div class="card-body">
                             @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
-                                <form action="{{ route('project.create') }}" method="GET">
-                                    <button type="submit" class="btn btn-primary d-flex gap-2 align-items-center"><i
-                                            class="fa-solid fa-circle-plus fa-lg"></i> Add New</button>
-                                </form>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#createTask">
+                                    Create Data
+                                </button>
                             @else
                             @endif
                             <table id="example" class="table table-striped">
@@ -177,16 +178,16 @@
                                     @forelse ($task as $item)
                                         <tr>
                                             <td>{{ $item->name }}</td>
-                                            <td>{{ $item->project_id }}</td>
-                                            <td>{{ $item->status_id }}</td>
-                                            <td>{{ $item->priority_id }}</td>
-                                            <td>{{ $item->task_label_id }}</td>
+                                            <td>{{ $item->project->name ?? 'No Project' }}</td>
+                                            <td>{{ $item->status->name ?? 'No Status' }}</td>
+                                            <td>{{ $item->priority->name ?? 'No Priority' }}</td>
+                                            <td>{{ $item->due_date ?? 'No Due Date' }}</td>
                                             <td>{{ $item->created_at }}</td>
                                             <td>
                                                 @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
                                                     <!-- Form untuk duplikasi -->
                                                     <form id="duplicate-form-{{ $item->id }}"
-                                                        action="{{ route('project.duplicate', $item->id) }}"
+                                                        action="{{ route('task.duplicate', $item->id) }}"
                                                         method="POST" style="display: none;">
                                                         @csrf
                                                     </form>
@@ -201,13 +202,8 @@
                                                         <i class="icon-action fa-solid fa-eye"></i>
                                                     </a>
 
-                                                    <!-- Ikon edit -->
-                                                    <a href="{{ route('project.edit', $item->id) }}" class="btn">
-                                                        <i class="icon-action fa-solid fa-pencil"></i>
-                                                    </a>
-
                                                     <!-- Form untuk delete -->
-                                                    <form action="{{ route('project.destroy', $item->id) }}"
+                                                    <form action="{{ route('task.destroy', $item->id) }}"
                                                         method="POST"
                                                         onsubmit="return confirm('Are you sure you want to delete this item?');"
                                                         class="d-inline">
@@ -233,6 +229,68 @@
                                             </td>
                                         </tr>
                                     @endforelse
+                                    <div class="modal fade" id="createTask" tabindex="-1"
+                                        aria-labelledby="createModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="createModalLabel">Create Data
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="{{ route('task.store') }}" method="POST"
+                                                        enctype="multipart/form-data">
+                                                        @csrf
+                                                        <div class="mb-3">
+                                                            <label for="field_name" class="form-label">
+                                                                Task Name</label>
+                                                            <input type="text"
+                                                                class="form-control @error('name') is-invalid @enderror"
+                                                                name="name" value="{{ old('name') }}"
+                                                                placeholder="Enter Project Name">
+                                                            @error('name')
+                                                                <div class="alert alert-danger mt-2">           
+                                                                    {{ $message }}
+                                                                </div>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="mb-3">
+
+                                                            <label for="field_name" class="form-label">
+                                                                Choose Project</label>
+                                                            <select id="project_id" name="project_id"
+                                                                class="form-control">
+                                                                <option value="" selected>Choose Project:
+                                                                </option>
+                                                                @foreach ($project as $items)
+                                                                    <option value="{{ $items->id }}">
+                                                                        {{ $items->name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="mb-3">
+
+                                                            <label for="field_name" class="form-label">
+                                                                Choose Board</label>
+                                                            <select id="board_id" name="board_id"
+                                                                class="form-control">
+                                                                <option value="" selected>Choose Board:
+                                                                </option>
+                                                                @foreach ($board as $items)
+                                                                    <option value="{{ $items->id }}">
+                                                                        {{ $items->board_name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary">Create
+                                                            Task</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </tbody>
                             </table>
 
@@ -251,6 +309,7 @@
         <a class="scroll-to-top rounded" href="#page-top">
             <i class="fas fa-angle-up"></i>
         </a>
+
 
 
 </x-layout>
