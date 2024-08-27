@@ -77,7 +77,7 @@ Route::middleware('auth')->group(function () {
 
 Route::get('/task', function () {
     return view('pages.task.task');
-});
+});  
 Route::get('/task/categories', function () {
     return view('pages.task.prioritiesTask');
 });
