@@ -30,10 +30,6 @@
     <script>
         new DataTable('#example');
     </script>
-    <script src="https://cdn.ckeditor.com/4.13.1/standard/ckeditor.js"></script>
-    <script>
-        CKEDITOR.replace('project_detail');
-    </script>
     <script src="https://kit.fontawesome.com/87dd173a0d.js" crossorigin="anonymous"></script>
     <!-- Bootstrap core JavaScript-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
