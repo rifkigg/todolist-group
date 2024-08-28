@@ -9,6 +9,7 @@ use App\Models\project;
 use App\Models\TaskLabel;
 use App\Models\Attachment;
 use App\Models\TaskStatus;
+use App\Models\TaskActivity;
 use Illuminate\Http\Request;
 use App\Models\task_priority;
 use Illuminate\Routing\Controller;
@@ -20,7 +21,7 @@ class TaskController extends Controller
 {
     public function index()
     {
-        $task = Task::with('project', 'board', 'status', 'priority', 'label', 'users', 'attachments')
+        $task = Task::with('project', 'board', 'status', 'priority', 'label', 'users', 'attachments', 'activities')
             ->latest()
             ->get()
             ->map(function ($task) {
@@ -34,14 +35,13 @@ class TaskController extends Controller
         $priority = task_priority::all();
         $label = TaskLabel::all();
         $users = User::all();
-        $attachments = Attachment::all();
 
         $total_project = Project::count();
         $total_board = Board::count();
         $total_user = User::count();
         $total_task = Task::count();
 
-        return view('pages.task.task', compact('task', 'total_project', 'total_user', 'total_task', 'total_board', 'project', 'board', 'status', 'priority', 'label', 'users', 'attachments'));
+        return view('pages.task.task', compact('task', 'total_project', 'total_user', 'total_task', 'total_board', 'project', 'board', 'status', 'priority', 'label', 'users'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -84,7 +84,6 @@ class TaskController extends Controller
             'priority_id' => $request->priority_id,
             'task_label_id' => $request->task_label_id,
             'description' => $request->description,
-            'activities' => $request->activities,
             'checklist' => $request->checklist,
             'time_count' => $request->time_count,
             'due_date' => $request->due_date,

@@ -202,10 +202,10 @@
                                                         </button>
                                                     </form>
                                                 @else
-                                                    <!-- Ikon view -->
-                                                    <a href="{{ route('project.show', $item->id) }}" class="btn">
+                                                    <button type="button" class="btn" data-bs-toggle="modal"
+                                                        data-bs-target="#view-{{ $item->id }}">
                                                         <i class="icon-action fa-solid fa-eye"></i>
-                                                    </a>
+                                                    </button>
                                                 @endif
                                             </td>
                                         </tr>
@@ -214,7 +214,8 @@
                                             <div class="modal-dialog modal-xl">
                                                 <div class="modal-content">
                                                     <form action="{{ route('task.update', $item->id) }}"
-                                                        method="POST" enctype="multipart/form-data">
+                                                        method="POST" enctype="multipart/form-data"
+                                                        id="formUpdate-{{ $item->id }}">
                                                         @csrf
                                                         @method('PUT')
                                                         <div class="modal-header">
@@ -239,7 +240,8 @@
 
                                                                     <p for="attachments" class="form-label">Attachment
                                                                     </p>
-                                                                    <div class="overflow-auto" style="max-height: 300px">
+                                                                    <div class="overflow-auto"
+                                                                        style="max-height: 300px">
                                                                         @foreach ($item->attachments as $img)
                                                                             <div
                                                                                 class="mb-3 d-flex align-items-start gap-2">
@@ -249,22 +251,43 @@
                                                                                         alt="{{ $img->file_name }}"
                                                                                         width="150">
                                                                                 </a>
-                                                                                <button type="button"
-                                                                                    onclick="if(confirm('Are you sure you want to delete this attachment?')) { document.getElementById('deleteGambar-{{ $img->id }}').submit(); }"
-                                                                                    class="btn btn-danger btn-sm">
-                                                                                    <i class="fa-solid fa-trash"></i>
-                                                                                </button>
+                                                                                <div>
+                                                                                    <button type="button"
+                                                                                        onclick="if(confirm('Are you sure you want to delete this attachment?')) { document.getElementById('deleteGambar-{{ $img->id }}').submit(); }"
+                                                                                        class="btn btn-danger btn-sm">
+                                                                                        <i
+                                                                                            class="fa-solid fa-trash"></i>
+                                                                                    </button>
+                                                                                    <p>Created at:
+                                                                                        {{ $img->created_at }}</p>
+                                                                                </div>
                                                                             </div>
                                                                         @endforeach
                                                                     </div>
 
+                                                                    <div
+                                                                        class="mb-3 d-flex align-items-center justify-content-between">
+                                                                        <p for="activities" class="form-label">
+                                                                            Activities
+                                                                        </p>
+                                                                        <button class="btn btn-success btn-sm"
+                                                                            type="button" data-bs-toggle="collapse"
+                                                                            data-bs-target="#collapseExample"
+                                                                            aria-expanded="false"
+                                                                            aria-controls="collapseExample"
+                                                                            onclick="alert('The input to add an activities is below')">
+                                                                            <i class="fa-solid fa-plus"></i> Add
+                                                                            Activities
+                                                                        </button>
 
-
-                                                                    <label for="activities"
-                                                                        class="form-label">Activities</label>
-                                                                    <input type="text" class="form-control mb-3"
-                                                                        id="activities" name="activities"
-                                                                        value="{{ old('activities', $item->activities) }}">
+                                                                    </div>
+                                                                    <div class="bg-secondary-subtle p-2 overflow-auto" style="max-height: 300px">
+                                                                        @foreach ($item->activities as $act)
+                                                                            <div class="p-2 rounded bg-light mb-2">
+                                                                                <p class="m-0">{{ $act->activity }}</p>
+                                                                            </div>
+                                                                        @endforeach
+                                                                    </div>
                                                                 </div>
 
                                                                 <div style="width: 35%">
@@ -405,22 +428,44 @@
 
                                                                 </div>
                                                             </div>
-                                                            <button type="submit" class="btn btn-primary w-100">Save
-                                                                and Close</button>
+
                                                         </div>
                                                     </form>
+                                                    <div class="collapse mt-3" id="collapseExample">
+                                                        <!-- Collapse Content -->
+                                                        <div class="card card-body">
+                                                            <form action="{{ route('activity.store') }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                <input type="hidden" name="task_id"
+                                                                    value="{{ $item->id }}" hidden>
+                                                                <label for="focusedInput">Add Activity : </label>
+                                                                <textarea class="form-control mb-3" id="focusedInput" name="activity" placeholder="Add Activity"></textarea>
+                                                                @error('activity')
+                                                                    <div class="alert alert-danger">
+                                                                        {{ $message }}</div>
+                                                                @enderror
+                                                                <button type="submit" class="btn btn-primary">Add
+                                                                    Activity</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary w-100"
+                                                        onclick="document.getElementById('formUpdate-{{ $item->id }}').submit();">Save
+                                                        and Close</button>
+
                                                     <form action="{{ route('task.destroy', $item->id) }}"
                                                         method="POST" class="d-none"
                                                         id="deleteForm-{{ $item->id }}">
                                                         @csrf
                                                         @method('DELETE')
                                                     </form>
+
                                                     <form action="{{ route('attachments.store') }}" method="POST"
                                                         enctype="multipart/form-data">
                                                         @csrf
                                                         <input type="text" name="task_id"
                                                             value="{{ $item->id }}" hidden>
-
                                                         <div>
                                                             <input type="file" name="file_name"
                                                                 id="file_name_{{ $item->id }}"
@@ -531,13 +576,6 @@
         <a class="scroll-to-top rounded" href="#page-top">
             <i class="fas fa-angle-up"></i>
         </a>
-
-        <script>
-            @if (session('openModal') == $item->id)
-                var modal = new bootstrap.Modal(document.getElementById('view-{{ $item->id }}'));
-                modal.show();
-            @endif
-        </script>
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
