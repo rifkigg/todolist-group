@@ -239,36 +239,26 @@
 
                                                                     <p for="attachments" class="form-label">Attachment
                                                                     </p>
-                                                                    <input type="file" class="form-control mb-3"
-                                                                        id="attachments" name="attachments[]" multiple
-                                                                        onchange="previewImages(event)" hidden>
-
-                                                                    <div class="task-item">
-                                                                        <!-- Menampilkan semua attachments -->
-                                                                        <div
-                                                                            class="overflow-auto d-flex align-items-center gap-2">
-                                                                            @if (!empty($item->attachments) && is_array(json_decode($item->attachments)))
-                                                                                @foreach (json_decode($item->attachments) as $attachment)
-                                                                                    <a href="{{ asset('storage/' . $attachment) }}"
-                                                                                        target="_blank"
-                                                                                        class="me-2">
-                                                                                        <img src="{{ asset('storage/' . $attachment) }}"
-                                                                                            alt="attachment"
-                                                                                            class="img-fluid"
-                                                                                            style="max-width: 150px; height: auto;">
-                                                                                    </a>
-                                                                                @endforeach
-                                                                            @endif
-
-                                                                        </div>
-
-                                                                        <br>
+                                                                    <div class="overflow-auto" style="max-height: 300px">
+                                                                        @foreach ($item->attachments as $img)
+                                                                            <div
+                                                                                class="mb-3 d-flex align-items-start gap-2">
+                                                                                <a
+                                                                                    href="{{ asset('storage/attachments/' . $img->file_name) }}">
+                                                                                    <img src="{{ asset('storage/attachments/' . $img->file_name) }}"
+                                                                                        alt="{{ $img->file_name }}"
+                                                                                        width="150">
+                                                                                </a>
+                                                                                <button type="button"
+                                                                                    onclick="if(confirm('Are you sure you want to delete this attachment?')) { document.getElementById('deleteGambar-{{ $img->id }}').submit(); }"
+                                                                                    class="btn btn-danger btn-sm">
+                                                                                    <i class="fa-solid fa-trash"></i>
+                                                                                </button>
+                                                                            </div>
+                                                                        @endforeach
                                                                     </div>
 
-                                                                    <!-- Menampilkan gambar yang baru diunggah -->
-                                                                    <p>Preview Attachment:</p>
-                                                                    <div id="preview-container-{{ $item->id }}">
-                                                                    </div>
+
 
                                                                     <label for="activities"
                                                                         class="form-label">Activities</label>
@@ -373,9 +363,11 @@
                                                                         <div
                                                                             id="stopwatch-container-{{ $item->id }}">
                                                                             <span
-                                                                                id="time-display-{{ $item->id }}">
+                                                                                id="time-display-{{ $item->id }}"
+                                                                                class="mb-3">
                                                                                 {{ old('time_count', $item->time_count) }}
                                                                             </span>
+                                                                            <br>
                                                                             <button type="button"
                                                                                 id="start-stopwatch-{{ $item->id }}"
                                                                                 class="btn btn-success">Start</button>
@@ -400,13 +392,9 @@
 
 
                                                                     <button type="button" class="btn btn-secondary"
-                                                                        onclick="document.getElementById('attachments-{{ $item->id }}').click();">Attachment</button>
-
-                                                                    <input type="file"
-                                                                        id="attachments-{{ $item->id }}"
-                                                                        style="display: none;" multiple
-                                                                        name="attachments[]"
-                                                                        onchange="previewImages(event, {{ $item->id }})">
+                                                                        onclick="document.getElementById('file_name_{{ $item->id }}').click();">
+                                                                        Attachment
+                                                                    </button>
 
 
                                                                     {{-- tombol delete --}}
@@ -414,6 +402,7 @@
                                                                         onclick="document.getElementById('deleteForm-{{ $item->id }}').submit();">
                                                                         Delete
                                                                     </button>
+
                                                                 </div>
                                                             </div>
                                                             <button type="submit" class="btn btn-primary w-100">Save
@@ -426,6 +415,35 @@
                                                         @csrf
                                                         @method('DELETE')
                                                     </form>
+                                                    <form action="{{ route('attachments.store') }}" method="POST"
+                                                        enctype="multipart/form-data">
+                                                        @csrf
+                                                        <input type="text" name="task_id"
+                                                            value="{{ $item->id }}" hidden>
+
+                                                        <div>
+                                                            <input type="file" name="file_name"
+                                                                id="file_name_{{ $item->id }}"
+                                                                class="form-control @error('file') is-invalid @enderror"
+                                                                style="display: none;" onchange="this.form.submit();">
+                                                            @error('file')
+                                                                <div class="alert alert-danger">{{ $message }}</div>
+                                                            @enderror
+                                                        </div>
+                                                    </form>
+
+                                                    @foreach ($item->attachments as $img)
+                                                        <div>
+                                                            <form
+                                                                action="{{ route('attachments.destroy', ['task_id' => $item->id, 'file_name' => $img->file_name]) }}"
+                                                                method="POST" id="deleteGambar-{{ $img->id }}"
+                                                                onsubmit="return confirm('Are you sure you want to delete this attachment?');">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                            </form>
+                                                        </div>
+                                                    @endforeach
+
                                                 </div>
                                             </div>
                                         </div>
@@ -435,6 +453,7 @@
                                                 Data Project belum Tersedia.
                                             </td>
                                         </tr>
+
                                     @endforelse
                                     <div class="modal fade" id="createTask" tabindex="-1"
                                         aria-labelledby="createModalLabel" aria-hidden="true">
@@ -514,28 +533,12 @@
         </a>
 
         <script>
-            function previewImages(event, itemId) {
-                const files = event.target.files;
-                const previewContainer = document.getElementById('preview-container-' + itemId);
-
-                previewContainer.innerHTML = ''; // Clear any existing previews
-
-                for (let i = 0; i < files.length; i++) {
-                    const file = files[i];
-                    const reader = new FileReader();
-
-                    reader.onload = function(e) {
-                        const imgElement = document.createElement('img');
-                        imgElement.src = e.target.result;
-                        imgElement.className = 'img-fluid w-50 h-50 mb-2';
-
-                        previewContainer.appendChild(imgElement);
-                    }
-
-                    reader.readAsDataURL(file);
-                }
-            }
+            @if (session('openModal') == $item->id)
+                var modal = new bootstrap.Modal(document.getElementById('view-{{ $item->id }}'));
+                modal.show();
+            @endif
         </script>
+
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const selectElements = document.querySelectorAll('[id^="assignees"]');

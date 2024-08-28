@@ -53,4 +53,9 @@ class task extends Model
     {
         return $this->belongsTo(Board::class, 'board_id');
     }
+
+    public function attachments()
+    {
+        return $this->hasMany(Attachment::class);
+    }
 }
