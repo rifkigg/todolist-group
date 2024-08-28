@@ -110,10 +110,10 @@
                                             <label for="category_id">Project Category: </label>
                                             <select id="category_id" name="category_id"
                                                 class=" form-control @error('category_id') is-invalid @enderror"
-                                                value="{{ old('category_id', $project->category_id) }}">
+                                                >
                                                 <option disabled>Pilih Category:</option>
                                                 @foreach ($categories as $items)
-                                                    <option value="{{ $items->id }}">{{ $items->name }}
+                                                    <option value="{{ $items->id }}" {{ old('category_id', $project->category_id) }}>{{ $items->name }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -134,10 +134,10 @@
                                         <label for="status_id">Project Status</label>
                                         <select id="status_id" name="status_id"
                                             class="form-control @error('status_id') is-invalid @enderror"
-                                            value="{{ old('status_id', $project->status_id) }}">
+                                            >
                                             <option disabled>Pilih Status:</option>
                                             @foreach ($status as $items)
-                                                <option value="{{ $items->id }}">{{ $items->name }}
+                                                <option value="{{ $items->id }}" {{ old('status_id', $project->status_id) }}>{{ $items->name }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -157,8 +157,8 @@
                                     <div class="textarea">
                                         <label for="project_detail">Project Details: </label>
                                         <textarea id="project_detail" class="form-control @error('project_detail') is-invalid @enderror"
-                                            name="project_detail" value="{{ old('project_detail', $project->project_detail) }}"
-                                            placeholder="Masukkan Judul Product">
+                                            name="project_detail"
+                                            placeholder="Masukkan Judul Product">{{ old('project_detail', $project->project_detail) }}
                                             </textarea>
                                         @error('project_detail')
                                             <div class="alert alert-danger mt-2">

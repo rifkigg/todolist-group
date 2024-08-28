@@ -179,7 +179,7 @@
                                             <td>{{ $item->status->name }}</td>
                                             <td>{{ $item->live_date }}</td>
                                             <td>{{ $item->created_at }}</td>
-                                            <td>
+                                            <td class="d-flex">
                                                 @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
                                                     <!-- Form untuk duplikasi -->
                                                     <form id="duplicate-form-{{ $item->id }}"
