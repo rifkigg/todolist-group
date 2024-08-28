@@ -211,5 +211,8 @@
                     </div>
                 </div>
             </div>
-
+            <script src="https://cdn.ckeditor.com/4.22.0/full/ckeditor.js"></script>
+            <script>
+                CKEDITOR.replace('project_detail');
+            </script>
 </x-layout>

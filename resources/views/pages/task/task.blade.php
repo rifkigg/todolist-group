@@ -172,7 +172,7 @@
                                             <td>{{ $item->priority->name ?? ' ' }}</td>
                                             <td>{{ $item->due_date ?? ' ' }}</td>
                                             <td>{{ $item->created_at }}</td>
-                                            <td>
+                                            <td class="d-flex flex-wrap">
                                                 @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
                                                     <!-- Form untuk duplikasi -->
                                                     <form id="duplicate-form-{{ $item->id }}"
@@ -231,11 +231,11 @@
                                                                 <div style="width: 55%">
                                                                     <label for="description"
                                                                         class="form-label">Description</label>
-                                                                    <textarea class="form-control mb-3" id="description" name="description">{{ old('description', $item->description) }}</textarea>
+                                                                    <textarea class="form-control mb-3" id="textarea1" name="description">{{ old('description', $item->description) }}</textarea>
 
                                                                     <label for="checklist"
                                                                         class="form-label">Checklist</label>
-                                                                    <textarea class="form-control mb-3" id="checklist" name="checklist">{{ old('checklist', $item->checklist) }}</textarea>
+                                                                    <textarea class="form-control mb-3" id="textarea2" name="checklist">{{ old('checklist', $item->checklist) }}</textarea>
 
                                                                     <p for="attachments" class="form-label">Attachment
                                                                     </p>
@@ -243,26 +243,32 @@
                                                                         id="attachments" name="attachments[]" multiple
                                                                         onchange="previewImages(event)" hidden>
 
-                                                                    <!-- Menampilkan gambar yang sudah ada -->
-                                                                    <div
-                                                                        class="overflow-auto d-flex align-items-center gap-2">
-                                                                        @if (!empty($item->attachments) && is_array(json_decode($item->attachments)))
-                                                                            @foreach (json_decode($item->attachments) as $attachment)
-                                                                                <a href="{{ asset('storage/attachments/' . basename($attachment)) }}"
-                                                                                    target="_blank" class="me-2">
-                                                                                    <img src="{{ asset('storage/attachments/' . basename($attachment)) }}"
-                                                                                        alt="attachments"
-                                                                                        class="img-fluid"
-                                                                                        style="max-width: 150px; height: auto;">
-                                                                                </a>
-                                                                            @endforeach
-                                                                        @endif
+                                                                    <div class="task-item">
+                                                                        <!-- Menampilkan semua attachments -->
+                                                                        <div
+                                                                            class="overflow-auto d-flex align-items-center gap-2">
+                                                                            @if (!empty($item->attachments) && is_array(json_decode($item->attachments)))
+                                                                                @foreach (json_decode($item->attachments) as $attachment)
+                                                                                    <a href="{{ asset('storage/' . $attachment) }}"
+                                                                                        target="_blank"
+                                                                                        class="me-2">
+                                                                                        <img src="{{ asset('storage/' . $attachment) }}"
+                                                                                            alt="attachment"
+                                                                                            class="img-fluid"
+                                                                                            style="max-width: 150px; height: auto;">
+                                                                                    </a>
+                                                                                @endforeach
+                                                                            @endif
+
+                                                                        </div>
+
+                                                                        <br>
                                                                     </div>
-                                                                    <br>
 
                                                                     <!-- Menampilkan gambar yang baru diunggah -->
                                                                     <p>Preview Attachment:</p>
-                                                                    <div id="preview-container"></div>
+                                                                    <div id="preview-container-{{ $item->id }}">
+                                                                    </div>
 
                                                                     <label for="activities"
                                                                         class="form-label">Activities</label>
@@ -332,40 +338,97 @@
                                                                         @endforeach
                                                                     </select>
 
-                                                                    <p for="assignees" class="form-label">Assignees
-                                                                    </p>
-                                                                    <p for="time_count" class="form-label">Time Count
-                                                                    </p>
+                                                                    <!-- Assignees (Multi-Select) -->
+                                                                    <label for="assignees"
+                                                                        class="form-label">Assignees</label>
+                                                                    <select name="assignees[]" id="assignees"
+                                                                        class="form-select mb-3" multiple>
+                                                                        @foreach ($users as $user)
+                                                                            <option value="{{ $user->id }}"
+                                                                                {{ in_array($user->id, old('assignees', $item->users->pluck('id')->toArray())) ? 'selected' : '' }}>
+                                                                                {{ $user->username }}
+                                                                            </option>
+                                                                        @endforeach
+                                                                    </select>
+                                                                    <p class="text-danger">Press
+                                                                        ctrl to select more than one</p>
 
+
+                                                                    <!-- Display selected assignees in flex -->
+                                                                    <div id="selected-assignees"
+                                                                        class="d-flex flex-wrap gap-2 mb-3">
+                                                                        @foreach ($item->users as $user)
+                                                                            <div class="selected-user d-flex align-items-center bg-light p-2 rounded"
+                                                                                data-id="{{ $user->id }}">
+                                                                                <span
+                                                                                    class="me-2">{{ $user->username }}</span>
+                                                                                <button type="button"
+                                                                                    class="btn btn-sm btn-danger ms-2 remove-assignee"
+                                                                                    aria-label="Remove">x</button>
+                                                                            </div>
+                                                                        @endforeach
+                                                                    </div>
+                                                                    
+                                                                    <div class="task-row"
+                                                                        data-task-id="{{ $item->id }}">
+                                                                        <p for="time_count_{{ $item->id }}"
+                                                                            class="form-label">Time Count</p>
+                                                                        <div
+                                                                            id="stopwatch-container-{{ $item->id }}">
+                                                                            <span
+                                                                                id="time-display-{{ $item->id }}">
+                                                                                {{ old('time_count', $item->time_count) }}
+                                                                            </span>
+                                                                            <button type="button"
+                                                                                id="start-stopwatch-{{ $item->id }}"
+                                                                                class="btn btn-success">Start</button>
+                                                                            <button type="button"
+                                                                                id="stop-stopwatch-{{ $item->id }}"
+                                                                                class="btn btn-danger"
+                                                                                disabled>Stop</button>
+                                                                            <button type="button"
+                                                                                id="reset-stopwatch-{{ $item->id }}"
+                                                                                class="btn btn-secondary"
+                                                                                disabled>Reset</button>
+                                                                        </div>
+                                                                        <input type="hidden" name="time_count[]"
+                                                                            id="time_count_{{ $item->id }}"
+                                                                            value="{{ old('time_count', $item->time_count) }}">
+                                                                    </div>
                                                                     <label for="due_date" class="form-label">Due
                                                                         Date</label>
                                                                     <input type="date" name="due_date"
                                                                         id="due_date" class="form-control mb-3"
                                                                         value="{{ old('due_date', $item->due_date) }}">
 
-                                                                    {{-- tombol attachment --}}
+
                                                                     <button type="button" class="btn btn-secondary"
-                                                                        onclick="document.getElementById('attachments').click();">Attachment</button>
+                                                                        onclick="document.getElementById('attachments-{{ $item->id }}').click();">Attachment</button>
+
+                                                                    <input type="file"
+                                                                        id="attachments-{{ $item->id }}"
+                                                                        style="display: none;" multiple
+                                                                        name="attachments[]"
+                                                                        onchange="previewImages(event, {{ $item->id }})">
+
 
                                                                     {{-- tombol delete --}}
-                                                                    <form
-                                                                        action="{{ route('task.destroy', $item->id) }}"
-                                                                        method="POST"
-                                                                        onsubmit="return confirm('Are you sure you want to delete this item?');"
-                                                                        class="d-inline"
-                                                                        id="deleteForm-{{ $item->id }}">
-                                                                        @csrf
-                                                                        @method('DELETE')
-                                                                        <button type="submit"
-                                                                            class="btn btn-danger">Delete</button>
-                                                                    </form>
+                                                                    <button type="button" class="btn btn-danger"
+                                                                        onclick="document.getElementById('deleteForm-{{ $item->id }}').submit();">
+                                                                        Delete
+                                                                    </button>
                                                                 </div>
                                                             </div>
                                                             <button type="submit" class="btn btn-primary w-100">Save
                                                                 and Close</button>
                                                         </div>
                                                     </form>
-
+                                                    <form action="{{ route('task.destroy', $item->id) }}"
+                                                        method="POST" class="d-none"
+                                                        id="deleteForm-{{ $item->id }}">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                    </form>
                                                 </div>
                                             </div>
                                         </div>
@@ -454,9 +517,9 @@
         </a>
 
         <script>
-            function previewImages(event) {
+            function previewImages(event, itemId) {
                 const files = event.target.files;
-                const previewContainer = document.getElementById('preview-container');
+                const previewContainer = document.getElementById('preview-container-' + itemId);
 
                 previewContainer.innerHTML = ''; // Clear any existing previews
 
@@ -476,4 +539,121 @@
                 }
             }
         </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const selectElement = document.getElementById('assignees');
+                const selectedAssigneesContainer = document.getElementById('selected-assignees');
+
+                // Function to update selected assignees display
+                function updateSelectedAssignees() {
+                    const selectedOptions = Array.from(selectElement.selectedOptions);
+                    selectedAssigneesContainer.innerHTML = '';
+
+                    selectedOptions.forEach(option => {
+                        const userId = option.value;
+                        const userName = option.textContent;
+
+                        const userDiv = document.createElement('div');
+                        userDiv.classList.add('selected-user');
+                        userDiv.dataset.id = userId;
+                        userDiv.innerHTML = `
+                <span class="me-2">${userName}</span>
+                <button type="button" class="btn btn-sm btn-danger ms-2 remove-assignee" aria-label="Remove">x</button>
+            `;
+                        selectedAssigneesContainer.appendChild(userDiv);
+                    });
+                }
+
+                // Event listener for when the select value changes
+                selectElement.addEventListener('change', updateSelectedAssignees);
+
+                // Event delegation to handle removal of assignees
+                selectedAssigneesContainer.addEventListener('click', function(event) {
+                    if (event.target.classList.contains('remove-assignee')) {
+                        const userDiv = event.target.closest('.selected-user');
+                        const userId = userDiv.dataset.id;
+
+                        // Remove the user from the select
+                        const optionToRemove = Array.from(selectElement.options).find(option => option.value ===
+                            userId);
+                        if (optionToRemove) {
+                            optionToRemove.selected = false;
+                        }
+
+                        // Remove the user div from the display
+                        userDiv.remove();
+                    }
+                });
+
+                // Initialize display on page load
+                updateSelectedAssignees();
+            });
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('.task-row').forEach(function(row) {
+                    const taskId = row.dataset.taskId;
+                    let startTime, elapsedTime = 0,
+                        timerInterval;
+                    const timeDisplay = document.getElementById(`time-display-${taskId}`);
+                    const timeInput = document.getElementById(`time_count_${taskId}`);
+
+                    function updateTimeDisplay(time) {
+                        const hours = Math.floor(time / 3600000);
+                        const minutes = Math.floor((time % 3600000) / 60000);
+                        const seconds = Math.floor((time % 60000) / 1000);
+                        timeDisplay.textContent =
+                            `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                        timeInput.value = timeDisplay.textContent;
+                    }
+
+                    function startStopwatch() {
+                        startTime = Date.now() - elapsedTime;
+                        timerInterval = setInterval(function() {
+                            elapsedTime = Date.now() - startTime;
+                            updateTimeDisplay(elapsedTime);
+                        }, 1000);
+                    }
+
+                    function stopStopwatch() {
+                        clearInterval(timerInterval);
+                    }
+
+                    function resetStopwatch() {
+                        clearInterval(timerInterval);
+                        elapsedTime = 0;
+                        updateTimeDisplay(0);
+                    }
+
+                    document.getElementById(`start-stopwatch-${taskId}`).addEventListener('click', function() {
+                        startStopwatch();
+                        this.disabled = true;
+                        document.getElementById(`stop-stopwatch-${taskId}`).disabled = false;
+                        document.getElementById(`reset-stopwatch-${taskId}`).disabled = false;
+                    });
+
+                    document.getElementById(`stop-stopwatch-${taskId}`).addEventListener('click', function() {
+                        stopStopwatch();
+                        this.disabled = true;
+                        document.getElementById(`start-stopwatch-${taskId}`).disabled = false;
+                    });
+
+                    document.getElementById(`reset-stopwatch-${taskId}`).addEventListener('click', function() {
+                        resetStopwatch();
+                        this.disabled = true;
+                        document.getElementById(`start-stopwatch-${taskId}`).disabled = false;
+                        document.getElementById(`stop-stopwatch-${taskId}`).disabled = true;
+                    });
+
+                    // Initialize with existing time count if any
+                    if (timeInput.value !== '00:00:00') {
+                        const timeParts = timeInput.value.split(':');
+                        elapsedTime = (+timeParts[0]) * 3600000 + (+timeParts[1]) * 60000 + (+timeParts[2]) *
+                            1000;
+                        updateTimeDisplay(elapsedTime);
+                    }
+                });
+            });
+        </script>
+
 </x-layout>
