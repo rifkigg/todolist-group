@@ -23,8 +23,32 @@ class BoardController extends Controller
         $task = task::all();
         $total_board = Board::count();
 
-        return view('pages.boards', compact('boards', 'projects')); // Pass boards and projects to the view
+        return view('pages.boards', compact('boards', 'projects')); 
     }
+
+    public function create(): View 
+    {
+        $projects = Project::all();
+        return view('pages.create_board', compact('boards')); 
+    }
+
+    public function store(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'board_name' => 'required',
+            'project_id' => 'required',
+        ]);
+
+        Board::create([
+            'board_name' => $request->board_name,
+            'project_id' => $request->project_id,
+        ]);
+
+        return redirect()
+            ->route('boards.index')
+            ->with(['success' => 'Data Berhasil Disimpan!']);
+    }
+
 
     public function destroy($id) {
         $boards = Board::findOrFail($id);

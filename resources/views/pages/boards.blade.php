@@ -97,6 +97,8 @@
                             <a href="{{ route('boards.create') }}" class="btn btn-success btn-sm">Create</a>
                         </div>
                     </div>
+
+
                 <!-- End of Main Content -->
 
                 <!-- Footer -->

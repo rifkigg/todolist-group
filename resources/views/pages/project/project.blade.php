@@ -12,6 +12,23 @@
                 </li>
             </x-slot>
 
+            
+            <li class="nav-item ">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                    aria-bs-expanded="true" aria-bs-controls="collapseOne">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span>Boards</span>
+                </a>
+                <div id="collapseOne" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        @if (auth()->user()->role == 'admin')
+                            <a class="collapse-item " href="{{ route('boards.index') }}">Boards</a>
+                        @else
+                            <a class="collapse-item " href="{{ route('boards.index') }}">boards</a>
+                        @endif
+                    </div>
+                </div>
+
             <li class="nav-item active">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
                     aria-bs-expanded="true" aria-bs-controls="collapseTwo">
