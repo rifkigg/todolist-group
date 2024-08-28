@@ -12,6 +12,7 @@ use App\Http\Controllers\TaskPrioritiesController;
 use App\Http\Controllers\ProjectCategoriesController;
 use App\Http\Controllers\StatusTaskController;
 use App\Http\Controllers\LabelsController;
+use App\Http\Controllers\BoardController;
 use App\Models\board;
 
 // Route::get('/', function () {
@@ -120,6 +121,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/task/labels/{id}', [LabelsController::class, 'destroy'])->name('labels.destroy');
     Route::get('/task/labels/{id}', [LabelsController::class, 'edit'])->name('labels.edit');
     Route::put('/task/labels/{id}', [LabelsController::class, 'update'])->name('labels.update');
+
+    Route::get('/boards', [BoardController::class, 'index'])->name('boards.index');
+    Route::get('/boards/create', [BoardController::class, 'create'])->name('boards.create');
+    Route::post('/boards/add', [BoardController::class, 'store'])->name('boards.store');
+    Route::get('/boards/edit/{id}', [BoardController::class, 'edit'])->name('boards.edit');
+    Route::put('/boards/edit/{id}', [BoardController::class, 'update'])->name('boards.update');
+    Route::delete('/boards/{id}', [BoardController::class, 'destroy'])->name('boards.destroy');
 });
 
 require __DIR__ . '/auth.php';
