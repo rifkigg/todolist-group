@@ -1,23 +1,21 @@
 <?php
 
+use App\Http\Controllers\ActivityController;
 use App\Models\task;
 use App\Models\User;
+use App\Models\board;
 use App\Models\project;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\LabelsController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\AttachmentController;
+use App\Http\Controllers\StatusTaskController;
 use App\Http\Controllers\TaskPrioritiesController;
 use App\Http\Controllers\ProjectCategoriesController;
-use App\Http\Controllers\StatusTaskController;
-use App\Http\Controllers\LabelsController;
 use App\Http\Controllers\BoardController;
-use App\Models\board;
-
-// Route::get('/', function () {
-//     return view('welcome');
-// });
 
 Route::get('/dashboard', function () {
     $total_project = Project::count();
@@ -99,8 +97,11 @@ Route::middleware('auth')->group(function () {
     Route::put('/task/{id}', [TaskController::class, 'update'])->name('task.update');
     Route::delete('/task/{id}', [TaskController::class, 'destroy'])->name('task.destroy');
     Route::post('/task/duplicate/{id}', [TaskController::class, 'duplicate'])->name('task.duplicate');
-    Route::get('/status', [StatusController::class, 'index'])->name('status.index');
+    Route::post('/task', [AttachmentController::class, 'store'])->name('attachments.store');
+    Route::delete('/attachments/{task_id}/{file_name}', [AttachmentController::class, 'destroy'])->name('attachments.destroy');
+    Route::post('/activity/store', [ActivityController::class, 'store'])->name('activity.store');
 
+    Route::get('/status', [StatusController::class, 'index'])->name('status.index');
     Route::get('/task/status', [StatusTaskController::class, 'index'])->name('task_status.index');
     Route::post('/task/status', [StatusTaskController::class, 'store'])->name('task_status.store');
     Route::delete('/task/status/{id}', [StatusTaskController::class, 'destroy'])->name('task_status.destroy');

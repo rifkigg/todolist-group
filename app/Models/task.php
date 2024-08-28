@@ -9,20 +9,7 @@ class task extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'name',
-        'board_id',
-        'project_id',
-        'status_id',
-        'priority_id',
-        'task_label_id',
-        'description',
-        'attachments',
-        'activities',
-        'checklist',
-        'time_count',
-        'due_date',
-    ];
+    protected $fillable = ['name', 'board_id', 'project_id', 'status_id', 'priority_id', 'task_label_id', 'description', 'attachments', 'activities', 'checklist', 'time_count', 'due_date'];
 
     public function project()
     {
@@ -52,5 +39,15 @@ class task extends Model
     public function board()
     {
         return $this->belongsTo(Board::class, 'board_id');
+    }
+
+    public function attachments()
+    {
+        return $this->hasMany(Attachment::class);
+    }
+
+    public function activities()
+    {
+        return $this->hasMany(TaskActivity::class);
     }
 }

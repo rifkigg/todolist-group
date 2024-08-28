@@ -20,8 +20,6 @@ return new class extends Migration
             $table->unsignedBigInteger('task_label_id')->nullable();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->text('attachments')->nullable();
-            $table->text('activities')->nullable();
             $table->text('checklist')->nullable();
             $table->string('time_count')->nullable();
             $table->date('due_date')->nullable();

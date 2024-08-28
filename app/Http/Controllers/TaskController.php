@@ -2,27 +2,29 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Log;
 use App\Models\task;
 use App\Models\User;
 use App\Models\board;
 use App\Models\project;
 use App\Models\TaskLabel;
+use App\Models\Attachment;
 use App\Models\TaskStatus;
+use App\Models\TaskActivity;
 use Illuminate\Http\Request;
 use App\Models\task_priority;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 
 class TaskController extends Controller
 {
     public function index()
     {
-        $task = Task::with('project', 'board', 'status', 'priority', 'label', 'users')
+        $task = Task::with('project', 'board', 'status', 'priority', 'label', 'users', 'attachments', 'activities')
             ->latest()
             ->get()
             ->map(function ($task) {
-                // Decode JSON time_count untuk setiap task
                 $task->time_count = json_decode($task->time_count, true)[0] ?? '00:00:00';
                 return $task;
             });
@@ -73,28 +75,6 @@ class TaskController extends Controller
         // Get task by ID
         $task = Task::findOrFail($id);
 
-        $attachments = [];
-
-        if ($request->hasFile('attachments')) {
-            foreach ($request->file('attachments') as $file) {
-                // Simpan file ke storage
-                $filename = time() . '_' . $file->getClientOriginalName();
-                $filePath = $file->storeAs('attachments', $filename, 'public');
-
-                // Tambahkan path ke array attachments
-                $attachments[] = $filePath;
-            }
-
-            // Mengambil attachments yang sudah ada dan memastikan itu adalah array
-            $existingAttachments = json_decode($task->attachments, true) ?? [];
-
-            // Menggabungkan attachments baru dengan yang lama
-            $attachments = array_merge($existingAttachments, $attachments);
-
-            // Simpan attachments sebagai JSON ke database
-            $task->attachments = json_encode($attachments);
-        }
-
         // Update data task
         $task->update([
             'name' => $request->name,
@@ -104,11 +84,9 @@ class TaskController extends Controller
             'priority_id' => $request->priority_id,
             'task_label_id' => $request->task_label_id,
             'description' => $request->description,
-            'activities' => $request->activities,
             'checklist' => $request->checklist,
             'time_count' => $request->time_count,
             'due_date' => $request->due_date,
-            'attachments' => $task->attachments, // Pastikan kolom attachments di-update
         ]);
 
         // Update assignees
