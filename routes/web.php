@@ -56,6 +56,8 @@ Route::middleware('auth')->group(function () {
         return view('pages.task.statusTask');
     });
 
+    Route::get('/status', [StatusController::class, 'index'])->name('status.index');
+
     Route::get('/project', [ProjectController::class, 'index'])->name('project.index');
     Route::get('/project/create', [ProjectController::class, 'create'])->name('project.create');
     Route::post('/project/add', [ProjectController::class, 'store'])->name('project.store');
