@@ -280,7 +280,7 @@
                                                                             Activities
                                                                         </button>
 
-                                                                    </div>
+                                                                    </div> 
                                                                     <div class="bg-secondary-subtle p-2 overflow-auto" style="max-height: 300px">
                                                                         @foreach ($item->activities as $act)
                                                                             <div class="p-2 rounded bg-light mb-2">
