@@ -124,10 +124,9 @@ Route::middleware('auth')->group(function () {
     Route::put('/task/labels/{id}', [LabelsController::class, 'update'])->name('labels.update');
 
     Route::get('/boards', [BoardController::class, 'index'])->name('boards.index');
+    Route::post('/taskboards/create', [TaskController::class, 'storeToBoard'])->name('taskboards.store');
     Route::get('/boards/create', [BoardController::class, 'create'])->name('boards.create');
     Route::post('/boards/add', [BoardController::class, 'store'])->name('boards.store');
-    Route::get('/boards/edit/{id}', [BoardController::class, 'edit'])->name('boards.edit');
-    Route::put('/boards/edit/{id}', [BoardController::class, 'update'])->name('boards.update');
     Route::delete('/boards/{id}', [BoardController::class, 'destroy'])->name('boards.destroy');
 });
 

@@ -21,14 +21,6 @@ class TaskController extends Controller
 {
     public function index()
     {
-        $task = Task::with('project', 'board', 'status', 'priority', 'label', 'users', 'attachments', 'activities')
-            ->latest()
-            ->get()
-            ->map(function ($task) {
-                $task->time_count = json_decode($task->time_count, true)[0] ?? '00:00:00';
-                return $task;
-            });
-
         $project = Project::all();
         $board = Board::all();
         $status = TaskStatus::all();
@@ -41,7 +33,44 @@ class TaskController extends Controller
         $total_user = User::count();
         $total_task = Task::count();
 
+        $task = Task::with('project', 'board', 'status', 'priority', 'label', 'users', 'attachments', 'activities')
+            ->latest()
+            ->get()
+            ->map(function ($task) {
+                $task->time_count = json_decode($task->time_count, true)[0] ?? '00:00:00';
+                return $task;
+            });
+
         return view('pages.task.task', compact('task', 'total_project', 'total_user', 'total_task', 'total_board', 'project', 'board', 'status', 'priority', 'label', 'users'));
+    }
+    public function getTasktoBoard()
+    {
+        $project = Project::all();
+        $board = Board::all();
+        $status = TaskStatus::all();
+        $priority = task_priority::all();
+        $label = TaskLabel::all();
+        $users = User::all();
+
+        $total_project = Project::count();
+        $total_board = Board::count();
+        $total_user = User::count();
+        $total_task = Task::count();
+
+        // Ambil tasks yang sesuai dengan board_id
+        $boards = $board->map(function ($board) {
+            $board->tasks = Task::with('project', 'status', 'priority', 'label', 'users', 'attachments', 'activities')
+                ->where('board_id', $board->id)
+                ->latest()
+                ->get()
+                ->map(function ($task) {
+                    $task->time_count = json_decode($task->time_count, true)[0] ?? '00:00:00';
+                    return $task;
+                });
+            return $board;
+        });
+
+        return view('pages.boards', compact('total_project', 'total_user', 'total_task', 'total_board', 'project', 'boards', 'status', 'priority', 'label', 'users'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -60,6 +89,24 @@ class TaskController extends Controller
 
         return redirect()
             ->route('task.index')
+            ->with(['success' => 'Data Berhasil Disimpan!']);
+    }
+    public function storeToBoard(Request $request): RedirectResponse
+    {
+        $request->validate([
+            'name' => 'required',
+            'project_id' => 'required',
+            'board_id' => 'required',
+        ]);
+
+        task::create([
+            'name' => $request->name,
+            'project_id' => $request->project_id,
+            'board_id' => $request->board_id,
+        ]);
+
+        return redirect()
+            ->route('boards.index')
             ->with(['success' => 'Data Berhasil Disimpan!']);
     }
 
