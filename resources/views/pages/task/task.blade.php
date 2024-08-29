@@ -15,7 +15,7 @@
                     </a>
                 </li>
             </x-slot>
-                
+
             <li class="nav-item ">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
                     aria-bs-expanded="true" aria-bs-controls="collapseTwo">
@@ -179,41 +179,43 @@
                                             <td>{{ $item->priority->name ?? ' ' }}</td>
                                             <td>{{ $item->due_date ?? ' ' }}</td>
                                             <td>{{ $item->created_at }}</td>
-                                            <td class="d-flex flex-wrap">
-                                                @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
-                                                    <!-- Form untuk duplikasi -->
-                                                    <form id="duplicate-form-{{ $item->id }}"
-                                                        action="{{ route('task.duplicate', $item->id) }}"
-                                                        method="POST" style="display: none;">
-                                                        @csrf
-                                                    </form>
-                                                    <!-- Ikon copy dengan event click -->
-                                                    <a href="#" class="btn"
-                                                        onclick="event.preventDefault(); document.getElementById('duplicate-form-{{ $item->id }}').submit();">
-                                                        <i class="icon-action fa-solid fa-copy"></i>
-                                                    </a>
-                                                    <!-- Ikon view -->
-                                                    <button type="button" class="btn" data-bs-toggle="modal"
-                                                        data-bs-target="#view-{{ $item->id }}">
-                                                        <i class="icon-action fa-solid fa-eye"></i>
-                                                    </button>
-                                                    <!-- Form untuk delete -->
-                                                    <form action="{{ route('task.destroy', $item->id) }}"
-                                                        method="POST"
-                                                        onsubmit="return confirm('Are you sure you want to delete this item?');"
-                                                        class="d-inline">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn">
-                                                            <i class="icon-action fa-solid fa-trash-can"></i>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                                                        <!-- Form untuk duplikasi -->
+                                                        <form id="duplicate-form-{{ $item->id }}"
+                                                            action="{{ route('task.duplicate', $item->id) }}"
+                                                            method="POST" style="display: none;">
+                                                            @csrf
+                                                        </form>
+                                                        <!-- Ikon copy dengan event click -->
+                                                        <a href="#" class="btn"
+                                                            onclick="event.preventDefault(); document.getElementById('duplicate-form-{{ $item->id }}').submit();">
+                                                            <i class="icon-action fa-solid fa-copy"></i>
+                                                        </a>
+                                                        <!-- Ikon view -->
+                                                        <button type="button" class="btn" data-bs-toggle="modal"
+                                                            data-bs-target="#view-{{ $item->id }}">
+                                                            <i class="icon-action fa-solid fa-eye"></i>
                                                         </button>
-                                                    </form>
-                                                @else
-                                                    <button type="button" class="btn" data-bs-toggle="modal"
-                                                        data-bs-target="#view-{{ $item->id }}">
-                                                        <i class="icon-action fa-solid fa-eye"></i>
-                                                    </button>
-                                                @endif
+                                                        <!-- Form untuk delete -->
+                                                        <form action="{{ route('task.destroy', $item->id) }}"
+                                                            method="POST"
+                                                            onsubmit="return confirm('Are you sure you want to delete this item?');"
+                                                            class="d-inline">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="btn">
+                                                                <i class="icon-action fa-solid fa-trash-can"></i>
+                                                            </button>
+                                                        </form>
+                                                    @else
+                                                        <button type="button" class="btn" data-bs-toggle="modal"
+                                                            data-bs-target="#view-{{ $item->id }}">
+                                                            <i class="icon-action fa-solid fa-eye"></i>
+                                                        </button>
+                                                    @endif
+                                                </div>
                                             </td>
                                         </tr>
                                         <div class="modal fade" id="view-{{ $item->id }}" tabindex="-1"
@@ -287,11 +289,13 @@
                                                                             Activities
                                                                         </button>
 
-                                                                    </div> 
-                                                                    <div class="bg-secondary-subtle p-2 overflow-auto" style="max-height: 300px">
+                                                                    </div>
+                                                                    <div class="bg-secondary-subtle p-2 overflow-auto"
+                                                                        style="max-height: 300px">
                                                                         @foreach ($item->activities as $act)
                                                                             <div class="p-2 rounded bg-light mb-2">
-                                                                                <p class="m-0">{{ $act->activity }}</p>
+                                                                                <p class="m-0">{{ $act->activity }}
+                                                                                </p>
                                                                             </div>
                                                                         @endforeach
                                                                     </div>
