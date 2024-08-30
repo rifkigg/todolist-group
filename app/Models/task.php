@@ -50,4 +50,9 @@ class task extends Model
     {
         return $this->hasMany(TaskActivity::class);
     }
+
+    public function checklist()
+    {
+        return $this->hasMany(TaskChecklist::class);
+    }
 }

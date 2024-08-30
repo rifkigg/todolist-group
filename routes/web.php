@@ -16,6 +16,7 @@ use App\Http\Controllers\StatusTaskController;
 use App\Http\Controllers\TaskPrioritiesController;
 use App\Http\Controllers\ProjectCategoriesController;
 use App\Http\Controllers\BoardController;
+use App\Http\Controllers\TaskChecklistController;
 
 Route::get('/dashboard', function () {
     $total_project = Project::count();
@@ -100,6 +101,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/task', [AttachmentController::class, 'store'])->name('attachments.store');
     Route::delete('/attachments/{task_id}/{file_name}', [AttachmentController::class, 'destroy'])->name('attachments.destroy');
     Route::post('/activity/store', [ActivityController::class, 'store'])->name('activity.store');
+    Route::post('/checklist/store', [TaskChecklistController::class, 'store'])->name('checklist.store');
 
     Route::get('/status', [StatusController::class, 'index'])->name('status.index');
     Route::get('/task/status', [StatusTaskController::class, 'index'])->name('task_status.index');

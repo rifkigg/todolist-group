@@ -134,9 +134,35 @@
                                                                         class="form-label">Description</label>
                                                                     <textarea class="form-control mb-3" id="textarea1" name="description">{{ old('description', $task->description) }}</textarea>
 
-                                                                    <label for="checklist"
-                                                                        class="form-label">Checklist</label>
-                                                                    <textarea class="form-control mb-3" id="textarea2" name="checklist">{{ old('checklist', $task->checklist) }}</textarea>
+                                                                    <div class="mb-3 d-flex justify-content-between">
+                                                                        <label for="checklist"
+                                                                            class="form-label">Checklist</label>
+                                                                        <button class="btn btn-success btn-sm"
+                                                                            type="button" data-bs-toggle="collapse"
+                                                                            data-bs-target="#collapseChecklist"
+                                                                            aria-expanded="false"
+                                                                            aria-controls="collapseChecklist"
+                                                                            onclick="alert('The input to add an checklist is below')">
+                                                                            <i class="fa-solid fa-plus"></i> Add
+                                                                            Checklist
+                                                                        </button>
+                                                                    </div>
+
+                                                                    <div class="bg-secondary-subtle p-2 overflow-auto"
+                                                                        style="max-height: 300px">
+                                                                        @if ($task->checklist)
+                                                                            @foreach ($task->checklist as $gg)
+                                                                                <div class="p-2 rounded bg-light mb-2">
+                                                                                    <input type="radio"
+                                                                                        value="{{ $gg->id }}"
+                                                                                        class="m-0">
+                                                                                    {{ $gg->name }}</input>
+                                                                                </div>
+                                                                            @endforeach
+                                                                        @else
+                                                                            <p>No checklist items found.</p>
+                                                                        @endif
+                                                                    </div>
 
                                                                     <p for="attachments" class="form-label">Attachment
                                                                     </p>
@@ -347,6 +373,24 @@
                                                                 @enderror
                                                                 <button type="submit" class="btn btn-primary">Add
                                                                     Activity</button>
+                                                            </form>
+                                                        </div>
+                                                    </div>
+                                                    <div class="collapse mt-3" id="collapseChecklist">
+                                                        <div class="card card-body">
+                                                            <form action="{{ route('checklist.store') }}"
+                                                                method="POST">
+                                                                @csrf
+                                                                <input type="hidden" name="task_id"
+                                                                    value="{{ $item->id }}" hidden>
+                                                                <label for="focusedInput">Add Checklist : </label>
+                                                                <textarea class="form-control mb-3" id="focusedInput" name="name" placeholder="Add Activity"></textarea>
+                                                                @error('name')
+                                                                    <div class="alert alert-danger">
+                                                                        {{ $message }}</div>
+                                                                @enderror
+                                                                <button type="submit" class="btn btn-primary">Add
+                                                                    Checklist</button>
                                                             </form>
                                                         </div>
                                                     </div>

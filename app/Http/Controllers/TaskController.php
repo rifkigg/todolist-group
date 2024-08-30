@@ -33,7 +33,7 @@ class TaskController extends Controller
         $total_user = User::count();
         $total_task = Task::count();
 
-        $task = Task::with('project', 'board', 'status', 'priority', 'label', 'users', 'attachments', 'activities')
+        $task = Task::with('project', 'board', 'status', 'priority', 'label', 'users', 'attachments', 'activities', 'checklist')
             ->latest()
             ->get()
             ->map(function ($task) {
@@ -59,7 +59,7 @@ class TaskController extends Controller
 
         // Ambil tasks yang sesuai dengan board_id
         $boards = $board->map(function ($board) {
-            $board->tasks = Task::with('project', 'status', 'priority', 'label', 'users', 'attachments', 'activities')
+            $board->tasks = Task::with('project', 'status', 'priority', 'label', 'users', 'attachments', 'activities', 'checklist')
                 ->where('board_id', $board->id)
                 ->latest()
                 ->get()
@@ -131,7 +131,6 @@ class TaskController extends Controller
             'priority_id' => $request->priority_id,
             'task_label_id' => $request->task_label_id,
             'description' => $request->description,
-            'checklist' => $request->checklist,
             'time_count' => $request->time_count,
             'due_date' => $request->due_date,
         ]);
