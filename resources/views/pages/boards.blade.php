@@ -382,7 +382,7 @@
                                                                 method="POST">
                                                                 @csrf
                                                                 <input type="hidden" name="task_id"
-                                                                    value="{{ $item->id }}" hidden>
+                                                                    value="{{ $task->id }}" hidden>
                                                                 <label for="focusedInput">Add Checklist : </label>
                                                                 <textarea class="form-control mb-3" id="focusedInput" name="name" placeholder="Add Activity"></textarea>
                                                                 @error('name')
