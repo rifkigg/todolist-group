@@ -55,4 +55,9 @@ class task extends Model
     {
         return $this->hasMany(TaskChecklist::class);
     }
+
+    public function description()
+    {
+        return $this->hasMany(TaskDescription::class);
+    }
 }

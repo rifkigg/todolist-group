@@ -1,22 +1,24 @@
 <?php
 
-use App\Http\Controllers\ActivityController;
 use App\Models\task;
 use App\Models\User;
 use App\Models\board;
 use App\Models\project;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\BoardController;
 use App\Http\Controllers\LabelsController;
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\StatusTaskController;
-use App\Http\Controllers\TaskPrioritiesController;
-use App\Http\Controllers\ProjectCategoriesController;
-use App\Http\Controllers\BoardController;
 use App\Http\Controllers\TaskChecklistController;
+use App\Http\Controllers\TaskPrioritiesController;
+use App\Http\Controllers\TaskDescriptionController;
+use App\Http\Controllers\ProjectCategoriesController;
+use App\Models\TaskChecklist;
 
 Route::get('/dashboard', function () {
     $total_project = Project::count();
@@ -130,6 +132,14 @@ Route::middleware('auth')->group(function () {
     Route::get('/boards/create', [BoardController::class, 'create'])->name('boards.create');
     Route::post('/boards/add', [BoardController::class, 'store'])->name('boards.store');
     Route::delete('/boards/{id}', [BoardController::class, 'destroy'])->name('boards.destroy');
+
+    Route::post('/description', [TaskDescriptionController::class, 'store'])->name('description.store');
+    Route::put('/description/{id}', [TaskDescriptionController::class, 'update'])->name('description.update');
+
+    Route::post('/update/completed', [TaskChecklistController::class, 'updateCompleted'])->name('update.completed');
+    Route::delete('/checklist/{id}', [TaskChecklistController::class, 'destroy'])->name('checklist.destroy');
+
+
 });
 
 require __DIR__ . '/auth.php';

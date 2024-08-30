@@ -19,7 +19,6 @@ return new class extends Migration
             $table->unsignedBigInteger('priority_id')->nullable();
             $table->unsignedBigInteger('task_label_id')->nullable();
             $table->string('name');
-            $table->text('description')->nullable();
             $table->string('time_count')->nullable();
             $table->date('due_date')->nullable();
             $table->timestamps();

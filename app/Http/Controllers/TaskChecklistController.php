@@ -22,4 +22,26 @@ class TaskChecklistController extends Controller
 
         return redirect()->back()->with('success', 'Checklist added successfully!');
     }
+
+    public function updateCompleted(Request $request)
+    {
+        $checklist = $request->input('checklist');
+
+        foreach ($checklist as $id => $completed) {
+            $item = TaskChecklist::find($id);
+            if ($item) {
+                $item->completed = $completed;
+                $item->save();
+            }
+        }
+    
+        return redirect()->back()->with('success', 'Checklist items updated successfully.');
+    }
+
+    public function destroy($id)
+    {
+        $checklist = TaskChecklist::find($id);
+        $checklist->delete();
+        return redirect()->back()->with('success', 'Checklist deleted successfully!');
+    }
 }

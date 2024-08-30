@@ -33,7 +33,7 @@ class TaskController extends Controller
         $total_user = User::count();
         $total_task = Task::count();
 
-        $task = Task::with('project', 'board', 'status', 'priority', 'label', 'users', 'attachments', 'activities', 'checklist')
+        $task = Task::with('project', 'board', 'status', 'priority', 'label', 'users', 'attachments', 'activities', 'checklist', 'description')
             ->latest()
             ->get()
             ->map(function ($task) {
@@ -59,15 +59,17 @@ class TaskController extends Controller
 
         // Ambil tasks yang sesuai dengan board_id
         $boards = $board->map(function ($board) {
-            $board->tasks = Task::with('project', 'status', 'priority', 'label', 'users', 'attachments', 'activities', 'checklist')
+            $board->tasks = Task::with('project', 'status', 'priority', 'label', 'users', 'attachments', 'activities', 'checklist', 'description')
                 ->where('board_id', $board->id)
                 ->latest()
-                ->get()
-                ->map(function ($task) {
-                    $task->time_count = json_decode($task->time_count, true)[0] ?? '00:00:00';
-                    return $task;
-                });
+                ->get();
+
             return $board;
+        });
+
+        $task = Task::all()->map(function ($task) {
+            $task->time_count = json_decode($task->time_count, true)[0] ?? '00:00:00';
+            return $task;
         });
 
         return view('pages.boards', compact('total_project', 'total_user', 'total_task', 'total_board', 'project', 'boards', 'status', 'priority', 'label', 'users'));
@@ -130,7 +132,6 @@ class TaskController extends Controller
             'status_id' => $request->status_id,
             'priority_id' => $request->priority_id,
             'task_label_id' => $request->task_label_id,
-            'description' => $request->description,
             'time_count' => $request->time_count,
             'due_date' => $request->due_date,
         ]);

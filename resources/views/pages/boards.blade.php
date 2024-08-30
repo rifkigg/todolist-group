@@ -100,75 +100,160 @@
                                     <h5 style="margin: 0;">{{ $board->board_name }}</h5>
                                     <br>
 
-                                    @forelse ($board->tasks as $task)
+                                    @forelse ($board->tasks as $item)
                                         <a href="#" data-bs-toggle="modal"
-                                            data-bs-target="#view-{{ $task->id }}">
+                                            data-bs-target="#view-{{ $item->id }}">
                                             <div class="text-white bg-secondary rounded p-2">
-                                                <p class="mb-0">{{ $task->name }}</p>
+                                                <p class="mb-0">{{ $item->name }}</p>
                                             </div>
                                         </a>
                                         <br>
 
-                                        <div class="modal fade" id="view-{{ $task->id }}" tabindex="-1"
+                                        <div class="modal fade" id="view-{{ $item->id }}" tabindex="-1"
                                             aria-labelledby="createModalLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-xl">
                                                 <div class="modal-content">
-                                                    <form action="{{ route('task.update', $task->id) }}" method="POST"
-                                                        enctype="multipart/form-data"
-                                                        id="formUpdate-{{ $task->id }}">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title w-100" id="createModalLabel">
-                                                                <input type="text" class="form-control border-0"
-                                                                    id="name" name="name"
-                                                                    value="{{ $task->name }}">
-                                                            </h5>
-                                                            <button type="button" class="btn-close"
-                                                                data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="d-flex justify-content-around">
-                                                                <div style="width: 55%">
-                                                                    <label for="description"
-                                                                        class="form-label">Description</label>
-                                                                    <textarea class="form-control mb-3" id="textarea1" name="description">{{ old('description', $task->description) }}</textarea>
 
-                                                                    <div class="mb-3 d-flex justify-content-between">
-                                                                        <label for="checklist"
-                                                                            class="form-label">Checklist</label>
-                                                                        <button class="btn btn-success btn-sm"
-                                                                            type="button" data-bs-toggle="collapse"
-                                                                            data-bs-target="#collapseChecklist"
-                                                                            aria-expanded="false"
-                                                                            aria-controls="collapseChecklist"
-                                                                            onclick="alert('The input to add an checklist is below')">
-                                                                            <i class="fa-solid fa-plus"></i> Add
-                                                                            Checklist
-                                                                        </button>
-                                                                    </div>
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title w-100" id="createModalLabel">
+                                                            <input type="text" class="form-control border-0"
+                                                                id="name" name="name"
+                                                                value="{{ $item->name }}"
+                                                                onchange="updateHiddenInput(this.value)">
+                                                        </h5>
+                                                        <button type="button" class="btn-close"
+                                                            data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="d-flex justify-content-around">
+                                                            <div style="width: 55%">
+                                                                @if ($item->description && count($item->description) > 0)
+                                                                    @foreach ($item->description as $desc)
+                                                                        <form
+                                                                            action="{{ route('description.update', $desc->id) }}"
+                                                                            method="POST"
+                                                                            enctype="multipart/form-data">
+                                                                            @csrf
+                                                                            @method('PUT')
+                                                                            <label for="description"
+                                                                                class="form-label">Description</label>
+                                                                            <input type="text" name="task_id"
+                                                                                value="{{ $item->id }}" hidden>
+                                                                            <textarea class="form-control mb-3" id="textarea1" name="name">{{ old('name', $desc->name) }}</textarea>
+                                                                            <button type="submit"
+                                                                                class="btn btn-primary btn-sm mb-3">Save
+                                                                                Changes</button>
+                                                                        </form>
+                                                                    @endforeach
+                                                                @else
+                                                                    <form action="{{ route('description.store') }}"
+                                                                        method="post" enctype="multipart/form-data"
+                                                                        id="formAddDescription">
+                                                                        @csrf
+                                                                        <input type="text" name="task_id"
+                                                                            value="{{ $item->id }}" hidden>
+                                                                        <textarea class="form-control mb-3" id="textarea1" name="name" hidden></textarea>
+                                                                        <div
+                                                                            class="mb-3 d-flex justify-content-between">
+                                                                            <p class="m-0">Description</p>
+                                                                            <button type="submit"
+                                                                                class="btn btn-success btn-sm"><i
+                                                                                    class="fa-solid fa-plus"></i> Add
+                                                                                Description</button>
+                                                                        </div>
+                                                                    </form>
+                                                                    <p>No description found.</p>
+                                                                @endif
 
-                                                                    <div class="bg-secondary-subtle p-2 overflow-auto"
+                                                                <div class="d-flex justify-content-between">
+                                                                    <label for="checklist"
+                                                                        class="form-label">Checklist</label>
+                                                                    <button class="btn btn-success btn-sm"
+                                                                        type="button" data-bs-toggle="collapse"
+                                                                        data-bs-target="#collapseChecklist"
+                                                                        aria-expanded="false"
+                                                                        aria-controls="collapseChecklist">
+                                                                        <i class="fa-solid fa-plus"></i> Add
+                                                                        Checklist
+                                                                    </button>
+                                                                </div>
+
+                                                                @if ($item->checklist && count($item->checklist) > 0)
+                                                                    <div class="my-3 bg-secondary-subtle p-2 overflow-auto rounded"
                                                                         style="max-height: 300px">
-                                                                        @if ($task->checklist)
-                                                                            @foreach ($task->checklist as $gg)
-                                                                                <div class="p-2 rounded bg-light mb-2">
-                                                                                    <input type="radio"
-                                                                                        value="{{ $gg->id }}"
-                                                                                        class="m-0">
-                                                                                    {{ $gg->name }}</input>
+                                                                        <form action="{{ route('update.completed') }}"
+                                                                            method="POST" id="formChecklist">
+                                                                            @foreach ($item->checklist as $gg)
+                                                                                @csrf
+                                                                                <div
+                                                                                    class="d-flex align-items-center justify-content-between p-2 rounded bg-light mb-2">
+                                                                                    <div class="d-flex gap-1">
+                                                                                        <input type="hidden"
+                                                                                            name="checklist[{{ $gg->id }}]"
+                                                                                            value="0">
+                                                                                        <input type="checkbox"
+                                                                                            name="checklist[{{ $gg->id }}]]"
+                                                                                            value="1"
+                                                                                            class="m-0"
+                                                                                            id="checkbox-{{ $gg->id }}"
+                                                                                            {{ $gg->completed == 1 ? 'checked' : '' }}
+                                                                                            onchange="toggleLineThrough({{ $gg->id }})">
+                                                                                        <span
+                                                                                            id="text-{{ $gg->id }}"
+                                                                                            class="{{ $gg->completed == 1 ? 'text-decoration-line-through' : '' }} ">
+                                                                                            {{ $gg->name }}
+                                                                                        </span>
+                                                                                    </div>
+                                                                                    <button type="button"
+                                                                                        class="btn btn-danger btn-sm"
+                                                                                        onclick="event.preventDefault(); alert('Are you sure you want to delete this checklist item?'); document.getElementById('deleteChecklist_{{ $gg->id }}').submit();">
+                                                                                        <i
+                                                                                            class="fa-solid fa-trash"></i>
+                                                                                    </button>
+
                                                                                 </div>
                                                                             @endforeach
-                                                                        @else
-                                                                            <p>No checklist items found.</p>
-                                                                        @endif
+                                                                        </form>
+                                                                        @foreach ($item->checklist as $check)
+                                                                            <form
+                                                                                action="{{ route('checklist.destroy', $check->id) }}"
+                                                                                method="POST" class="d-inline"
+                                                                                id="deleteChecklist_{{ $check->id }}">
+                                                                                @csrf
+                                                                                @method('DELETE')
+                                                                            </form>
+                                                                        @endforeach
+                                                                        <button type="submit"
+                                                                            class="btn btn-primary mt-2"
+                                                                            onclick="event.preventDefault(); document.getElementById('formChecklist').submit();">Save
+                                                                            All</button>
                                                                     </div>
+                                                                @else
+                                                                    <p>No checklist items found.</p>
+                                                                @endif
 
-                                                                    <p for="attachments" class="form-label">Attachment
-                                                                    </p>
-                                                                    <div class="overflow-auto"
-                                                                        style="max-height: 300px">
-                                                                        @foreach ($task->attachments as $img)
+                                                                <div class="collapse my-3" id="collapseChecklist">
+                                                                    <form action="{{ route('checklist.store') }}"
+                                                                        method="POST">
+                                                                        @csrf
+                                                                        <input type="hidden" name="task_id"
+                                                                            value="{{ $item->id }}" hidden>
+                                                                        <textarea class="form-control mb-3" id="focusedInput" name="name" placeholder="Add Activity"></textarea>
+                                                                        @error('name')
+                                                                            <div class="alert alert-danger">
+                                                                                {{ $message }}</div>
+                                                                        @enderror
+                                                                        <button type="submit"
+                                                                            class="btn btn-primary">Add
+                                                                            Checklist</button>
+                                                                    </form>
+                                                                </div>
+
+                                                                <p for="attachments" class="form-label">Attachment
+                                                                </p>
+                                                                <div class="overflow-auto" style="max-height: 300px">
+                                                                    @if ($item->attachments && count($item->attachments) > 0)
+                                                                        @foreach ($item->attachments as $img)
                                                                             <div
                                                                                 class="mb-3 d-flex align-items-start gap-2">
                                                                                 <a
@@ -189,42 +274,77 @@
                                                                                 </div>
                                                                             </div>
                                                                         @endforeach
-                                                                    </div>
+                                                                    @else
+                                                                        <p>No attachments found.</p>
+                                                                    @endif
+                                                                </div>
 
-                                                                    <div
-                                                                        class="mb-3 d-flex align-items-center justify-content-between">
-                                                                        <p for="activities" class="form-label">
-                                                                            Activities
-                                                                        </p>
-                                                                        <button class="btn btn-success btn-sm"
-                                                                            type="button" data-bs-toggle="collapse"
-                                                                            data-bs-target="#collapseExample"
-                                                                            aria-expanded="false"
-                                                                            aria-controls="collapseExample"
-                                                                            onclick="alert('The input to add an activities is below')">
-                                                                            <i class="fa-solid fa-plus"></i> Add
-                                                                            Activities
-                                                                        </button>
+                                                                <div
+                                                                    class="d-flex align-items-center justify-content-between">
+                                                                    <p for="activities" class="form-label">
+                                                                        Activities
+                                                                    </p>
+                                                                    <button class="btn btn-success btn-sm"
+                                                                        type="button" data-bs-toggle="collapse"
+                                                                        data-bs-target="#collapseExample"
+                                                                        aria-expanded="false"
+                                                                        aria-controls="collapseExample">
+                                                                        <i class="fa-solid fa-plus"></i> Add
+                                                                        Activities
+                                                                    </button>
 
-                                                                    </div>
+                                                                </div>
+                                                                @if ($item->activities && count($item->activities) > 0)
                                                                     <div class="bg-secondary-subtle p-2 overflow-auto"
                                                                         style="max-height: 300px">
-                                                                        @foreach ($task->activities as $act)
+                                                                        @foreach ($item->activities as $act)
                                                                             <div class="p-2 rounded bg-light mb-2">
                                                                                 <p class="m-0">{{ $act->activity }}
                                                                                 </p>
                                                                             </div>
                                                                         @endforeach
                                                                     </div>
-                                                                </div>
+                                                                @else
+                                                                    <p>No activities found.</p>
+                                                                @endif
+                                                                <div class="collapse mt-3" id="collapseExample">
+                                                                    <form action="{{ route('activity.store') }}"
+                                                                        method="POST">
+                                                                        @csrf
+                                                                        <input type="hidden" name="task_id"
+                                                                            value="{{ $item->id }}" hidden>
+                                                                        <textarea class="form-control mb-3" id="focusedInput" name="activity" placeholder="Add Activity"></textarea>
+                                                                        @error('activity')
+                                                                            <div class="alert alert-danger">
+                                                                                {{ $message }}</div>
+                                                                        @enderror
+                                                                        <button type="submit"
+                                                                            class="btn btn-primary">Add
+                                                                            Activity</button>
+                                                                    </form>
 
-                                                                <div style="width: 35%">
+                                                                </div>
+                                                            </div>
+
+                                                            {{-- uhuy --}}
+
+                                                            <div style="width: 35%">
+                                                                <form action="{{ route('task.update', $item->id) }}"
+                                                                    method="POST" enctype="multipart/form-data"
+                                                                    id="formUpdate-{{ $item->id }}">
+                                                                    @csrf
+                                                                    @method('PUT')
+                                                                    <input type="text"
+                                                                        class="form-control border-0" id="hiddenName"
+                                                                        name="name" value="{{ $item->name }}"
+                                                                        hidden>
+
                                                                     <label for="board_id" class="form-label">Task
                                                                         Board</label>
                                                                     <select name="board_id" id="board_id"
                                                                         class="form-select mb-3">
                                                                         <option value="{{ $board->id }}"
-                                                                            {{ old('board_id', $task->board_id) == $board->id ? 'selected' : '' }}>
+                                                                            {{ old('board_id', $item->board_id) == $board->id ? 'selected' : '' }}>
                                                                             {{ $board->board_name ?? ' ' }}
                                                                         </option>
                                                                     </select>
@@ -235,7 +355,7 @@
                                                                         class="form-select mb-3">
                                                                         @foreach ($status as $items)
                                                                             <option value="{{ $items->id }}"
-                                                                                {{ old('status_id', $task->status_id) == $items->id ? 'selected' : '' }}>
+                                                                                {{ old('status_id', $item->status_id) == $items->id ? 'selected' : '' }}>
                                                                                 {{ $items->name ?? ' ' }}
                                                                             </option>
                                                                         @endforeach
@@ -247,7 +367,7 @@
                                                                         class="form-select mb-3">
                                                                         @foreach ($priority as $items)
                                                                             <option value="{{ $items->id }}"
-                                                                                {{ old('priority_id', $task->priority_id) == $items->id ? 'selected' : '' }}>
+                                                                                {{ old('priority_id', $item->priority_id) == $items->id ? 'selected' : '' }}>
                                                                                 {{ $items->name ?? ' ' }}
                                                                             </option>
                                                                         @endforeach
@@ -259,7 +379,7 @@
                                                                         class="form-select mb-3">
                                                                         @foreach ($label as $items)
                                                                             <option value="{{ $items->id }}"
-                                                                                {{ old('task_label_id', $task->task_label_id) == $items->id ? 'selected' : '' }}>
+                                                                                {{ old('task_label_id', $item->task_label_id) == $items->id ? 'selected' : '' }}>
                                                                                 {{ $items->name ?? ' ' }}
                                                                             </option>
                                                                         @endforeach
@@ -271,7 +391,7 @@
                                                                         class="form-select mb-3">
                                                                         @foreach ($projects as $items)
                                                                             <option value="{{ $items->id }}"
-                                                                                {{ old('project_id', $task->project_id) == $items->id ? 'selected' : '' }}>
+                                                                                {{ old('project_id', $item->project_id) == $items->id ? 'selected' : '' }}>
                                                                                 {{ $items->name ?? ' ' }}
                                                                             </option>
                                                                         @endforeach
@@ -284,7 +404,7 @@
                                                                         class="form-select mb-3" multiple>
                                                                         @foreach ($users as $user)
                                                                             <option value="{{ $user->id }}"
-                                                                                {{ in_array($user->id, old('assignees', $task->users->pluck('id')->toArray())) ? 'selected' : '' }}>
+                                                                                {{ in_array($user->id, old('assignees', $item->users->pluck('id')->toArray())) ? 'selected' : '' }}>
                                                                                 {{ $user->username }}
                                                                             </option>
                                                                         @endforeach
@@ -295,7 +415,7 @@
                                                                         <p>Selected Assignees:</p>
                                                                         <ul
                                                                             class="d-flex flex-wrap gap-2 list-unstyled">
-                                                                            @foreach ($task->users as $user)
+                                                                            @foreach ($item->users as $user)
                                                                                 <li
                                                                                     class="d-flex align-items-center border rounded px-2 py-1">
                                                                                     {{ $user->username }}
@@ -304,103 +424,58 @@
                                                                         </ul>
                                                                     </div>
 
-
-                                                                    <div class="task-row"
-                                                                        data-task-id="{{ $task->id }}">
-                                                                        <p for="time_count_{{ $task->id }}"
-                                                                            class="form-label">Time Count</p>
-                                                                        <div
-                                                                            id="stopwatch-container-{{ $task->id }}">
-                                                                            <span
-                                                                                id="time-display-{{ $task->id }}"
-                                                                                class="mb-3">
+                                                                    @foreach($board->tasks as $task)
+                                                                    @php
+                                                                        // Mendekode JSON dan mengambil elemen pertama dari array
+                                                                        $time_count = json_decode($task->time_count, true);
+                                                                        $task->time_count = isset($time_count[0]) ? $time_count[0] : '00:00:00';
+                                                                    @endphp
+                                                                    <div class="task-row" data-task-id="{{ $task->id }}">
+                                                                        <p for="time_count_{{ $task->id }}" class="form-label">Time Count</p>
+                                                                        <div id="stopwatch-container-{{ $task->id }}">
+                                                                            <span id="time-display-{{ $task->id }}" class="mb-3">
                                                                                 {{ old('time_count', $task->time_count) }}
                                                                             </span>
                                                                             <br>
-                                                                            <button type="button"
-                                                                                id="start-stopwatch-{{ $task->id }}"
-                                                                                class="btn btn-success">Start</button>
-                                                                            <button type="button"
-                                                                                id="stop-stopwatch-{{ $task->id }}"
-                                                                                class="btn btn-danger"
-                                                                                disabled>Stop</button>
-                                                                            <button type="button"
-                                                                                id="reset-stopwatch-{{ $task->id }}"
-                                                                                class="btn btn-secondary"
-                                                                                disabled>Reset</button>
+                                                                            <button type="button" id="start-stopwatch-{{ $task->id }}" class="btn btn-success">Start</button>
+                                                                            <button type="button" id="stop-stopwatch-{{ $task->id }}" class="btn btn-danger" disabled>Stop</button>
+                                                                            <button type="button" id="reset-stopwatch-{{ $task->id }}" class="btn btn-secondary" disabled>Reset</button>
                                                                         </div>
-                                                                        <input type="hidden" name="time_count[]"
-                                                                            id="time_count_{{ $task->id }}"
-                                                                            value="{{ old('time_count', $task->time_count) }}">
+                                                                        <input type="hidden" name="time_count[]" id="time_count_{{ $task->id }}"
+                                                                            value="{{ is_array(old('time_count', $task->time_count)) ? implode(',', old('time_count', $task->time_count)) : old('time_count', $task->time_count) }}">
                                                                     </div>
+                                                                @endforeach
+                                                                    
                                                                     <label for="due_date" class="form-label">Due
                                                                         Date</label>
                                                                     <input type="date" name="due_date"
                                                                         id="due_date" class="form-control mb-3"
-                                                                        value="{{ old('due_date', $task->due_date) }}">
+                                                                        value="{{ old('due_date', $item->due_date) }}">
 
 
                                                                     <button type="button" class="btn btn-secondary"
-                                                                        onclick="document.getElementById('file_name_{{ $task->id }}').click();">
+                                                                        onclick="document.getElementById('file_name_{{ $item->id }}').click();">
                                                                         Attachment
                                                                     </button>
 
 
                                                                     {{-- tombol delete --}}
                                                                     <button type="button" class="btn btn-danger"
-                                                                        onclick="document.getElementById('deleteForm-{{ $task->id }}').submit();">
+                                                                        onclick="document.getElementById('deleteForm-{{ $item->id }}').submit();">
                                                                         Delete
                                                                     </button>
-
-                                                                </div>
+                                                                </form>
                                                             </div>
+                                                        </div>
+                                                    </div>
 
-                                                        </div>
-                                                    </form>
-                                                    <div class="collapse mt-3" id="collapseExample">
-                                                        <!-- Collapse Content -->
-                                                        <div class="card card-body">
-                                                            <form action="{{ route('activity.store') }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                <input type="hidden" name="task_id"
-                                                                    value="{{ $task->id }}" hidden>
-                                                                <label for="focusedInput">Add Activity : </label>
-                                                                <textarea class="form-control mb-3" id="focusedInput" name="activity" placeholder="Add Activity"></textarea>
-                                                                @error('activity')
-                                                                    <div class="alert alert-danger">
-                                                                        {{ $message }}</div>
-                                                                @enderror
-                                                                <button type="submit" class="btn btn-primary">Add
-                                                                    Activity</button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                    <div class="collapse mt-3" id="collapseChecklist">
-                                                        <div class="card card-body">
-                                                            <form action="{{ route('checklist.store') }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                <input type="hidden" name="task_id"
-                                                                    value="{{ $task->id }}" hidden>
-                                                                <label for="focusedInput">Add Checklist : </label>
-                                                                <textarea class="form-control mb-3" id="focusedInput" name="name" placeholder="Add Activity"></textarea>
-                                                                @error('name')
-                                                                    <div class="alert alert-danger">
-                                                                        {{ $message }}</div>
-                                                                @enderror
-                                                                <button type="submit" class="btn btn-primary">Add
-                                                                    Checklist</button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
                                                     <button type="submit" class="btn btn-primary w-100"
-                                                        onclick="document.getElementById('formUpdate-{{ $task->id }}').submit();">Save
+                                                        onclick="document.getElementById('formUpdate-{{ $item->id }}').submit();">Save
                                                         and Close</button>
 
-                                                    <form action="{{ route('task.destroy', $task->id) }}"
+                                                    <form action="{{ route('task.destroy', $item->id) }}"
                                                         method="POST" class="d-none"
-                                                        id="deleteForm-{{ $task->id }}">
+                                                        id="deleteForm-{{ $item->id }}">
                                                         @csrf
                                                         @method('DELETE')
                                                     </form>
@@ -409,10 +484,10 @@
                                                         enctype="multipart/form-data">
                                                         @csrf
                                                         <input type="text" name="task_id"
-                                                            value="{{ $task->id }}" hidden>
+                                                            value="{{ $item->id }}" hidden>
                                                         <div>
                                                             <input type="file" name="file_name"
-                                                                id="file_name_{{ $task->id }}"
+                                                                id="file_name_{{ $item->id }}"
                                                                 class="form-control @error('file') is-invalid @enderror"
                                                                 style="display: none;" onchange="this.form.submit();">
                                                             @error('file')
@@ -421,10 +496,10 @@
                                                         </div>
                                                     </form>
 
-                                                    @foreach ($task->attachments as $img)
+                                                    @foreach ($item->attachments as $img)
                                                         <div>
                                                             <form
-                                                                action="{{ route('attachments.destroy', ['task_id' => $task->id, 'file_name' => $img->file_name]) }}"
+                                                                action="{{ route('attachments.destroy', ['task_id' => $item->id, 'file_name' => $img->file_name]) }}"
                                                                 method="POST" id="deleteGambar-{{ $img->id }}"
                                                                 onsubmit="return confirm('Are you sure you want to delete this attachment?');">
                                                                 @csrf

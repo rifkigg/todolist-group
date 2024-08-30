@@ -222,60 +222,146 @@
                                             aria-labelledby="createModalLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-xl">
                                                 <div class="modal-content">
-                                                    <form action="{{ route('task.update', $item->id) }}"
-                                                        method="POST" enctype="multipart/form-data"
-                                                        id="formUpdate-{{ $item->id }}">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title w-100" id="createModalLabel">
-                                                                <input type="text" class="form-control border-0"
-                                                                    id="name" name="name"
-                                                                    value="{{ $item->name }}">
-                                                            </h5>
-                                                            <button type="button" class="btn-close"
-                                                                data-bs-dismiss="modal" aria-label="Close"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <div class="d-flex justify-content-around">
-                                                                <div style="width: 55%">
-                                                                    <label for="description"
-                                                                        class="form-label">Description</label>
-                                                                    <textarea class="form-control mb-3" id="textarea1" name="description">{{ old('description', $item->description) }}</textarea>
-                                                                    <div class="mb-3 d-flex justify-content-between">
-                                                                        <label for="checklist"
-                                                                            class="form-label">Checklist</label>
-                                                                        <button class="btn btn-success btn-sm"
-                                                                            type="button" data-bs-toggle="collapse"
-                                                                            data-bs-target="#collapseChecklist"
-                                                                            aria-expanded="false"
-                                                                            aria-controls="collapseChecklist"
-                                                                            onclick="alert('The input to add an checklist is below')">
-                                                                            <i class="fa-solid fa-plus"></i> Add
-                                                                            Checklist
-                                                                        </button>
-                                                                    </div>
 
-                                                                    <div class="bg-secondary-subtle p-2 overflow-auto"
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title w-100" id="createModalLabel">
+                                                            <input type="text" class="form-control border-0"
+                                                                id="name" name="name"
+                                                                value="{{ $item->name }}"
+                                                                onchange="updateHiddenInput(this.value)">
+                                                        </h5>
+                                                        <button type="button" class="btn-close"
+                                                            data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <div class="d-flex justify-content-around">
+                                                            <div style="width: 55%">
+                                                                @if ($item->description && count($item->description) > 0)
+                                                                    @foreach ($item->description as $desc)
+                                                                        <form
+                                                                            action="{{ route('description.update', $desc->id) }}"
+                                                                            method="POST"
+                                                                            enctype="multipart/form-data">
+                                                                            @csrf
+                                                                            @method('PUT')
+                                                                            <label for="description"
+                                                                                class="form-label">Description</label>
+                                                                            <input type="text" name="task_id"
+                                                                                value="{{ $item->id }}" hidden>
+                                                                            <textarea class="form-control mb-3" id="textarea1" name="name">{{ old('name', $desc->name) }}</textarea>
+                                                                            <button type="submit"
+                                                                                class="btn btn-primary btn-sm mb-3">Save
+                                                                                Changes</button>
+                                                                        </form>
+                                                                    @endforeach
+                                                                @else
+                                                                    <form action="{{ route('description.store') }}"
+                                                                        method="post" enctype="multipart/form-data"
+                                                                        id="formAddDescription">
+                                                                        @csrf
+                                                                        <input type="text" name="task_id"
+                                                                            value="{{ $item->id }}" hidden>
+                                                                        <textarea class="form-control mb-3" id="textarea1" name="name" hidden></textarea>
+                                                                        <div
+                                                                            class="mb-3 d-flex justify-content-between">
+                                                                            <p class="m-0">Description</p>
+                                                                            <button type="submit"
+                                                                                class="btn btn-success btn-sm"><i
+                                                                                    class="fa-solid fa-plus"></i> Add
+                                                                                Description</button>
+                                                                        </div>
+                                                                    </form>
+                                                                    <p>No description found.</p>
+                                                                @endif
+
+                                                                <div class="d-flex justify-content-between">
+                                                                    <label for="checklist"
+                                                                        class="form-label">Checklist</label>
+                                                                    <button class="btn btn-success btn-sm"
+                                                                        type="button" data-bs-toggle="collapse"
+                                                                        data-bs-target="#collapseChecklist"
+                                                                        aria-expanded="false"
+                                                                        aria-controls="collapseChecklist">
+                                                                        <i class="fa-solid fa-plus"></i> Add
+                                                                        Checklist
+                                                                    </button>
+                                                                </div>
+
+                                                                @if ($item->checklist && count($item->checklist) > 0)
+                                                                    <div class="my-3 bg-secondary-subtle p-2 overflow-auto rounded"
                                                                         style="max-height: 300px">
-                                                                        @if ($item->checklist)
+                                                                        <form action="{{ route('update.completed') }}"
+                                                                            method="POST" id="formChecklist">
                                                                             @foreach ($item->checklist as $gg)
-                                                                                <div class="p-2 rounded bg-light mb-2">
-                                                                                    <input type="radio"
-                                                                                        value="{{ $gg->id }}"
-                                                                                        class="m-0">
-                                                                                    {{ $gg->name }}</input>
+                                                                                @csrf
+                                                                                <div
+                                                                                    class="d-flex align-items-center justify-content-between p-2 rounded bg-light mb-2">
+                                                                                    <div class="d-flex gap-1">
+                                                                                        <input type="hidden"
+                                                                                            name="checklist[{{ $gg->id }}]"
+                                                                                            value="0">
+                                                                                        <input type="checkbox"
+                                                                                            name="checklist[{{ $gg->id }}]]"
+                                                                                            value="1"
+                                                                                            class="m-0"
+                                                                                            id="checkbox-{{ $gg->id }}"
+                                                                                            {{ $gg->completed == 1 ? 'checked' : '' }}
+                                                                                            onchange="toggleLineThrough({{ $gg->id }})">
+                                                                                        <span
+                                                                                            id="text-{{ $gg->id }}"
+                                                                                            class="{{ $gg->completed == 1 ? 'text-decoration-line-through' : '' }} ">
+                                                                                            {{ $gg->name }}
+                                                                                        </span>
+                                                                                    </div>
+                                                                                    <button type="button"
+                                                                                        class="btn btn-danger btn-sm"
+                                                                                        onclick="event.preventDefault(); alert('Are you sure you want to delete this checklist item?'); document.getElementById('deleteChecklist_{{ $gg->id }}').submit();">
+                                                                                        <i
+                                                                                            class="fa-solid fa-trash"></i>
+                                                                                    </button>
+
                                                                                 </div>
                                                                             @endforeach
-                                                                        @else
-                                                                            <p>No checklist items found.</p>
-                                                                        @endif
+                                                                        </form>
+                                                                        @foreach ($item->checklist as $check)
+                                                                            <form
+                                                                                action="{{ route('checklist.destroy', $check->id) }}"
+                                                                                method="POST" class="d-inline"
+                                                                                id="deleteChecklist_{{ $check->id }}">
+                                                                                @csrf
+                                                                                @method('DELETE')
+                                                                            </form>
+                                                                        @endforeach
+                                                                        <button type="submit"
+                                                                            class="btn btn-primary mt-2"
+                                                                            onclick="event.preventDefault(); document.getElementById('formChecklist').submit();">Save
+                                                                            All</button>
                                                                     </div>
+                                                                @else
+                                                                    <p>No checklist items found.</p>
+                                                                @endif
 
-                                                                    <p for="attachments" class="form-label">Attachment
-                                                                    </p>
-                                                                    <div class="overflow-auto"
-                                                                        style="max-height: 300px">
+                                                                <div class="collapse my-3" id="collapseChecklist">
+                                                                    <form action="{{ route('checklist.store') }}"
+                                                                        method="POST">
+                                                                        @csrf
+                                                                        <input type="hidden" name="task_id"
+                                                                            value="{{ $item->id }}" hidden>
+                                                                        <textarea class="form-control mb-3" id="focusedInput" name="name" placeholder="Add Activity"></textarea>
+                                                                        @error('name')
+                                                                            <div class="alert alert-danger">
+                                                                                {{ $message }}</div>
+                                                                        @enderror
+                                                                        <button type="submit"
+                                                                            class="btn btn-primary">Add
+                                                                            Checklist</button>
+                                                                    </form>
+                                                                </div>
+
+                                                                <p for="attachments" class="form-label">Attachment
+                                                                </p>
+                                                                <div class="overflow-auto" style="max-height: 300px">
+                                                                    @if ($item->attachments && count($item->attachments) > 0)
                                                                         @foreach ($item->attachments as $img)
                                                                             <div
                                                                                 class="mb-3 d-flex align-items-start gap-2">
@@ -297,24 +383,27 @@
                                                                                 </div>
                                                                             </div>
                                                                         @endforeach
-                                                                    </div>
+                                                                    @else
+                                                                        <p>No attachments found.</p>
+                                                                    @endif
+                                                                </div>
 
-                                                                    <div
-                                                                        class="mb-3 d-flex align-items-center justify-content-between">
-                                                                        <p for="activities" class="form-label">
-                                                                            Activities
-                                                                        </p>
-                                                                        <button class="btn btn-success btn-sm"
-                                                                            type="button" data-bs-toggle="collapse"
-                                                                            data-bs-target="#collapseExample"
-                                                                            aria-expanded="false"
-                                                                            aria-controls="collapseExample"
-                                                                            onclick="alert('The input to add an activities is below')">
-                                                                            <i class="fa-solid fa-plus"></i> Add
-                                                                            Activities
-                                                                        </button>
+                                                                <div
+                                                                    class="d-flex align-items-center justify-content-between">
+                                                                    <p for="activities" class="form-label">
+                                                                        Activities
+                                                                    </p>
+                                                                    <button class="btn btn-success btn-sm"
+                                                                        type="button" data-bs-toggle="collapse"
+                                                                        data-bs-target="#collapseExample"
+                                                                        aria-expanded="false"
+                                                                        aria-controls="collapseExample">
+                                                                        <i class="fa-solid fa-plus"></i> Add
+                                                                        Activities
+                                                                    </button>
 
-                                                                    </div>
+                                                                </div>
+                                                                @if ($item->activities && count($item->activities) > 0)
                                                                     <div class="bg-secondary-subtle p-2 overflow-auto"
                                                                         style="max-height: 300px">
                                                                         @foreach ($item->activities as $act)
@@ -324,9 +413,41 @@
                                                                             </div>
                                                                         @endforeach
                                                                     </div>
-                                                                </div>
+                                                                @else
+                                                                    <p>No activities found.</p>
+                                                                @endif
+                                                                <div class="collapse mt-3" id="collapseExample">
+                                                                    <form action="{{ route('activity.store') }}"
+                                                                        method="POST">
+                                                                        @csrf
+                                                                        <input type="hidden" name="task_id"
+                                                                            value="{{ $item->id }}" hidden>
+                                                                        <textarea class="form-control mb-3" id="focusedInput" name="activity" placeholder="Add Activity"></textarea>
+                                                                        @error('activity')
+                                                                            <div class="alert alert-danger">
+                                                                                {{ $message }}</div>
+                                                                        @enderror
+                                                                        <button type="submit"
+                                                                            class="btn btn-primary">Add
+                                                                            Activity</button>
+                                                                    </form>
 
-                                                                <div style="width: 35%">
+                                                                </div>
+                                                            </div>
+
+                                                            {{-- uhuy --}}
+
+                                                            <div style="width: 35%">
+                                                                <form action="{{ route('task.update', $item->id) }}"
+                                                                    method="POST" enctype="multipart/form-data"
+                                                                    id="formUpdate-{{ $item->id }}">
+                                                                    @csrf
+                                                                    @method('PUT')
+                                                                    <input type="text"
+                                                                        class="form-control border-0" id="hiddenName"
+                                                                        name="name" value="{{ $item->name }}"
+                                                                        hidden>
+
                                                                     <label for="board_id" class="form-label">Task
                                                                         Board</label>
                                                                     <select name="board_id" id="board_id"
@@ -441,7 +562,8 @@
                                                                         </div>
                                                                         <input type="hidden" name="time_count[]"
                                                                             id="time_count_{{ $item->id }}"
-                                                                            value="{{ old('time_count', $item->time_count) }}">
+                                                                            value="{{ is_array(old('time_count', $item->time_count)) ? implode(',', old('time_count', $item->time_count)) : old('time_count', $item->time_count) }}">
+
                                                                     </div>
                                                                     <label for="due_date" class="form-label">Due
                                                                         Date</label>
@@ -461,49 +583,11 @@
                                                                         onclick="document.getElementById('deleteForm-{{ $item->id }}').submit();">
                                                                         Delete
                                                                     </button>
-
-                                                                </div>
+                                                                </form>
                                                             </div>
+                                                        </div>
+                                                    </div>
 
-                                                        </div>
-                                                    </form>
-                                                    <div class="collapse mt-3" id="collapseExample">
-                                                        <!-- Collapse Content -->
-                                                        <div class="card card-body">
-                                                            <form action="{{ route('activity.store') }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                <input type="hidden" name="task_id"
-                                                                    value="{{ $item->id }}" hidden>
-                                                                <label for="focusedInput">Add Activity : </label>
-                                                                <textarea class="form-control mb-3" id="focusedInput" name="activity" placeholder="Add Activity"></textarea>
-                                                                @error('activity')
-                                                                    <div class="alert alert-danger">
-                                                                        {{ $message }}</div>
-                                                                @enderror
-                                                                <button type="submit" class="btn btn-primary">Add
-                                                                    Activity</button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
-                                                    <div class="collapse mt-3" id="collapseChecklist">
-                                                        <div class="card card-body">
-                                                            <form action="{{ route('checklist.store') }}"
-                                                                method="POST">
-                                                                @csrf
-                                                                <input type="hidden" name="task_id"
-                                                                    value="{{ $item->id }}" hidden>
-                                                                <label for="focusedInput">Add Checklist : </label>
-                                                                <textarea class="form-control mb-3" id="focusedInput" name="name" placeholder="Add Activity"></textarea>
-                                                                @error('name')
-                                                                    <div class="alert alert-danger">
-                                                                        {{ $message }}</div>
-                                                                @enderror
-                                                                <button type="submit" class="btn btn-primary">Add
-                                                                    Checklist</button>
-                                                            </form>
-                                                        </div>
-                                                    </div>
                                                     <button type="submit" class="btn btn-primary w-100"
                                                         onclick="document.getElementById('formUpdate-{{ $item->id }}').submit();">Save
                                                         and Close</button>
@@ -630,6 +714,7 @@
         <a class="scroll-to-top rounded" href="#page-top">
             <i class="fas fa-angle-up"></i>
         </a>
+
 
         <script>
             document.addEventListener('DOMContentLoaded', function() {
@@ -763,6 +848,24 @@
                     }
                 });
             });
+        </script>
+        <script>
+            function updateHiddenInput(value) {
+                // Mengupdate nilai dari input hidden dengan nilai yang diubah
+                document.getElementById('hiddenName').value = value;
+            }
+        </script>
+        <script>
+            function toggleLineThrough(id) {
+                const checkbox = document.getElementById('checkbox-' + id);
+                const text = document.getElementById('text-' + id);
+
+                if (checkbox.checked) {
+                    text.classList.add('text-decoration-line-through');
+                } else {
+                    text.classList.remove('text-decoration-line-through');
+                }
+            }
         </script>
 
 </x-layout>

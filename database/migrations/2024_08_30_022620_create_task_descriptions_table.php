@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('task_checklists', function (Blueprint $table) {
+        Schema::create('task_descriptions', function (Blueprint $table) {
             $table->id();
             $table->foreignId('task_id')->constrained()->onDelete('cascade');
-            $table->text('name');
-            $table->enum('completed', [0, 1])->default(0);
+            $table->text('name')->nullable();
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('task_checklists');
+        Schema::dropIfExists('task_descriptions');
     }
 };
