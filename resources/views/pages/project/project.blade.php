@@ -10,18 +10,25 @@
                         <i class="fas fa-fw fa-tachometer-alt"></i>
                         <span>Dashboard</span></a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/boards">
+                        <i class="fa-solid fa-chess-board"></i>
+                        <span>Boards</span>
+                    </a>
+                </li>
             </x-slot>
 
-            <li class="nav-item ">
+
+            <li class="nav-item active">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
                     aria-bs-expanded="true" aria-bs-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
+                    <i class="fa-solid fa-list-check"></i>
                     <span>Project</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         @if (auth()->user()->role == 'admin')
-                            <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
+                            <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
                             <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
                             <a class="collapse-item " href="{{ route('projectcategories.index') }}">Categories</a>
                             <a class="collapse-item" href="{{ route('project_status.index') }}">Project Status</a>
@@ -35,23 +42,21 @@
                 </div>
             </li>
             <li class="nav-item ">
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-                    aria-bs-expanded="true" aria-bs-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseThree"
+                    aria-bs-expanded="true" aria-bs-controls="collapseThree">
+                    <i class="fas fa-clipboard-list"></i>
                     <span>Task</span>
                 </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
+                <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                    data-bs-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         @if (auth()->user()->role == 'admin')
                             <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
-                            <a class="collapse-item" href="{{ route('status.index') }}">Task Status</a>
+                            <a class="collapse-item" href="{{ route('task_status.index') }}">Task Status</a>
                             <a class="collapse-item " href="{{ route('priorities.index') }}">Task Priorities</a>
                             <a class="collapse-item" href="{{ route('labels.index') }}">Task Labels/Tags</a>
-                        @elseif (auth()->user()->role == 'manajer')
-                            <a class="collapse-item active" href="{{ route('task.index') }}">Project</a>
-                            <!-- <a class="collapse-item" href="{{ route('add.create') }}">Task Status</a> -->
                         @else
-                            <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
+                            <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
                         @endif
                     </div>
                 </div>
@@ -98,7 +103,7 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                 Boards</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">10</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $total_board }}</div>
                                         </div>
                                         <div class="col-auto">
                                             <i class="fa-solid fa-display fa-2x text-gray-300"></i>
@@ -118,7 +123,7 @@
                                             </div>
                                             <div class="row no-gutters align-items-center">
                                                 <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50</div>
+                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">{{ $total_task }}</div>
                                                 </div>
                                             </div>
                                         </div>
@@ -138,7 +143,8 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                                                 People Involved</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $total_user }}</div>
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $total_user }}
+                                            </div>
                                         </div>
                                         <div class="col-auto">
                                             {{-- <i class="fas fa-comments fa-2x text-gray-300"></i> --}}
@@ -180,7 +186,7 @@
                                             <td>{{ $item->status->name }}</td>
                                             <td>{{ $item->live_date }}</td>
                                             <td>{{ $item->created_at }}</td>
-                                            <td>
+                                            <td class="d-flex">
                                                 @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
                                                     <!-- Form untuk duplikasi -->
                                                     <form id="duplicate-form-{{ $item->id }}"

@@ -10,12 +10,19 @@
                         <i class="fas fa-fw fa-tachometer-alt"></i>
                         <span>Dashboard</span></a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/boards">
+                        <i class="fa-solid fa-chess-board"></i>
+                        <span>Boards</span>
+                    </a>
+                </li>
             </x-slot>
+
 
             <li class="nav-item ">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
                     aria-bs-expanded="true" aria-bs-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
+                    <i class="fa-solid fa-list-check"></i>
                     <span>Project</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
@@ -34,25 +41,22 @@
                     </div>
                 </div>
             </li>
-            <li class="nav-item ">
+            <li class="nav-item active">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseThree"
                     aria-bs-expanded="true" aria-bs-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
+                    <i class="fas fa-clipboard-list"></i>
                     <span>Task</span>
                 </a>
-                <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
+                <div id="collapseThree" class="collapse" aria-labelledby="headingTwo"
+                    data-bs-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         @if (auth()->user()->role == 'admin')
                             <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
                             <a class="collapse-item" href="{{ route('task_status.index') }}">Task Status</a>
-                            <a class="collapse-item " href="{{ route('priorities.index') }}">Task Priorities</a>
+                            <a class="collapse-item active" href="{{ route('priorities.index') }}">Task Priorities</a>
                             <a class="collapse-item " href="{{ route('labels.index') }}">Task Labels/Tags</a>
-                            
-                        @elseif (auth()->user()->role == 'manajer')
-                            <a class="collapse-item active" href="{{ route('task.index') }}">Task</a>
-                            <!-- <a class="collapse-item" href="{{ route('add.create') }}">Task Status</a> -->
                         @else
-                            <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
+                            <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
                         @endif
                     </div>
                 </div>
@@ -74,37 +78,44 @@
                             <h6 class="m-0 font-weight-bold text-primary">Add New Priority</h6>
                         </div>
                         <div class="card-body">
-                        <form action="{{ route('priorities.store') }}" method="POST" enctype="multipart/form-data">
-                            @csrf
-                            <div class="form-group">
-                                <label for="name">Nama</label>
-                                <input type="text" class="form-control" id="name" name="name" required value="{{ old('name') }}">
-                            </div>
-                            <div class="form-group">
-                                <label for="icon">Icon</label>
-                                <div class="icon-selection">
-                                    <div class="icon-options">
-                                        <button type="button" class="btn btn-outline-primary" name="icon" value="😎" onclick="selectIcon('😎')">😎</button>
-                                        <button type="button" class="btn btn-outline-primary" name="icon" value="🐲" onclick="selectIcon('🐲')">🐲</button>
-                                        <button type="button" class="btn btn-outline-primary" name="icon" value="😄" onclick="selectIcon('😄')">😄</button>
-                                        <button type="button" class="btn btn-outline-primary" name="icon" value="😔" onclick="selectIcon('😔')">😔</button>
-                                        <button type="button" class="btn btn-outline-primary" name="icon" value="🤡" onclick="selectIcon('🤡')">🤡</button>
-                                    </div>
-                                    <input type="hidden" id="selectedIcon" name="icon" required>
+                            <form action="{{ route('priorities.store') }}" method="POST"
+                                enctype="multipart/form-data">
+                                @csrf
+                                <div class="form-group">
+                                    <label for="name">Nama</label>
+                                    <input type="text" class="form-control" id="name" name="name" required
+                                        value="{{ old('name') }}">
                                 </div>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Tambah</button>
-                        </form>
-                        <script>
-                            function selectIcon(value, id) {
-                                var iconInput = document.getElementById('selectedIcon' + (id ? id : ''));
-                                if (iconInput) {
-                                    iconInput.value = value; // Set the hidden input value
+                                <div class="form-group">
+                                    <label for="icon">Icon</label>
+                                    <div class="icon-selection">
+                                        <div class="icon-options">
+                                            <button type="button" class="btn btn-outline-primary" name="icon"
+                                                value="😎" onclick="selectIcon('😎')">😎</button>
+                                            <button type="button" class="btn btn-outline-primary" name="icon"
+                                                value="🐲" onclick="selectIcon('🐲')">🐲</button>
+                                            <button type="button" class="btn btn-outline-primary" name="icon"
+                                                value="😄" onclick="selectIcon('😄')">😄</button>
+                                            <button type="button" class="btn btn-outline-primary" name="icon"
+                                                value="😔" onclick="selectIcon('😔')">😔</button>
+                                            <button type="button" class="btn btn-outline-primary" name="icon"
+                                                value="🤡" onclick="selectIcon('🤡')">🤡</button>
+                                        </div>
+                                        <input type="hidden" id="selectedIcon" name="icon" required>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Tambah</button>
+                            </form>
+                            <script>
+                                function selectIcon(value, id) {
+                                    var iconInput = document.getElementById('selectedIcon' + (id ? id : ''));
+                                    if (iconInput) {
+                                        iconInput.value = value; // Set the hidden input value
+                                    }
                                 }
-                            }
-                        </script>
+                            </script>
                             <!-- Tabel untuk Menampilkan Daftar -->
-                            <table class="table table-striped mt-4">
+                            <table id="example" class="table table-striped mt-4">
                                 <thead>
                                     <tr>
                                         <th>Nama</th>
@@ -113,7 +124,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                @foreach ($priorities as $priority)
+                                    @foreach ($priorities as $priority)
                                         <tr>
                                             <td>{{ $priority->name }}</td>
                                             <td>{{ $priority->icon }}</td>
@@ -142,25 +153,49 @@
                                                             data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form action="{{ route('priorities.update', $priority->id) }}" method="POST">
+                                                        <form action="{{ route('priorities.update', $priority->id) }}"
+                                                            method="POST">
                                                             @csrf
                                                             @method('PUT')
                                                             <div class="mb-3">
-                                                                <label for="field_name" class="form-label">Field Name</label>
-                                                                <input type="text" class="form-control" id="name{{ $priority->id }}" name="name" value="{{ old('name', $priority->name) }}">
-                                                                <label for="field_icon" class="form-label">Field Icon</label>
+                                                                <label for="field_name" class="form-label">Field
+                                                                    Name</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="name{{ $priority->id }}" name="name"
+                                                                    value="{{ old('name', $priority->name) }}">
+                                                                <label for="field_icon" class="form-label">Field
+                                                                    Icon</label>
                                                                 <div class="icon-selection">
                                                                     <div class="icon-options">
-                                                                        <button type="button" class="btn btn-outline-primary" name="icon" value="😎" onclick="selectIcon('😎', '{{ $priority->id }}')">😎</button>
-                                                                        <button type="button" class="btn btn-outline-primary" name="icon" value="🐲" onclick="selectIcon('🐲', '{{ $priority->id }}')">🐲</button>
-                                                                        <button type="button" class="btn btn-outline-primary" name="icon" value="😄" onclick="selectIcon('😄', '{{ $priority->id }}')">😄</button>
-                                                                        <button type="button" class="btn btn-outline-primary" name="icon" value="😔" onclick="selectIcon('😔', '{{ $priority->id }}')">😔</button>
-                                                                        <button type="button" class="btn btn-outline-primary" name="icon" value="🤡" onclick="selectIcon('🤡', '{{ $priority->id }}')">🤡</button>
+                                                                        <button type="button"
+                                                                            class="btn btn-outline-primary"
+                                                                            name="icon" value="😎"
+                                                                            onclick="selectIcon('😎', '{{ $priority->id }}')">😎</button>
+                                                                        <button type="button"
+                                                                            class="btn btn-outline-primary"
+                                                                            name="icon" value="🐲"
+                                                                            onclick="selectIcon('🐲', '{{ $priority->id }}')">🐲</button>
+                                                                        <button type="button"
+                                                                            class="btn btn-outline-primary"
+                                                                            name="icon" value="😄"
+                                                                            onclick="selectIcon('😄', '{{ $priority->id }}')">😄</button>
+                                                                        <button type="button"
+                                                                            class="btn btn-outline-primary"
+                                                                            name="icon" value="😔"
+                                                                            onclick="selectIcon('😔', '{{ $priority->id }}')">😔</button>
+                                                                        <button type="button"
+                                                                            class="btn btn-outline-primary"
+                                                                            name="icon" value="🤡"
+                                                                            onclick="selectIcon('🤡', '{{ $priority->id }}')">🤡</button>
                                                                     </div>
-                                                                    <input type="hidden" id="selectedIcon{{ $priority->id }}" name="icon" required value="{{ old('icon', $priority->icon) }}">
+                                                                    <input type="hidden"
+                                                                        id="selectedIcon{{ $priority->id }}"
+                                                                        name="icon" required
+                                                                        value="{{ old('icon', $priority->icon) }}">
                                                                 </div>
                                                             </div>
-                                                            <button type="submit" class="btn btn-success">Update</button>
+                                                            <button type="submit"
+                                                                class="btn btn-success">Update</button>
                                                         </form>
                                                     </div>
                                                 </div>
@@ -179,7 +214,7 @@
             <!-- End of Content Wrapper -->
 
         </div>
-        
+
         <!-- End of Page Wrapper -->
 
         <!-- Scroll to Top Button-->
@@ -205,6 +240,6 @@
                     </div>
                 </div>
             </div>
- 
+
         </div>
 </x-layout>

@@ -10,12 +10,19 @@
                         <i class="fas fa-fw fa-tachometer-alt"></i>
                         <span>Dashboard</span></a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link active" href="/boards">
+                        <i class="fa-solid fa-chess-board"></i>
+                        <span>Boards</span>
+                    </a>
+                </li>
             </x-slot>
+
 
             <li class="nav-item ">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
                     aria-bs-expanded="true" aria-bs-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
+                    <i class="fa-solid fa-list-check"></i>
                     <span>Project</span>
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
@@ -34,24 +41,22 @@
                     </div>
                 </div>
             </li>
-            <li class="nav-item ">
+            <li class="nav-item active">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseThree"
                     aria-bs-expanded="true" aria-bs-controls="collapseTwo">
-                    <i class="fas fa-fw fa-cog"></i>
+                    <i class="fas fa-clipboard-list"></i>
                     <span>Task</span>
                 </a>
-                <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
+                <div id="collapseThree" class="collapse" aria-labelledby="headingTwo"
+                    data-bs-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         @if (auth()->user()->role == 'admin')
                             <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
                             <a class="collapse-item" href="{{ route('task_status.index') }}">Task Status</a>
                             <a class="collapse-item " href="{{ route('priorities.index') }}">Task Priorities</a>
-                            <a class="collapse-item" href="{{ route('labels.index') }}">Task Labels/Tags</a>
-                        @elseif (auth()->user()->role == 'manajer')
-                            <a class="collapse-item active" href="{{ route('task.index') }}">Project</a>
-                            <!-- <a class="collapse-item" href="{{ route('add.create') }}">Task Status</a> -->
+                            <a class="collapse-item active" href="{{ route('labels.index') }}">Task Labels/Tags</a>
                         @else
-                            <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
+                            <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
                         @endif
                     </div>
                 </div>
@@ -73,20 +78,21 @@
                     <h1 class="h3 mb-4 text-gray-800">Task Labels/Tags</h1>
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Add New Label</h6> 
+                            <h6 class="m-0 font-weight-bold text-primary">Add New Label</h6>
                         </div>
                         <div class="card-body">
                             <form action="{{ route('labels.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
                                     <label for="statusName">Name</label>
-                                    <input type="text" class="form-control" id="name" name="name" value="{{ old('name') }}" placeholder="Enter label name" required> 
+                                    <input type="text" class="form-control" id="name" name="name"
+                                        value="{{ old('name') }}" placeholder="Enter label name" required>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Add New Label</button> 
+                                <button type="submit" class="btn btn-primary">Add New Label</button>
                             </form>
                             <hr>
-                            <h6 class="m-0 font-weight-bold text-primary">Current Labels</h6> 
-                            <table class="table table-striped" id="dataTable" width="100%" cellspacing="0">
+                            <h6 class="m-0 font-weight-bold text-primary">Current Labels</h6>
+                            <table id="example" class="table table-striped" id="dataTable" width="100%" cellspacing="0">
                                 <thead>
                                     <tr>
                                         <th>Name</th>
@@ -94,39 +100,48 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($labels as $item) 
+                                    @foreach ($labels as $item)
                                         <tr>
                                             <td>
                                                 {{ $item->name }}
                                             </td>
                                             <td class='d-flex'>
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#editModal{{ $item->id }}">
+                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                    data-bs-target="#editModal{{ $item->id }}">
                                                     Edit Data
                                                 </button>
-                
+
                                                 <form action="{{ route('labels.destroy', $item->id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
+                                                    <button type="submit" class="btn btn-danger"
+                                                        onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
                                                 </form>
                                             </td>
                                         </tr>
-                                        <div class="modal fade" id="editModal{{ $item->id }}" tabindex="-1" aria-labelledby="editModalLabel{{ $item->id }}" aria-hidden="true">
+                                        <div class="modal fade" id="editModal{{ $item->id }}" tabindex="-1"
+                                            aria-labelledby="editModalLabel{{ $item->id }}" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
                                                         <h5 class="modal-title" id="editModalLabel">Edit Data</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        <button type="button" class="btn-close"
+                                                            data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form action="{{ route('labels.update', $item->id) }}" method="POST">
+                                                        <form action="{{ route('labels.update', $item->id) }}"
+                                                            method="POST">
                                                             @csrf
                                                             @method('PUT')
                                                             <div class="mb-3">
-                                                                <label for="field_name" class="form-label">Field Name</label>
-                                                                <input type="text" class="form-control" id="name" name="name" value="{{ old('name', $item->name) }}">
+                                                                <label for="field_name" class="form-label">Field
+                                                                    Name</label>
+                                                                <input type="text" class="form-control"
+                                                                    id="name" name="name"
+                                                                    value="{{ old('name', $item->name) }}">
                                                             </div>
-                                                            <button type="submit" class="btn btn-success">Update</button>
+                                                            <button type="submit"
+                                                                class="btn btn-success">Update</button>
                                                         </form>
                                                     </div>
                                                 </div>
@@ -135,7 +150,8 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            <p class="mt-3"><strong>Note:</strong> These labels will appear on tasks, deleting a label can affect the project/task.</p> 
+                            <p class="mt-3"><strong>Note:</strong> These labels will appear on tasks, deleting a
+                                label can affect the project/task.</p>
                         </div>
                     </div>
                 </div>

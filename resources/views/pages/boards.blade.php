@@ -3,12 +3,14 @@
     <div id="wrapper">
         <x-navbar>
             <x-slot name="dashboard">
-                <li class="nav-item ">
-                    <a class="nav-link " href="/dashboard">
-                        <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Dashboard</span></a>
-                </li>
                 <li class="nav-item">
+                    <a class="nav-link" href="/dashboard">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Dashboard</span>
+                    </a>
+
+                </li>
+                <li class="nav-item active">
                     <a class="nav-link active" href="/boards">
                         <i class="fa-solid fa-chess-board"></i>
                         <span>Boards</span>
@@ -30,194 +32,83 @@
                             <a class="collapse-item " href="{{ route('projectcategories.index') }}">Categories</a>
                             <a class="collapse-item" href="{{ route('project_status.index') }}">Project Status</a>
                         @elseif (auth()->user()->role == 'manajer')
-                            <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
+                            <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
                             <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
                         @else
-                            <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
+                            <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
                         @endif
                     </div>
                 </div>
             </li>
-            <li class="nav-item active">
+            <li class="nav-item ">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseThree"
-                    aria-bs-expanded="true" aria-bs-controls="collapseThree">
-                    <i class="fas fa-clipboard-list"></i>
+                    aria-bs-expanded="true" aria-bs-controls="collapseTwo">
+                    <i class="fas fa-clipboard-list "></i>
                     <span>Task</span>
                 </a>
-                <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                <div id="collapseThree" class="collapse" aria-labelledby="headingTwo"
                     data-bs-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         @if (auth()->user()->role == 'admin')
-                            <a class="collapse-item active" href="{{ route('task.index') }}">Task</a>
+                            <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
                             <a class="collapse-item" href="{{ route('task_status.index') }}">Task Status</a>
                             <a class="collapse-item " href="{{ route('priorities.index') }}">Task Priorities</a>
                             <a class="collapse-item" href="{{ route('labels.index') }}">Task Labels/Tags</a>
                         @else
-                            <a class="collapse-item active" href="{{ route('task.index') }}">Task</a>
+                            <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
                         @endif
                     </div>
                 </div>
             </li>
         </x-navbar>
+
+        <!-- End of Sidebar -->
+
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
+
             <!-- Main Content -->
             <div id="content">
+
                 <x-navbar-topbar></x-navbar-topbar>
+
                 <!-- Begin Page Content -->
-                <div class="container text-dark">
-                    <!-- Content Row -->
-                    <div class="row">
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Total Projects</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $total_project }}
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fa-solid fa-list-check fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                <div class="container-fluid">
+                    <form method="GET" action="{{ route('boards.index') }}">
+                        <div class="form-group">
+                            <label for="projectSelect">Select Project:</label>
+                            <select id="projectSelect" name="project_id" class="form-control"
+                                onchange="this.form.submit()">
+                                <option value="" disabled selected>Choose Project</option>
+                                @foreach ($projects as $project)
+                                    <option value="{{ $project->id }}"
+                                        {{ request('project_id') == $project->id ? 'selected' : '' }}>
+                                        {{ $project->name }}
+                                    </option>
+                                @endforeach
+                            </select>
                         </div>
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Boards</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $total_board }}
+                    </form>
+
+
+                    <div style="height: 100vh;">
+                        <div class="board-container overflow-auto d-flex flex-nowrap align-items-start"
+                            style="max-width: 100%; padding: 10px;">
+                            @forelse ($boards as $board)
+                                <div class="board-item"
+                                    style="min-width: 300px; height: auto;  margin-right: 10px; border: 1px solid #ccc; border-radius: 5px; padding: 10px; background-color: #f9f9f9;">
+                                    <h5 style="margin: 0;">{{ $board->board_name }}</h5>
+                                    <br>
+
+                                    @forelse ($board->tasks as $item)
+                                        <a href="#" data-bs-toggle="modal"
+                                            data-bs-target="#view-{{ $item->id }}">
+                                            <div class="text-white bg-secondary rounded p-2">
+                                                <p class="mb-0">{{ $item->name }}</p>
                                             </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fa-solid fa-display fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
-                                            </div>
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
-                                                        {{ $total_task }}</div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Pending Requests Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                People Involved</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $total_user }}
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            {{-- <i class="fas fa-comments fa-2x text-gray-300"></i> --}}
-                                            <i class="fa-solid fa-user fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card shadow mb-4">
-                        <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Tasks</h6>
-                        </div>
-                        <div class="card-body">
-                            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#createTask">
-                                    Create Task
-                                </button>
-                            @else
-                            @endif
-                            <table id="example" class="table table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Name</th>
-                                        <th>Project Name</th>
-                                        <th>Task Status</th>
-                                        <th>Task Priority</th>
-                                        <th>Due Date</th>
-                                        <th>Created At</th>
-                                        <th>Action</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @forelse ($task as $item)
-                                        <tr>
-                                            <td>{{ $item->name }}</td>
-                                            <td>{{ $item->project->name ?? ' ' }}</td>
-                                            <td>{{ $item->status->name ?? ' ' }}</td>
-                                            <td>{{ $item->priority->name ?? ' ' }}</td>
-                                            <td>{{ $item->due_date ?? ' ' }}</td>
-                                            <td>{{ $item->created_at }}</td>
-                                            <td>
-                                                <div class="d-flex align-items-center">
-                                                    @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
-                                                        <!-- Form untuk duplikasi -->
-                                                        <form id="duplicate-form-{{ $item->id }}"
-                                                            action="{{ route('task.duplicate', $item->id) }}"
-                                                            method="POST" style="display: none;">
-                                                            @csrf
-                                                        </form>
-                                                        <!-- Ikon copy dengan event click -->
-                                                        <a href="#" class="btn"
-                                                            onclick="event.preventDefault(); document.getElementById('duplicate-form-{{ $item->id }}').submit();">
-                                                            <i class="icon-action fa-solid fa-copy"></i>
-                                                        </a>
-                                                        <!-- Ikon view -->
-                                                        <button type="button" class="btn" data-bs-toggle="modal"
-                                                            data-bs-target="#view-{{ $item->id }}">
-                                                            <i class="icon-action fa-solid fa-eye"></i>
-                                                        </button>
-                                                        <!-- Form untuk delete -->
-                                                        <form action="{{ route('task.destroy', $item->id) }}"
-                                                            method="POST"
-                                                            onsubmit="return confirm('Are you sure you want to delete this item?');"
-                                                            class="d-inline">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn">
-                                                                <i class="icon-action fa-solid fa-trash-can"></i>
-                                                            </button>
-                                                        </form>
-                                                    @else
-                                                        <button type="button" class="btn" data-bs-toggle="modal"
-                                                            data-bs-target="#view-{{ $item->id }}">
-                                                            <i class="icon-action fa-solid fa-eye"></i>
-                                                        </button>
-                                                    @endif
-                                                </div>
-                                            </td>
-                                        </tr>
+                                        </a>
+                                        <br>
+
                                         <div class="modal fade" id="view-{{ $item->id }}" tabindex="-1"
                                             aria-labelledby="createModalLabel" aria-hidden="true">
                                             <div class="modal-dialog modal-xl">
@@ -452,12 +343,10 @@
                                                                         Board</label>
                                                                     <select name="board_id" id="board_id"
                                                                         class="form-select mb-3">
-                                                                        @foreach ($board as $items)
-                                                                            <option value="{{ $items->id }}"
-                                                                                {{ old('board_id', $item->board_id) == $items->id ? 'selected' : '' }}>
-                                                                                {{ $items->board_name ?? ' ' }}
-                                                                            </option>
-                                                                        @endforeach
+                                                                        <option value="{{ $board->id }}"
+                                                                            {{ old('board_id', $item->board_id) == $board->id ? 'selected' : '' }}>
+                                                                            {{ $board->board_name ?? ' ' }}
+                                                                        </option>
                                                                     </select>
 
                                                                     <label for="status_id" class="form-label">Task
@@ -500,7 +389,7 @@
                                                                         Project</label>
                                                                     <select name="project_id" id="project_id"
                                                                         class="form-select mb-3">
-                                                                        @foreach ($project as $items)
+                                                                        @foreach ($projects as $items)
                                                                             <option value="{{ $items->id }}"
                                                                                 {{ old('project_id', $item->project_id) == $items->id ? 'selected' : '' }}>
                                                                                 {{ $items->name ?? ' ' }}
@@ -535,36 +424,28 @@
                                                                         </ul>
                                                                     </div>
 
-
-                                                                    <div class="task-row"
-                                                                        data-task-id="{{ $item->id }}">
-                                                                        <p for="time_count_{{ $item->id }}"
-                                                                            class="form-label">Time Count</p>
-                                                                        <div
-                                                                            id="stopwatch-container-{{ $item->id }}">
-                                                                            <span
-                                                                                id="time-display-{{ $item->id }}"
-                                                                                class="mb-3">
-                                                                                {{ old('time_count', $item->time_count) }}
+                                                                    @foreach($board->tasks as $task)
+                                                                    @php
+                                                                        // Mendekode JSON dan mengambil elemen pertama dari array
+                                                                        $time_count = json_decode($task->time_count, true);
+                                                                        $task->time_count = isset($time_count[0]) ? $time_count[0] : '00:00:00';
+                                                                    @endphp
+                                                                    <div class="task-row" data-task-id="{{ $task->id }}">
+                                                                        <p for="time_count_{{ $task->id }}" class="form-label">Time Count</p>
+                                                                        <div id="stopwatch-container-{{ $task->id }}">
+                                                                            <span id="time-display-{{ $task->id }}" class="mb-3">
+                                                                                {{ old('time_count', $task->time_count) }}
                                                                             </span>
                                                                             <br>
-                                                                            <button type="button"
-                                                                                id="start-stopwatch-{{ $item->id }}"
-                                                                                class="btn btn-success">Start</button>
-                                                                            <button type="button"
-                                                                                id="stop-stopwatch-{{ $item->id }}"
-                                                                                class="btn btn-danger"
-                                                                                disabled>Stop</button>
-                                                                            <button type="button"
-                                                                                id="reset-stopwatch-{{ $item->id }}"
-                                                                                class="btn btn-secondary"
-                                                                                disabled>Reset</button>
+                                                                            <button type="button" id="start-stopwatch-{{ $task->id }}" class="btn btn-success">Start</button>
+                                                                            <button type="button" id="stop-stopwatch-{{ $task->id }}" class="btn btn-danger" disabled>Stop</button>
+                                                                            <button type="button" id="reset-stopwatch-{{ $task->id }}" class="btn btn-secondary" disabled>Reset</button>
                                                                         </div>
-                                                                        <input type="hidden" name="time_count[]"
-                                                                            id="time_count_{{ $item->id }}"
-                                                                            value="{{ is_array(old('time_count', $item->time_count)) ? implode(',', old('time_count', $item->time_count)) : old('time_count', $item->time_count) }}">
-
+                                                                        <input type="hidden" name="time_count[]" id="time_count_{{ $task->id }}"
+                                                                            value="{{ is_array(old('time_count', $task->time_count)) ? implode(',', old('time_count', $task->time_count)) : old('time_count', $task->time_count) }}">
                                                                     </div>
+                                                                @endforeach
+                                                                    
                                                                     <label for="due_date" class="form-label">Due
                                                                         Date</label>
                                                                     <input type="date" name="due_date"
@@ -631,241 +512,280 @@
                                             </div>
                                         </div>
                                     @empty
-                                        <tr>
-                                            <td colspan="6" class="alert alert-danger">
-                                                Data Project belum Tersedia.
-                                            </td>
-                                        </tr>
-
+                                        <p>No tasks found for this board.</p>
                                     @endforelse
-                                    <div class="modal fade" id="createTask" tabindex="-1"
-                                        aria-labelledby="createModalLabel" aria-hidden="true">
-                                        <div class="modal-dialog">
-                                            <div class="modal-content">
-                                                <div class="modal-header">
-                                                    <h5 class="modal-title" id="createModalLabel">Create Data
-                                                    </h5>
-                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                        aria-label="Close"></button>
-                                                </div>
-                                                <div class="modal-body">
-                                                    <form action="{{ route('task.store') }}" method="POST"
-                                                        enctype="multipart/form-data">
-                                                        @csrf
-                                                        <div class="mb-3">
-                                                            <label for="field_name" class="form-label">
-                                                                Task Name</label>
-                                                            <input type="text"
-                                                                class="form-control @error('name') is-invalid @enderror"
-                                                                name="name" value="{{ old('name') }}"
-                                                                placeholder="Enter Project Name">
-                                                            @error('name')
-                                                                <div class="alert alert-danger mt-2">
-                                                                    {{ $message }}
-                                                                </div>
-                                                            @enderror
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label for="field_name" class="form-label">
-                                                                Choose Project</label>
-                                                            <select id="project_id" name="project_id"
-                                                                class="form-control">
-                                                                <option value="" selected>Choose Project:
-                                                                </option>
-                                                                @foreach ($project as $items)
-                                                                    <option value="{{ $items->id }}">
-                                                                        {{ $items->name }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                        <div class="mb-3">
-                                                            <label for="field_name" class="form-label">
-                                                                Choose Board</label>
-                                                            <select id="board_id" name="board_id"
-                                                                class="form-control">
-                                                                <option value="" selected>Choose Board:
-                                                                </option>
-                                                                @foreach ($board as $items)
-                                                                    <option value="{{ $items->id }}">
-                                                                        {{ $items->board_name }}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-                                                        <button type="submit" class="btn btn-primary">Create
-                                                            Task</button>
-                                                    </form>
-                                                </div>
-
-                                            </div>
-                                        </div>
+                                    <div class="d-flex gap-2 card-footer">
+                                        <button type="button"
+                                            class="btn btn-primary create-task-btn btn-sm w-100 d-flex align-items-center gap-2"
+                                            data-board-id="{{ $board->id }}" data-bs-toggle="modal"
+                                            data-bs-target="#createTaskModal">
+                                            <i class="fa-solid fa-circle-plus fa-sm"></i> Add task
+                                        </button>
+                                        <form action="{{ route('boards.destroy', $board->id) }}" method="POST"
+                                            style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button class="btn btn-danger btn-sm" type="submit"
+                                                onclick="return confirm('Are you sure you want to delete this board?')"><i
+                                                    class="fa-solid fa-trash-can"></i></button>
+                                        </form>
                                     </div>
+                                </div>
+                            @empty
+                                <p>Tidak ada board yang ditemukan untuk proyek ini.</p>
+                            @endforelse
 
-                                </tbody>
-                            </table>
+                            <!-- Form untuk membuat Board baru -->
+                            <div class="board-item"
+                                style="margin-right: 10px; border-radius: 5px; padding: 10px; background-color: #f9f9f9; ">
+                                <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
+                                    data-bs-target="#collapseExample" aria-expanded="false"
+                                    aria-controls="collapseExample" style="min-width: 200px">
+                                    Create Board
+                                </button>
+                                <div class="collapse" id="collapseExample">
+                                    <div class="card card-body" style="min-width: 300px">
+                                        <form action="{{ route('boards.store') }}" method="post"
+                                            enctype="multipart/form-data">
+                                            @csrf
+                                            <div class="form-group">
+                                                <input type="text" class="form-control" id="boardName"
+                                                    name="board_name" value="{{ old('board_name') }}"
+                                                    placeholder="Enter board name" required>
+                                                <input type="hidden" id="projectIdInput" name="project_id"
+                                                    value="{{ request('project_id') }}">
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Create Board</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                        <!-- Modal for Creating Task -->
+                        <div class="modal fade" id="createTaskModal" tabindex="-1"
+                            aria-labelledby="createModalLabel" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="createModalLabel">Create Task</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form action="{{ route('taskboards.store') }}" method="POST"
+                                            enctype="multipart/form-data">
+                                            @csrf
+                                            <div class="mb-3">
+                                                <label for="taskName" class="form-label">Task Name</label>
+                                                <input type="text"
+                                                    class="form-control @error('name') is-invalid @enderror"
+                                                    name="name" value="{{ old('name') }}"
+                                                    placeholder="Enter Task Name">
+                                                @error('name')
+                                                    <div class="alert alert-danger mt-2">
+                                                        {{ $message }}
+                                                    </div>
+                                                @enderror
+                                            </div>
+                                            <div class="mb-3">
+                                                <input type="hidden" id="projectIdInput" name="project_id"
+                                                    value="{{ request('project_id') }}">
+                                            </div>
+                                            <div class="">
+                                                <input type="hidden" id="board_id_uhuy" name="board_id"
+                                                    class="form-control" readonly>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">Create Task</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+            <!-- End of Page Wrapper -->
+
+            <!-- Scroll to Top Button-->
+            <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fas fa-angle-up"></i>
+            </a>
+
+            <!-- Logout Modal-->
+            <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">Select "Logout" below if you are ready to end your current session.
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                            <a class="btn btn-primary" href="login.html">Logout</a>
                         </div>
                     </div>
                 </div>
-                <!-- End of Main Content -->
             </div>
-            <!-- End of Content Wrapper -->
-        </div>
-        <!-- End of Page Wrapper -->
-        <!-- Scroll to Top Button-->
-        <a class="scroll-to-top rounded" href="#page-top">
-            <i class="fas fa-angle-up"></i>
-        </a>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const selectElements = document.querySelectorAll('[id^="assignees"]');
+                    const selectedAssigneesContainers = document.querySelectorAll('[id^="selected-assignees"]');
 
+                    // Function to update selected assignees display for a specific pair of select and container
+                    function updateSelectedAssignees(selectElement, selectedAssigneesContainer) {
+                        const selectedOptions = Array.from(selectElement.selectedOptions);
+                        selectedAssigneesContainer.innerHTML = '';
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const selectElements = document.querySelectorAll('[id^="assignees"]');
-                const selectedAssigneesContainers = document.querySelectorAll('[id^="selected-assignees"]');
+                        selectedOptions.forEach(option => {
+                            const userId = option.value;
+                            const userName = option.textContent;
 
-                // Function to update selected assignees display for a specific pair of select and container
-                function updateSelectedAssignees(selectElement, selectedAssigneesContainer) {
-                    const selectedOptions = Array.from(selectElement.selectedOptions);
-                    selectedAssigneesContainer.innerHTML = '';
+                            const userDiv = document.createElement('div');
+                            userDiv.classList.add('selected-user');
+                            userDiv.dataset.id = userId;
+                            userDiv.innerHTML = `
+                            <span class="me-2">${userName}</span>
+                            <button type="button" class="btn btn-sm btn-danger ms-2 remove-assignee" aria-label="Remove">x</button>
+                        `;
+                            selectedAssigneesContainer.appendChild(userDiv);
+                        });
+                    }
 
-                    selectedOptions.forEach(option => {
-                        const userId = option.value;
-                        const userName = option.textContent;
+                    // Iterate over all select elements and attach event listeners
+                    selectElements.forEach((selectElement, index) => {
+                        const selectedAssigneesContainer = selectedAssigneesContainers[index];
 
-                        const userDiv = document.createElement('div');
-                        userDiv.classList.add('selected-user');
-                        userDiv.dataset.id = userId;
-                        userDiv.innerHTML = `
-                        <span class="me-2">${userName}</span>
-                        <button type="button" class="btn btn-sm btn-danger ms-2 remove-assignee" aria-label="Remove">x</button>
-                    `;
-                        selectedAssigneesContainer.appendChild(userDiv);
-                    });
-                }
+                        // Event listener for when the select value changes
+                        selectElement.addEventListener('change', function() {
+                            updateSelectedAssignees(selectElement, selectedAssigneesContainer);
+                        });
 
-                // Iterate over all select elements and attach event listeners
-                selectElements.forEach((selectElement, index) => {
-                    const selectedAssigneesContainer = selectedAssigneesContainers[index];
+                        // Event delegation to handle removal of assignees
+                        selectedAssigneesContainer.addEventListener('click', function(event) {
+                            if (event.target.classList.contains('remove-assignee')) {
+                                const userDiv = event.target.closest('.selected-user');
+                                const userId = userDiv.dataset.id;
 
-                    // Event listener for when the select value changes
-                    selectElement.addEventListener('change', function() {
-                        updateSelectedAssignees(selectElement, selectedAssigneesContainer);
-                    });
+                                // Remove the user from the select
+                                const optionToRemove = Array.from(selectElement.options).find(option =>
+                                    option.value === userId);
+                                if (optionToRemove) {
+                                    optionToRemove.selected = false;
+                                }
 
-                    // Event delegation to handle removal of assignees
-                    selectedAssigneesContainer.addEventListener('click', function(event) {
-                        if (event.target.classList.contains('remove-assignee')) {
-                            const userDiv = event.target.closest('.selected-user');
-                            const userId = userDiv.dataset.id;
-
-                            // Remove the user from the select
-                            const optionToRemove = Array.from(selectElement.options).find(option =>
-                                option.value === userId);
-                            if (optionToRemove) {
-                                optionToRemove.selected = false;
+                                // Remove the user div from the display
+                                userDiv.remove();
                             }
+                        });
 
-                            // Remove the user div from the display
-                            userDiv.remove();
+                        // Initialize display on page load
+                        updateSelectedAssignees(selectElement, selectedAssigneesContainer);
+
+                        // Ensure that changes in data after load are reflected in the UI
+                        new MutationObserver(() => updateSelectedAssignees(selectElement,
+                            selectedAssigneesContainer)).observe(selectElement, {
+                            childList: true,
+                            subtree: true,
+                            attributes: true,
+                            characterData: true
+                        });
+                    });
+                });
+            </script>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    document.querySelectorAll('.task-row').forEach(function(row) {
+                        const taskId = row.dataset.taskId;
+                        let startTime, elapsedTime = 0,
+                            timerInterval;
+                        const timeDisplay = document.getElementById(`time-display-${taskId}`);
+                        const timeInput = document.getElementById(`time_count_${taskId}`);
+
+                        function updateTimeDisplay(time) {
+                            const hours = Math.floor(time / 3600000);
+                            const minutes = Math.floor((time % 3600000) / 60000);
+                            const seconds = Math.floor((time % 60000) / 1000);
+                            timeDisplay.textContent =
+                                `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                            timeInput.value = timeDisplay.textContent;
+                        }
+
+                        function startStopwatch() {
+                            startTime = Date.now() - elapsedTime;
+                            timerInterval = setInterval(function() {
+                                elapsedTime = Date.now() - startTime;
+                                updateTimeDisplay(elapsedTime);
+                            }, 1000);
+                        }
+
+                        function stopStopwatch() {
+                            clearInterval(timerInterval);
+                        }
+
+                        function resetStopwatch() {
+                            clearInterval(timerInterval);
+                            elapsedTime = 0;
+                            updateTimeDisplay(0);
+                        }
+
+                        document.getElementById(`start-stopwatch-${taskId}`).addEventListener('click', function() {
+                            startStopwatch();
+                            this.disabled = true;
+                            document.getElementById(`stop-stopwatch-${taskId}`).disabled = false;
+                            document.getElementById(`reset-stopwatch-${taskId}`).disabled = false;
+                        });
+
+                        document.getElementById(`stop-stopwatch-${taskId}`).addEventListener('click', function() {
+                            stopStopwatch();
+                            this.disabled = true;
+                            document.getElementById(`start-stopwatch-${taskId}`).disabled = false;
+                        });
+
+                        document.getElementById(`reset-stopwatch-${taskId}`).addEventListener('click', function() {
+                            resetStopwatch();
+                            this.disabled = true;
+                            document.getElementById(`start-stopwatch-${taskId}`).disabled = false;
+                            document.getElementById(`stop-stopwatch-${taskId}`).disabled = true;
+                        });
+
+                        // Initialize with existing time count if any
+                        if (timeInput.value !== '00:00:00') {
+                            const timeParts = timeInput.value.split(':');
+                            elapsedTime = (+timeParts[0]) * 3600000 + (+timeParts[1]) * 60000 + (+timeParts[2]) *
+                                1000;
+                            updateTimeDisplay(elapsedTime);
                         }
                     });
-
-                    // Initialize display on page load
-                    updateSelectedAssignees(selectElement, selectedAssigneesContainer);
-
-                    // Ensure that changes in data after load are reflected in the UI
-                    new MutationObserver(() => updateSelectedAssignees(selectElement,
-                        selectedAssigneesContainer)).observe(selectElement, {
-                        childList: true,
-                        subtree: true,
-                        attributes: true,
-                        characterData: true
+                });
+            </script>
+            <script>
+                document.querySelectorAll('.create-task-btn').forEach(function(button) {
+                    button.addEventListener('click', function() {
+                        var boardId = this.getAttribute('data-board-id');
+                        document.getElementById('board_id_uhuy').value = boardId;
                     });
                 });
-            });
-        </script>
+            </script>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const projectSelect = document.getElementById('projectSelect');
+                    const projectIdInput = document.getElementById('projectIdInput');
 
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                document.querySelectorAll('.task-row').forEach(function(row) {
-                    const taskId = row.dataset.taskId;
-                    let startTime, elapsedTime = 0,
-                        timerInterval;
-                    const timeDisplay = document.getElementById(`time-display-${taskId}`);
-                    const timeInput = document.getElementById(`time_count_${taskId}`);
-
-                    function updateTimeDisplay(time) {
-                        const hours = Math.floor(time / 3600000);
-                        const minutes = Math.floor((time % 3600000) / 60000);
-                        const seconds = Math.floor((time % 60000) / 1000);
-                        timeDisplay.textContent =
-                            `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-                        timeInput.value = timeDisplay.textContent;
-                    }
-
-                    function startStopwatch() {
-                        startTime = Date.now() - elapsedTime;
-                        timerInterval = setInterval(function() {
-                            elapsedTime = Date.now() - startTime;
-                            updateTimeDisplay(elapsedTime);
-                        }, 1000);
-                    }
-
-                    function stopStopwatch() {
-                        clearInterval(timerInterval);
-                    }
-
-                    function resetStopwatch() {
-                        clearInterval(timerInterval);
-                        elapsedTime = 0;
-                        updateTimeDisplay(0);
-                    }
-
-                    document.getElementById(`start-stopwatch-${taskId}`).addEventListener('click', function() {
-                        startStopwatch();
-                        this.disabled = true;
-                        document.getElementById(`stop-stopwatch-${taskId}`).disabled = false;
-                        document.getElementById(`reset-stopwatch-${taskId}`).disabled = false;
+                    projectSelect.addEventListener('change', function() {
+                        projectIdInput.value = this.value;
                     });
-
-                    document.getElementById(`stop-stopwatch-${taskId}`).addEventListener('click', function() {
-                        stopStopwatch();
-                        this.disabled = true;
-                        document.getElementById(`start-stopwatch-${taskId}`).disabled = false;
-                    });
-
-                    document.getElementById(`reset-stopwatch-${taskId}`).addEventListener('click', function() {
-                        resetStopwatch();
-                        this.disabled = true;
-                        document.getElementById(`start-stopwatch-${taskId}`).disabled = false;
-                        document.getElementById(`stop-stopwatch-${taskId}`).disabled = true;
-                    });
-
-                    // Initialize with existing time count if any
-                    if (timeInput.value !== '00:00:00') {
-                        const timeParts = timeInput.value.split(':');
-                        elapsedTime = (+timeParts[0]) * 3600000 + (+timeParts[1]) * 60000 + (+timeParts[2]) *
-                            1000;
-                        updateTimeDisplay(elapsedTime);
-                    }
                 });
-            });
-        </script>
-        <script>
-            function updateHiddenInput(value) {
-                // Mengupdate nilai dari input hidden dengan nilai yang diubah
-                document.getElementById('hiddenName').value = value;
-            }
-        </script>
-        <script>
-            function toggleLineThrough(id) {
-                const checkbox = document.getElementById('checkbox-' + id);
-                const text = document.getElementById('text-' + id);
-
-                if (checkbox.checked) {
-                    text.classList.add('text-decoration-line-through');
-                } else {
-                    text.classList.remove('text-decoration-line-through');
-                }
-            }
-        </script>
+            </script>
 
 </x-layout>
