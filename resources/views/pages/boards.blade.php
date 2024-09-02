@@ -425,46 +425,44 @@
                                                                         </ul>
                                                                     </div>
 
-                                                                    @foreach ($board->tasks as $task)
                                                                         @php
                                                                             // Mendekode JSON dan mengambil elemen pertama dari array
                                                                             $time_count = json_decode(
-                                                                                $task->time_count,
+                                                                                $item->time_count,
                                                                                 true,
                                                                             );
-                                                                            $task->time_count = isset($time_count[0])
+                                                                            $item->time_count = isset($time_count[0])
                                                                                 ? $time_count[0]
                                                                                 : '00:00:00';
                                                                         @endphp
                                                                         <div class="task-row"
-                                                                            data-task-id="{{ $task->id }}">
-                                                                            <p for="time_count_{{ $task->id }}"
+                                                                            data-task-id="{{ $item->id }}">
+                                                                            <p for="time_count_{{ $item->id }}"
                                                                                 class="form-label">Time Count</p>
                                                                             <div
-                                                                                id="stopwatch-container-{{ $task->id }}">
+                                                                                id="stopwatch-container-{{ $item->id }}">
                                                                                 <span
-                                                                                    id="time-display-{{ $task->id }}"
+                                                                                    id="time-display-{{ $item->id }}"
                                                                                     class="mb-3">
-                                                                                    {{ old('time_count', $task->time_count) }}
+                                                                                    {{ old('time_count', $item->time_count) }}
                                                                                 </span>
                                                                                 <br>
                                                                                 <button type="button"
-                                                                                    id="start-stopwatch-{{ $task->id }}"
+                                                                                    id="start-stopwatch-{{ $item->id }}"
                                                                                     class="btn btn-success">Start</button>
                                                                                 <button type="button"
-                                                                                    id="stop-stopwatch-{{ $task->id }}"
+                                                                                    id="stop-stopwatch-{{ $item->id }}"
                                                                                     class="btn btn-danger"
                                                                                     disabled>Stop</button>
                                                                                 <button type="button"
-                                                                                    id="reset-stopwatch-{{ $task->id }}"
+                                                                                    id="reset-stopwatch-{{ $item->id }}"
                                                                                     class="btn btn-secondary"
                                                                                     disabled>Reset</button>
                                                                             </div>
                                                                             <input type="hidden" name="time_count[]"
-                                                                                id="time_count_{{ $task->id }}"
-                                                                                value="{{ is_array(old('time_count', $task->time_count)) ? implode(',', old('time_count', $task->time_count)) : old('time_count', $task->time_count) }}">
+                                                                                id="time_count_{{ $item->id }}"
+                                                                                value="{{ is_array(old('time_count', $item->time_count)) ? implode(',', old('time_count', $item->time_count)) : old('time_count', $item->time_count) }}">
                                                                         </div>
-                                                                    @endforeach
 
                                                                     <label for="due_date" class="form-label">Due
                                                                         Date</label>
@@ -834,6 +832,21 @@
                     projectSelect.addEventListener('change', function() {
                         toggleElementsBasedOnProjectSelection();
                     });
+                });
+            </script>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    var fragment = window.location.hash; // Mendapatkan fragment dari URL
+
+                    if (fragment && fragment.startsWith('#view-')) {
+                        var modalId = fragment.replace('#', ''); // Menghapus '#' dari fragment
+                        var modalElement = document.getElementById(modalId); // Mendapatkan elemen modal berdasarkan ID
+
+                        if (modalElement) {
+                            var modalInstance = new bootstrap.Modal(modalElement);
+                            modalInstance.show(); // Membuka modal
+                        }
+                    }
                 });
             </script>
 

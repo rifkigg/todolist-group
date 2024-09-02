@@ -19,6 +19,6 @@ class ActivityController extends Controller
             'activity' => $request->activity,
         ]);
 
-        return redirect()->back()->with('success', 'Activity added successfully!');
+        return redirect()->back()->with('success', 'Activity added successfully!')->withFragment('view-' . $request->task_id);
     }
 }

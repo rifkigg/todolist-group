@@ -7,32 +7,38 @@ use App\Models\TaskDescription;
 
 class TaskDescriptionController extends Controller
 {
-    public function store(Request $request)
+    public function store(Request $request, $id)
     {
         $request->validate([
-            'task_id' => 'required'
+            'task_id' => 'required',
         ]);
 
-            TaskDescription::create([
+        TaskDescription::create([
             'name' => $request->name,
-            'task_id' => $request->task_id
+            'task_id' => $request->task_id,
         ]);
-
-        return redirect()->route('task.index')->with('success', 'Description has been created.');
+        return redirect()
+            ->back()
+            ->with('success', 'Description updated successfully!')
+            ->withFragment('view-' . $id);
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'task_id' => 'required'
+            'task_id' => 'required',
         ]);
 
         $description = TaskDescription::findOrFail($id);
 
         $description->update([
             'name' => $request->name,
-            'task_id' => $request->task_id
+            'task_id' => $request->task_id,
         ]);
-        return redirect()->route('task.index')->with('success', 'Description has been updated.');
+        return redirect()
+            ->route('task.index')
+            ->with('success', 'Description has been updated.')
+            ->with('success_id', $description->task_id) // Simpan task_id dalam session
+            ->withFragment('view-' . $description->task_id); // Tambahkan fragment ke URL
     }
 }

@@ -133,13 +133,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/boards/add', [BoardController::class, 'store'])->name('boards.store');
     Route::delete('/boards/{id}', [BoardController::class, 'destroy'])->name('boards.destroy');
 
-    Route::post('/description', [TaskDescriptionController::class, 'store'])->name('description.store');
+    Route::post('/task/{id}/description', [TaskDescriptionController::class, 'store'])->name('description.store');
     Route::put('/description/{id}', [TaskDescriptionController::class, 'update'])->name('description.update');
 
     Route::post('/update/completed', [TaskChecklistController::class, 'updateCompleted'])->name('update.completed');
     Route::delete('/checklist/{id}', [TaskChecklistController::class, 'destroy'])->name('checklist.destroy');
-
-
 });
 
 require __DIR__ . '/auth.php';
