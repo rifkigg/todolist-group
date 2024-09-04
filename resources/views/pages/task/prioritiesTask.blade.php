@@ -61,6 +61,16 @@
                     </div>
                 </div>
             </li>
+            @if (auth()->user()->role == 'admin')
+                <li class="nav-item ">
+                    <a class="nav-link " href="{{ route('manage_user.index') }}" aria-bs-expanded="true"
+                        aria-bs-controls="collapseTwo">
+                        <i class="fa-solid fa-users-gear"></i>
+                        <span>Manage User</span>
+                    </a>
+                </li>
+            @else
+            @endif
         </x-navbar>
 
         <!-- Content Wrapper -->
@@ -91,15 +101,15 @@
                                     <div class="icon-selection">
                                         <div class="icon-options">
                                             <button type="button" class="btn btn-outline-primary" name="icon"
-                                                value="😎" onclick="selectIcon('😎')">😎</button>
+                                                value="📈" onclick="selectIcon('📈')">📈</button>
                                             <button type="button" class="btn btn-outline-primary" name="icon"
-                                                value="🐲" onclick="selectIcon('🐲')">🐲</button>
+                                                value="📅" onclick="selectIcon('📅')">📅</button>
                                             <button type="button" class="btn btn-outline-primary" name="icon"
-                                                value="😄" onclick="selectIcon('😄')">😄</button>
+                                                value="🔒" onclick="selectIcon('🔒')">🔒</button>
                                             <button type="button" class="btn btn-outline-primary" name="icon"
-                                                value="😔" onclick="selectIcon('😔')">😔</button>
+                                                value="📌" onclick="selectIcon('📌')">📌</button>
                                             <button type="button" class="btn btn-outline-primary" name="icon"
-                                                value="🤡" onclick="selectIcon('🤡')">🤡</button>
+                                                value="⌛" onclick="selectIcon('⌛')">⌛</button>
                                         </div>
                                         <input type="hidden" id="selectedIcon" name="icon" required>
                                     </div>
