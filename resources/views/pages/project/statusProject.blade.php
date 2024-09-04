@@ -118,17 +118,17 @@
                                                 {{ $item->name }}
                                             </td>
                                             <td class='d-flex'>
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                <button type="button" class="btn" data-bs-toggle="modal"
                                                     data-bs-target="#editModal{{ $item->id }}">
-                                                    Edit Data
+                                                    <i class="icon-action fa-solid fa-pencil"></i>
                                                 </button>
 
                                                 <form action="{{ route('project_status.destroy', $item->id) }}"
                                                     method="POST">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger"
-                                                        onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
+                                                    <button type="submit" class="btn"
+                                                        onclick="return confirm('Are you sure you want to delete this item?');"> <i class="icon-action fa-solid fa-trash-can"></i></button>
                                                 </form>
 
                                             </td>
