@@ -1,16 +1,14 @@
 <x-guest-layout>
-    <a href="/" class="text-2xl d-flex justify-content-center fs-2 fw-bold text-decoration-none text-dark">
-        Login Form
-    </a>
+
     <!-- Session Status -->
     <x-auth-session-status class="mb-4" :status="session('status')" />
-    <div class="container-fluid">
-
-
-        <form method="POST" action="{{ route('login') }}" class="card shadow ">
+    <div class="container">
+        <form method="POST" action="{{ route('login') }}" class="card shadow">
             @csrf
             <div class="card-body">
-
+                <a href="/" class="text-2xl d-flex justify-content-center fs-2 fw-bold text-decoration-none text-dark">
+                    Login Form
+                </a>
 
                 <!-- Email Address -->
                 <div>
@@ -32,7 +30,7 @@
 
 
                 <div class="flex items-center justify-end mt-4">
-                    <x-primary-button class="ms-3">
+                    <x-primary-button class="w-full">
                         {{ __('Log in') }}
                     </x-primary-button>
                 </div>

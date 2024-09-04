@@ -1,15 +1,16 @@
 <x-guest-layout>
-    <a href="/" class="text-2xl d-flex justify-content-center fs-2 fw-bold text-decoration-none text-dark">
-        Register Form
-    </a>
-    <div class="container-fluid">
+
+    <div class="container">
 
 
         <form method="POST" action="{{ route('register') }}" class="card shadow">
             @csrf
             <div class="card-body">
 
-
+                <a href="/register"
+                    class="text-2xl d-flex justify-content-center fs-2 fw-bold text-decoration-none text-dark">
+                    Register Form
+                </a>
                 <!-- Name -->
                 <div>
                     <x-input-label for="username" :value="__('username')" />
@@ -58,13 +59,12 @@
                     <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
                 </div>
 
-                <div class="flex items-center justify-end mt-4">
-                    <a class="text-decoration-none text-dark"
-                        href="{{ route('login') }}">
+                <div class="flex items-center justify-end gap-2 mt-4">
+                    <a class="text-decoration-none text-dark" href="{{ route('login') }}">
                         {{ __('Already registered?') }}
                     </a>
 
-                    <x-primary-button class="ms-4">
+                    <x-primary-button class="w-100">
                         {{ __('Register') }}
                     </x-primary-button>
                 </div>
