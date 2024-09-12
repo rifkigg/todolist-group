@@ -18,7 +18,9 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
         //get all products
-        $project = Project::with('category', 'status')->latest()->get();
+        $project = Project::with('users','category', 'status')->latest()->get();
+
+        $users = User::all();
 
         $total_project = Project::count();
         $total_user = User::count();
@@ -26,11 +28,13 @@ class ProjectController extends Controller
         $total_board = board::count();
 
         $selectedUserId = $request->input('assignee_id');
-        $projectQuery = Project::with('category', 'status')->latest();
+        $userRole = $request->user()->role;
 
-        if ($selectedUserId) {
-            $projectQuery->whereHas('users', function ($query) use ($selectedUserId) {
-                $query->where('users.id', $selectedUserId);
+        if ($userRole === 'admin') {
+            $projectQuery = Project::with('category', 'status')->latest();
+        } else {
+            $projectQuery = Project::with('category', 'status')->whereHas('users', function ($query) use ($request) {
+                $query->where('users.id', $request->user()->id);
             });
         }
 
@@ -40,7 +44,7 @@ class ProjectController extends Controller
         });
 
         //render view with products
-        return view('pages.project.project', compact('project', 'total_project', 'total_user', 'total_task', 'total_board'));
+        return view('pages.project.project', compact('users','project', 'total_project', 'total_user', 'total_task', 'total_board'));
     }
 
     public function create(): View
@@ -73,6 +77,7 @@ class ProjectController extends Controller
             'project_detail' => $cleanText,
         ]);
 
+
         // Redirect to index
         return redirect()
             ->route('project.index')
@@ -90,7 +95,8 @@ class ProjectController extends Controller
         $project = Project::find($id);
         $categories = ProjectCategories::all();
         $status = ProjectStatus::all();
-        return view('pages.project.editProject', compact('project', 'categories', 'status'));
+        $users = User::all();
+        return view('pages.project.editProject', compact('users','project', 'categories', 'status'));
     }
 
     public function update(Request $request, $id): RedirectResponse

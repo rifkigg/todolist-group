@@ -19,4 +19,8 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Task::class, table: 'task_user');
     }
+    public function projects()
+    {
+        return $this->belongsToMany(Task::class, table: 'project_users');
+    }
 }

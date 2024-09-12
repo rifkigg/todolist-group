@@ -126,11 +126,12 @@
 
                                             <label for="category_id">Project Category: </label>
                                             <select id="category_id" name="category_id"
-                                                class=" form-control @error('category_id') is-invalid @enderror"
-                                                >
+                                                class=" form-control @error('category_id') is-invalid @enderror">
                                                 <option disabled>Pilih Category:</option>
                                                 @foreach ($categories as $items)
-                                                    <option value="{{ $items->id }}" {{ old('category_id', $project->category_id) }}>{{ $items->name }}
+                                                    <option value="{{ $items->id }}"
+                                                        {{ old('category_id', $project->category_id) }}>
+                                                        {{ $items->name }}
                                                     </option>
                                                 @endforeach
                                             </select>
@@ -150,11 +151,11 @@
                                     <div class="form-select">
                                         <label for="status_id">Project Status</label>
                                         <select id="status_id" name="status_id"
-                                            class="form-control @error('status_id') is-invalid @enderror"
-                                            >
+                                            class="form-control @error('status_id') is-invalid @enderror">
                                             <option disabled>Pilih Status:</option>
                                             @foreach ($status as $items)
-                                                <option value="{{ $items->id }}" {{ old('status_id', $project->status_id) }}>{{ $items->name }}
+                                                <option value="{{ $items->id }}"
+                                                    {{ old('status_id', $project->status_id) }}>{{ $items->name }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -174,8 +175,7 @@
                                     <div class="textarea">
                                         <label for="project_detail">Project Details: </label>
                                         <textarea id="project_detail" class="form-control @error('project_detail') is-invalid @enderror"
-                                            name="project_detail"
-                                            placeholder="Masukkan Judul Product">{{ old('project_detail', $project->project_detail) }}
+                                            name="project_detail" placeholder="Masukkan Judul Product">{{ old('project_detail', $project->project_detail) }}
                                             </textarea>
                                         @error('project_detail')
                                             <div class="alert alert-danger mt-2">
@@ -184,6 +184,29 @@
                                         @enderror
 
                                     </div>
+                                </div>
+
+                                <!-- Assignees (Multi-Select) -->
+                                <label for="assignees" class="form-label">Assignees</label>
+                                <select name="assignees[]" id="assignees" class="form-select mb-3" multiple>
+                                    @foreach ($users as $user)
+                                        <option value="{{ $user->id }}"
+                                            {{ in_array($user->id, old('assignees', $project->users->pluck('id')->toArray())) ? 'selected' : '' }}>
+                                            {{ $user->username }}
+                                        </option>
+                                    @endforeach
+                                </select>
+
+                                <!-- Tempat untuk menampilkan hasil pilihan -->
+                                <div id="selected-assignees">
+                                    <p>Selected Assignees:</p>
+                                    <ul class="d-flex flex-wrap gap-2 list-unstyled">
+                                        @foreach ($project->users as $user)
+                                            <li class="d-flex align-items-center border rounded px-2 py-1">
+                                                {{ $user->username }}
+                                            </li>
+                                        @endforeach
+                                    </ul>
                                 </div>
 
                                 <div class="submit">
@@ -207,6 +230,74 @@
             <a class="scroll-to-top rounded" href="#page-top">
                 <i class="fas fa-angle-up"></i>
             </a>
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const selectElements = document.querySelectorAll('[id^="assignees"]');
+                    const selectedAssigneesContainers = document.querySelectorAll('[id^="selected-assignees"]');
 
+                    // Function to update selected assignees display for a specific pair of select and container
+                    function updateSelectedAssignees(selectElement, selectedAssigneesContainer) {
+                        const selectedOptions = Array.from(selectElement.selectedOptions);
+                        selectedAssigneesContainer.innerHTML = '';
+
+                        selectedOptions.forEach(option => {
+                            const userId = option.value;
+                            const userName = option.textContent;
+
+                            const userDiv = document.createElement('div');
+                            userDiv.classList.add('selected-user', 'mb-2', 'p-2', 'rounded', 'd-flex',
+                                'justify-content-between', 'align-items-center', 'bg-secondary', 'text-white');
+                            userDiv.dataset.id = userId;
+
+
+                            userDiv.innerHTML = `
+                        <span class="me-2">${userName}</span>
+                        <button type="button" class="btn btn-sm btn-danger ms-2 remove-assignee" aria-label="Remove">x</button>
+                    `;
+                            selectedAssigneesContainer.appendChild(userDiv);
+                        });
+                    }
+
+                    // Iterate over all select elements and attach event listeners
+                    selectElements.forEach((selectElement, index) => {
+                        const selectedAssigneesContainer = selectedAssigneesContainers[index];
+
+                        // Event listener for when the select value changes
+                        selectElement.addEventListener('change', function() {
+                            updateSelectedAssignees(selectElement, selectedAssigneesContainer);
+                        });
+
+                        // Event delegation to handle removal of assignees
+                        selectedAssigneesContainer.addEventListener('click', function(event) {
+                            if (event.target.classList.contains('remove-assignee')) {
+                                const userDiv = event.target.closest('.selected-user');
+                                const userId = userDiv.dataset.id;
+
+                                // Remove the user from the select
+                                const optionToRemove = Array.from(selectElement.options).find(option =>
+                                    option.value === userId);
+                                if (optionToRemove) {
+                                    optionToRemove.selected = false;
+                                }
+
+                                // Remove the user div from the display
+                                userDiv.remove();
+                            }
+                        });
+
+                        // Initialize display on page load
+                        updateSelectedAssignees(selectElement, selectedAssigneesContainer);
+
+                        // Ensure that changes in data after load are reflected in the UI
+                        new MutationObserver(() => updateSelectedAssignees(selectElement,
+                            selectedAssigneesContainer)).observe(selectElement, {
+                            childList: true,
+                            subtree: true,
+                            attributes: true,
+                            characterData: true
+                        });
+                    });
+                });
+            </script>
 
 </x-layout>
