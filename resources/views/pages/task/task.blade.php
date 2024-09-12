@@ -58,6 +58,16 @@
                     </div>
                 </div>
             </li>
+            @if (auth()->user()->role == 'admin')
+                <li class="nav-item ">
+                    <a class="nav-link " href="{{ route('manage_user.index') }}" aria-bs-expanded="true"
+                        aria-bs-controls="collapseTwo">
+                        <i class="fa-solid fa-users-gear"></i>
+                        <span>Manage User</span>
+                    </a>
+                </li>
+            @else
+            @endif
         </x-navbar>
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -348,7 +358,7 @@
                                                                         @csrf
                                                                         <input type="hidden" name="task_id"
                                                                             value="{{ $item->id }}" hidden>
-                                                                        <textarea class="form-control mb-3" id="focusedInput" name="name" placeholder="Add Activity"></textarea>
+                                                                        <textarea class="form-control mb-3" id="focusedInput" name="name" placeholder="Add Checklist"></textarea>
                                                                         @error('name')
                                                                             <div class="alert alert-danger">
                                                                                 {{ $message }}</div>
@@ -372,10 +382,12 @@
                                                                                         alt="{{ $img->file_name }}"
                                                                                         width="150">
                                                                                 </a>
-                                                                                <div>
+                                                                                <div
+                                                                                    class="d-flex justify-content-between w-100">
                                                                                     <button type="button"
                                                                                         onclick="if(confirm('Are you sure you want to delete this attachment?')) { document.getElementById('deleteGambar-{{ $img->id }}').submit(); }"
-                                                                                        class="btn btn-danger btn-sm">
+                                                                                        class="btn btn-danger btn-sm">Delete
+                                                                                        this Attachment
                                                                                         <i
                                                                                             class="fa-solid fa-trash"></i>
                                                                                     </button>
@@ -390,7 +402,7 @@
                                                                 </div>
 
                                                                 <div
-                                                                    class="d-flex align-items-center justify-content-between">
+                                                                    class="d-flex align-items-center justify-content-between mb-3">
                                                                     <p for="activities" class="form-label">
                                                                         Activities
                                                                     </p>
@@ -405,10 +417,18 @@
 
                                                                 </div>
                                                                 @if ($item->activities && count($item->activities) > 0)
-                                                                    <div class="bg-secondary-subtle p-2 overflow-auto"
+                                                                    <div class="bg-secondary-subtle rounded p-2 overflow-auto "
                                                                         style="max-height: 300px">
                                                                         @foreach ($item->activities as $act)
                                                                             <div class="p-2 rounded bg-light mb-2">
+                                                                                <div
+                                                                                    class="d-flex justify-content-between align-items-baseline">
+                                                                                    <p class="m-0 fw-bold">
+                                                                                        {{ $act->username }}</p>
+                                                                                    <p class="m-0"
+                                                                                        style="font-size: 0.8rem">
+                                                                                        {{ $act->created_at }}</p>
+                                                                                </div>
                                                                                 <p class="m-0">{{ $act->activity }}
                                                                                 </p>
                                                                             </div>
@@ -423,6 +443,9 @@
                                                                         @csrf
                                                                         <input type="hidden" name="task_id"
                                                                             value="{{ $item->id }}" hidden>
+                                                                        <input type="hidden" name="username"
+                                                                            value="{{ Auth::user()->username }}"
+                                                                            hidden>
                                                                         <textarea class="form-control mb-3" id="focusedInput" name="activity" placeholder="Add Activity"></textarea>
                                                                         @error('activity')
                                                                             <div class="alert alert-danger">

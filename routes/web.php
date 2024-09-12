@@ -18,6 +18,7 @@ use App\Http\Controllers\TaskChecklistController;
 use App\Http\Controllers\TaskPrioritiesController;
 use App\Http\Controllers\TaskDescriptionController;
 use App\Http\Controllers\ProjectCategoriesController;
+use App\Http\Controllers\UserController;
 use App\Models\TaskChecklist;
 
 Route::get('/dashboard', function () {
@@ -30,7 +31,12 @@ Route::get('/dashboard', function () {
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
-Route::middleware('auth')->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/manage_user', [UserController::class, 'index'])->name('manage_user.index');
+    Route::post('/manage_user/store', [UserController::class, 'store'])->name('manage_user.store');
+    Route::put('/manage_user/update/{id}', [UserController::class, 'update'])->name('manage_user.update');
+    Route::delete('/manage_user/destroy/{id}', [UserController::class, 'destroy'])->name('manage_user.destroy');
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');

@@ -61,6 +61,16 @@
                     </div>
                 </div>
             </li>
+            @if (auth()->user()->role == 'admin')
+                <li class="nav-item ">
+                    <a class="nav-link " href="{{ route('manage_user.index') }}" aria-bs-expanded="true"
+                        aria-bs-controls="collapseTwo">
+                        <i class="fa-solid fa-users-gear"></i>
+                        <span>Manage User</span>
+                    </a>
+                </li>
+            @else
+            @endif
         </x-navbar>
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">

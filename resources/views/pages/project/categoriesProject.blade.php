@@ -60,6 +60,16 @@
                     </div>
                 </div>
             </li>
+            @if (auth()->user()->role == 'admin')
+                <li class="nav-item ">
+                    <a class="nav-link " href="{{ route('manage_user.index') }}" aria-bs-expanded="true"
+                        aria-bs-controls="collapseTwo">
+                        <i class="fa-solid fa-users-gear"></i>
+                        <span>Manage User</span>
+                    </a>
+                </li>
+            @else
+            @endif
         </x-navbar>
 
         <!-- Content Wrapper -->
@@ -83,24 +93,24 @@
                                 @csrf
                                 <div class="form-group">
                                     <label for="name">Nama</label>
-                                    <input type="text" class="form-control" id="name" name="name" onkeyup="convertToSlug()" required
-                                        value="{{ old('name') }}">
+                                    <input type="text" class="form-control" id="name" name="name"
+                                        onkeyup="generateSlug('name', 'slug')" required placeholder="Enter Name">
                                 </div>
                                 <div class="form-group">
                                     <label for="slug">Slug</label>
-                                    <input type="text" class="form-control" id="slug" name="slug" readonly required
-                                        value="{{ old('slug') }}">
+                                    <input type="text" class="form-control" id="slug" name="slug" readonly
+                                        required>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Tambah</button>
+                                <button type="submit" class="btn btn-primary">Add New</button>
                             </form>
 
                             <!-- Tabel untuk Menampilkan Daftar -->
                             <table id="example" class="table table-striped mt-4">
                                 <thead>
                                     <tr>
-                                        <th>Nama</th>
+                                        <th>Name</th>
                                         <th>Slug</th>
-                                        <th>Aksi</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -109,16 +119,17 @@
                                             <td>{{ $category->name }}</td>
                                             <td>{{ $category->slug }}</td>
                                             <td>
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                <button type="button" class="btn" data-bs-toggle="modal"
                                                     data-bs-target="#editModal{{ $category->id }}">
-                                                    Edit Data
+                                                    <i class="icon-action fa-solid fa-pencil"></i>
                                                 </button>
                                                 <form action="{{ route('projectcategories.destroy', $category->id) }}"
                                                     method="POST" style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger"
-                                                        onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
+                                                    <button type="submit" class="btn"
+                                                        onclick="return confirm('Are you sure you want to delete this item?');">
+                                                        <i class="icon-action fa-solid fa-trash-can"></i></button>
                                                 </form>
                                             </td>
                                         </tr>
@@ -132,7 +143,7 @@
                                                         <button type="button" class="btn-close"
                                                             data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
-                                                    <div class="modal-body">
+                                                    {{-- <div class="modal-body">
                                                         <form
                                                             action="{{ route('projectcategories.update', $category->id) }}"
                                                             method="POST">
@@ -143,17 +154,31 @@
                                                                     Name</label>
                                                                 <input type="text" class="form-control"
                                                                     id="name" name="name"
-                                                                    value="{{ old('name', $category->name) }}">
+                                                                    value="{{ old('name', $category->name) }}" onkeyup="generateSlug()" required>
                                                                 <label for="field_slug" class="form-label">Field
                                                                     Slug</label>
                                                                 <input type="text" class="form-control"
-                                                                    id="slug" name="slug"
-                                                                    value="{{ old('slug', $category->slug) }}">
+                                                                    id="slug" name="slug" readonly>
                                                             </div>
                                                             <button type="submit"
                                                                 class="btn btn-success">Update</button>
                                                         </form>
+                                                    </div> --}}
+                                                    <div class="modal-body">
+                                                        <form action="{{ route('projectcategories.update', $category->id) }}" method="POST">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <div class="mb-3">
+                                                                <label for="field_name_{{ $category->id }}" class="form-label">Nama</label>
+                                                                <input type="text" class="form-control" id="field_name_{{ $category->id }}" name="name"
+                                                                    oninput="generateSlug('field_name_{{ $category->id }}', 'field_slug_{{ $category->id }}')" value="{{ $category->name }}" required>
+                                                                <label for="field_slug_{{ $category->id }}" class="form-label">Slug</label>
+                                                                <input type="text" class="form-control" id="field_slug_{{ $category->id }}" name="slug" value="{{ $category->slug }}" readonly>
+                                                            </div>
+                                                            <button type="submit" class="btn btn-success">Perbarui</button>
+                                                        </form>
                                                     </div>
+                                                    
                                                 </div>
                                             </div>
                                         </div>
@@ -197,10 +222,12 @@
             </div>
         </div>
         <script>
-            function generateSlug() {
-                let name = document.getElementById('name').value;
-                let slug = name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
-                document.getElementById('slug').value = slug;
-            }
+            function generateSlug(nameFieldId, slugFieldId) {
+    let name = document.getElementById(nameFieldId).value;
+    console.log('name: ', name);
+    let slug = name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+    document.getElementById(slugFieldId).value = slug;
+}
+
         </script>
 </x-layout>
