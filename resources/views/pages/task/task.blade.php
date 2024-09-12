@@ -261,7 +261,7 @@
                                                                                 <input type="text" name="task_id"
                                                                                     value="{{ $item->id }}"
                                                                                     hidden>
-                                                                                <textarea class="form-control mb-3" id="textarea1" name="name">{{ old('name', $desc->name) }}</textarea>
+                                                                                <textarea class="form-control mb-3" id="textarea" name="name">{{ old('name', $desc->name) }}</textarea>
                                                                                 <button type="submit"
                                                                                     class="btn btn-primary btn-sm mb-3">Save
                                                                                     Changes</button>
@@ -276,7 +276,7 @@
                                                                             @csrf
                                                                             <input type="text" name="task_id"
                                                                                 value="{{ $item->id }}" hidden>
-                                                                            <textarea class="form-control mb-3" id="textarea1" name="name" hidden></textarea>
+                                                                            <textarea class="form-control mb-3" id="textarea" name="name" hidden></textarea>
                                                                             <div
                                                                                 class="mb-3 d-flex justify-content-between">
                                                                                 <p class="m-0">Description</p>
@@ -383,12 +383,22 @@
                                                                             @foreach ($item->attachments as $img)
                                                                                 <div
                                                                                     class="mb-3 d-flex align-items-start gap-2">
-                                                                                    <a
-                                                                                        href="{{ asset('storage/attachments/' . $img->file_name) }}">
-                                                                                        <img src="{{ asset('storage/attachments/' . $img->file_name) }}"
-                                                                                            alt="{{ $img->file_name }}"
-                                                                                            width="150">
-                                                                                    </a>
+                                                                                    @if (preg_match('/\.(jpg|jpeg|png|gif)$/i', $img->file_name))
+                                                                                        <a
+                                                                                            href="{{ asset('storage/attachments/' . $img->file_name) }}">
+                                                                                            <img src="{{ asset('storage/attachments/' . $img->file_name) }}"
+                                                                                                alt="{{ $img->file_name }}"
+                                                                                                width="150">
+                                                                                        </a>
+                                                                                    @else
+                                                                                        <a
+                                                                                            href="{{ asset('storage/attachments/' . $img->file_name) }}">
+                                                                                            <div class="file-icon d-flex flex-column justify-content-center align-items-center text-dark" style="width: 150px ;height: 100px">
+                                                                                                <i class="fa-solid fa-file fs-1" ></i> 
+                                                                                                <p>{{ $img->file_name }}</p>
+                                                                                            </div>
+                                                                                        </a>
+                                                                                    @endif
                                                                                     <div
                                                                                         class="d-flex justify-content-between w-100">
                                                                                         <button type="button"
@@ -703,7 +713,7 @@
                                                                                 <input type="text" name="task_id"
                                                                                     value="{{ $item->id }}"
                                                                                     hidden>
-                                                                                <textarea class="form-control mb-3" id="textarea1" name="name" readonly>{{ old('name', $desc->name) }}</textarea>
+                                                                                <textarea class="form-control mb-3" id="textarea" name="name" readonly>{{ old('name', $desc->name) }}</textarea>
                                                                             </form>
                                                                         @endforeach
                                                                     @else
@@ -715,7 +725,7 @@
                                                                             @csrf
                                                                             <input type="text" name="task_id"
                                                                                 value="{{ $item->id }}" hidden>
-                                                                            <textarea class="form-control mb-3" id="textarea1" name="name" hidden></textarea>
+                                                                            <textarea class="form-control mb-3" id="textarea" name="name" hidden></textarea>
                                                                             <div
                                                                                 class="mb-3 d-flex justify-content-between">
                                                                                 <p class="m-0">Description</p>
@@ -786,12 +796,21 @@
                                                                             @foreach ($item->attachments as $img)
                                                                                 <div
                                                                                     class="mb-3 d-flex align-items-start gap-2">
-                                                                                    <a
-                                                                                        href="{{ asset('storage/attachments/' . $img->file_name) }}">
-                                                                                        <img src="{{ asset('storage/attachments/' . $img->file_name) }}"
-                                                                                            alt="{{ $img->file_name }}"
-                                                                                            width="150">
-                                                                                    </a>
+                                                                                    @if (preg_match('/\.(jpg|jpeg|png|gif)$/i', $img->file_name))
+                                                                                        <a
+                                                                                            href="{{ asset('storage/attachments/' . $img->file_name) }}">
+                                                                                            <img src="{{ asset('storage/attachments/' . $img->file_name) }}"
+                                                                                                alt="{{ $img->file_name }}"
+                                                                                                width="150">
+                                                                                        </a>
+                                                                                    @else
+                                                                                        <a
+                                                                                            href="{{ asset('storage/attachments/' . $img->file_name) }}">
+                                                                                            <div class="file-icon">
+                                                                                                <i class="fa-solid fa-file"></i> {{ $img->file_name }}
+                                                                                            </div>
+                                                                                        </a>
+                                                                                    @endif
                                                                                     <div
                                                                                         class="d-flex justify-content-between w-100">
                                                                                         <p>Created at:
@@ -1117,7 +1136,9 @@
         <a class="scroll-to-top rounded" href="#page-top">
             <i class="fas fa-angle-up"></i>
         </a>
-
+        <script>
+            CKEDITOR.replace('textarea');
+        </script>
         @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
@@ -1355,5 +1376,6 @@
                 }
             });
         </script>
+
 
 </x-layout>
