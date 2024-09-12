@@ -20,7 +20,7 @@ class AttachmentController extends Controller
         // Proses upload file
         if ($request->hasFile('file_name')) {
             $file = $request->file('file_name');
-            $file_name = $file->hashName();
+            $file_name = $file->getClientOriginalName(); // Gunakan nama asli file
 
             // Simpan file ke storage
             $file->storeAs('public/attachments', $file_name);
