@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Storage;
 
 class TaskController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
         $project = Project::all();
         $board = Board::all();
@@ -33,15 +33,22 @@ class TaskController extends Controller
         $total_user = User::count();
         $total_task = Task::count();
 
-        $task = Task::with('project', 'board', 'status', 'priority', 'label', 'users', 'attachments', 'activities', 'checklist', 'description')
-            ->latest()
-            ->get()
-            ->map(function ($task) {
-                $task->time_count = json_decode($task->time_count, true)[0] ?? '00:00:00';
-                return $task;
-            });
+        $selectedUserId = $request->input('assignee_id');
+        $taskQuery = Task::with('project', 'board', 'status', 'priority', 'label', 'users', 'attachments', 'activities', 'checklist', 'description')
+            ->latest();
 
-        return view('pages.task.task', compact('task', 'total_project', 'total_user', 'total_task', 'total_board', 'project', 'board', 'status', 'priority', 'label', 'users'));
+        if ($selectedUserId) {
+            $taskQuery->whereHas('users', function ($query) use ($selectedUserId) {
+                $query->where('users.id', $selectedUserId);
+            });
+        }
+
+        $task = $taskQuery->get()->map(function ($task) {
+            $task->time_count = json_decode($task->time_count, true)[0] ?? '00:00:00';
+            return $task;
+        });
+
+        return view('pages.task.task', compact('task', 'total_project', 'total_user', 'total_task', 'total_board', 'project', 'board', 'status', 'priority', 'label', 'users', 'selectedUserId'));
     }
     public function getTasktoBoard()
     {
@@ -159,5 +166,14 @@ class TaskController extends Controller
         $newTask->save();
 
         return redirect()->route('task.index')->with('success', 'Project duplicated successfully!');
+    }
+
+    public function getTasksByUser($userId)
+    {
+        $tasks = Task::whereHas('users', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->get();
+
+        return $tasks;
     }
 }

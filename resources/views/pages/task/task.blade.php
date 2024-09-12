@@ -3,8 +3,8 @@
     <div id="wrapper">
         <x-navbar>
             <x-slot name="dashboard">
-                <li class="nav-item ">
-                    <a class="nav-link " href="/dashboard">
+                <li class="nav-item active">
+                    <a class="nav-link active" href="/dashboard">
                         <i class="fas fa-fw fa-tachometer-alt"></i>
                         <span>Dashboard</span></a>
                 </li>
@@ -30,10 +30,10 @@
                             <a class="collapse-item " href="{{ route('projectcategories.index') }}">Categories</a>
                             <a class="collapse-item" href="{{ route('project_status.index') }}">Project Status</a>
                         @elseif (auth()->user()->role == 'manajer')
-                            <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
+                            <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
                             <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
                         @else
-                            <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
+                            <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
                         @endif
                     </div>
                 </div>
@@ -536,7 +536,7 @@
                                                                     <label for="assignees"
                                                                         class="form-label">Assignees</label>
                                                                     <select name="assignees[]" id="assignees"
-                                                                        class="form-select mb-3" multiple>
+                                                                        class="form-select mb-3" multiple onchange="updateDashboardTasks(this)">
                                                                         @foreach ($users as $user)
                                                                             <option value="{{ $user->id }}"
                                                                                 {{ in_array($user->id, old('assignees', $item->users->pluck('id')->toArray())) ? 'selected' : '' }}>

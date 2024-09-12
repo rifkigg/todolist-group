@@ -26,7 +26,8 @@ Route::get('/dashboard', function () {
     $total_user = User::count();
     $total_task = task::count();
     $total_board = board::count();
-    return view('pages.dashboard', compact('total_project', 'total_user', 'total_task', 'total_board'));
+    $tasks = app(TaskController::class)->getTasksByUser(auth()->id()); // Fetch tasks assigned to the authenticated user
+    return view('pages.dashboard', compact('total_project', 'total_user', 'total_task', 'total_board', 'tasks'));
 })
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
@@ -46,7 +47,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
         $total_user = User::count();
         $total_task = task::count();
         $total_board = board::count();
-        return view('pages.dashboard', compact('total_project', 'total_user', 'total_task', 'total_board'));
+        $tasks = app(TaskController::class)->getTasksByUser(auth()->id());
+        return view('pages.dashboard', compact('total_project', 'total_user', 'total_task', 'total_board', 'tasks'));
     });
     // Route::get('/dashboard', function () {
     //     return view('pages.dashboard');
@@ -144,6 +146,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::post('/update/completed', [TaskChecklistController::class, 'updateCompleted'])->name('update.completed');
     Route::delete('/checklist/{id}', [TaskChecklistController::class, 'destroy'])->name('checklist.destroy');
+
+    Route::get('/tasks/user/{userId}', [TaskController::class, 'getTasksByUser'])->name('tasks.byUser');
 });
 
 require __DIR__ . '/auth.php';
