@@ -60,6 +60,16 @@
                     </div>
                 </div>
             </li>
+            @if (auth()->user()->role == 'admin')
+                <li class="nav-item ">
+                    <a class="nav-link " href="{{ route('manage_user.index') }}" aria-bs-expanded="true"
+                        aria-bs-controls="collapseTwo">
+                        <i class="fa-solid fa-users-gear"></i>
+                        <span>Manage User</span>
+                    </a>
+                </li>
+            @else
+            @endif
         </x-navbar>
 
         <!-- End of Sidebar -->
@@ -127,7 +137,7 @@
                                                     </div>
                                                     <div class="modal-body">
                                                         <div class="d-flex justify-content-around">
-                                                            <div style="width: 55%">
+                                                            <div class="text-dark" style="width: 55%">
                                                                 @if ($item->description && count($item->description) > 0)
                                                                     @foreach ($item->description as $desc)
                                                                         <form
@@ -147,7 +157,8 @@
                                                                         </form>
                                                                     @endforeach
                                                                 @else
-                                                                    <form action="{{ route('description.store') }}"
+                                                                    <form
+                                                                        action="{{ route('description.store', $item->id) }}"
                                                                         method="post" enctype="multipart/form-data"
                                                                         id="formAddDescription">
                                                                         @csrf
@@ -263,10 +274,10 @@
                                                                                         alt="{{ $img->file_name }}"
                                                                                         width="150">
                                                                                 </a>
-                                                                                <div>
+                                                                                <div class="d-flex justify-content-between w-100">
                                                                                     <button type="button"
                                                                                         onclick="if(confirm('Are you sure you want to delete this attachment?')) { document.getElementById('deleteGambar-{{ $img->id }}').submit(); }"
-                                                                                        class="btn btn-danger btn-sm">
+                                                                                        class="btn btn-danger btn-sm">Delete this Attachment 
                                                                                         <i
                                                                                             class="fa-solid fa-trash"></i>
                                                                                     </button>
@@ -281,7 +292,7 @@
                                                                 </div>
 
                                                                 <div
-                                                                    class="d-flex align-items-center justify-content-between">
+                                                                    class="d-flex align-items-center justify-content-between mb-3">
                                                                     <p for="activities" class="form-label">
                                                                         Activities
                                                                     </p>
@@ -296,10 +307,18 @@
 
                                                                 </div>
                                                                 @if ($item->activities && count($item->activities) > 0)
-                                                                    <div class="bg-secondary-subtle p-2 overflow-auto"
+                                                                    <div class="bg-secondary-subtle rounded p-2 overflow-auto "
                                                                         style="max-height: 300px">
                                                                         @foreach ($item->activities as $act)
                                                                             <div class="p-2 rounded bg-light mb-2">
+                                                                                <div
+                                                                                    class="d-flex justify-content-between align-items-baseline">
+                                                                                    <p class="m-0 fw-bold">
+                                                                                        {{ $act->username }}</p>
+                                                                                    <p class="m-0"
+                                                                                        style="font-size: 0.8rem">
+                                                                                        {{ $act->created_at }}</p>
+                                                                                </div>
                                                                                 <p class="m-0">{{ $act->activity }}
                                                                                 </p>
                                                                             </div>
@@ -314,6 +333,10 @@
                                                                         @csrf
                                                                         <input type="hidden" name="task_id"
                                                                             value="{{ $item->id }}" hidden>
+
+                                                                        <input type="hidden" name="username"
+                                                                            value="{{ Auth::user()->username }}"
+                                                                            hidden>
                                                                         <textarea class="form-control mb-3" id="focusedInput" name="activity" placeholder="Add Activity"></textarea>
                                                                         @error('activity')
                                                                             <div class="alert alert-danger">
@@ -425,44 +448,44 @@
                                                                         </ul>
                                                                     </div>
 
-                                                                        @php
-                                                                            // Mendekode JSON dan mengambil elemen pertama dari array
-                                                                            $time_count = json_decode(
-                                                                                $item->time_count,
-                                                                                true,
-                                                                            );
-                                                                            $item->time_count = isset($time_count[0])
-                                                                                ? $time_count[0]
-                                                                                : '00:00:00';
-                                                                        @endphp
-                                                                        <div class="task-row"
-                                                                            data-task-id="{{ $item->id }}">
-                                                                            <p for="time_count_{{ $item->id }}"
-                                                                                class="form-label">Time Count</p>
-                                                                            <div
-                                                                                id="stopwatch-container-{{ $item->id }}">
-                                                                                <span
-                                                                                    id="time-display-{{ $item->id }}"
-                                                                                    class="mb-3">
-                                                                                    {{ old('time_count', $item->time_count) }}
-                                                                                </span>
-                                                                                <br>
-                                                                                <button type="button"
-                                                                                    id="start-stopwatch-{{ $item->id }}"
-                                                                                    class="btn btn-success">Start</button>
-                                                                                <button type="button"
-                                                                                    id="stop-stopwatch-{{ $item->id }}"
-                                                                                    class="btn btn-danger"
-                                                                                    disabled>Stop</button>
-                                                                                <button type="button"
-                                                                                    id="reset-stopwatch-{{ $item->id }}"
-                                                                                    class="btn btn-secondary"
-                                                                                    disabled>Reset</button>
-                                                                            </div>
-                                                                            <input type="hidden" name="time_count[]"
-                                                                                id="time_count_{{ $item->id }}"
-                                                                                value="{{ is_array(old('time_count', $item->time_count)) ? implode(',', old('time_count', $item->time_count)) : old('time_count', $item->time_count) }}">
+                                                                    @php
+                                                                        // Mendekode JSON dan mengambil elemen pertama dari array
+                                                                        $time_count = json_decode(
+                                                                            $item->time_count,
+                                                                            true,
+                                                                        );
+                                                                        $item->time_count = isset($time_count[0])
+                                                                            ? $time_count[0]
+                                                                            : '00:00:00';
+                                                                    @endphp
+                                                                    <div class="task-row"
+                                                                        data-task-id="{{ $item->id }}">
+                                                                        <p for="time_count_{{ $item->id }}"
+                                                                            class="form-label">Time Count</p>
+                                                                        <div
+                                                                            id="stopwatch-container-{{ $item->id }}">
+                                                                            <span
+                                                                                id="time-display-{{ $item->id }}"
+                                                                                class="mb-3">
+                                                                                {{ old('time_count', $item->time_count) }}
+                                                                            </span>
+                                                                            <br>
+                                                                            <button type="button"
+                                                                                id="start-stopwatch-{{ $item->id }}"
+                                                                                class="btn btn-success">Start</button>
+                                                                            <button type="button"
+                                                                                id="stop-stopwatch-{{ $item->id }}"
+                                                                                class="btn btn-danger"
+                                                                                disabled>Stop</button>
+                                                                            <button type="button"
+                                                                                id="reset-stopwatch-{{ $item->id }}"
+                                                                                class="btn btn-secondary"
+                                                                                disabled>Reset</button>
                                                                         </div>
+                                                                        <input type="hidden" name="time_count[]"
+                                                                            id="time_count_{{ $item->id }}"
+                                                                            value="{{ is_array(old('time_count', $item->time_count)) ? implode(',', old('time_count', $item->time_count)) : old('time_count', $item->time_count) }}">
+                                                                    </div>
 
                                                                     <label for="due_date" class="form-label">Due
                                                                         Date</label>

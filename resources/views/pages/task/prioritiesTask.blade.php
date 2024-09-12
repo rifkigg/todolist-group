@@ -61,6 +61,16 @@
                     </div>
                 </div>
             </li>
+            @if (auth()->user()->role == 'admin')
+                <li class="nav-item ">
+                    <a class="nav-link " href="{{ route('manage_user.index') }}" aria-bs-expanded="true"
+                        aria-bs-controls="collapseTwo">
+                        <i class="fa-solid fa-users-gear"></i>
+                        <span>Manage User</span>
+                    </a>
+                </li>
+            @else
+            @endif
         </x-navbar>
 
         <!-- Content Wrapper -->
@@ -82,24 +92,24 @@
                                 enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
-                                    <label for="name">Nama</label>
+                                    <label for="name">Name</label>
                                     <input type="text" class="form-control" id="name" name="name" required
-                                        value="{{ old('name') }}">
+                                        value="{{ old('name') }}" placeholder="Enter Name of Priority">
                                 </div>
                                 <div class="form-group">
                                     <label for="icon">Icon</label>
                                     <div class="icon-selection">
                                         <div class="icon-options">
                                             <button type="button" class="btn btn-outline-primary" name="icon"
-                                                value="😎" onclick="selectIcon('😎')">😎</button>
+                                                value="📈" onclick="selectIcon('📈')">📈</button>
                                             <button type="button" class="btn btn-outline-primary" name="icon"
-                                                value="🐲" onclick="selectIcon('🐲')">🐲</button>
+                                                value="📅" onclick="selectIcon('📅')">📅</button>
                                             <button type="button" class="btn btn-outline-primary" name="icon"
-                                                value="😄" onclick="selectIcon('😄')">😄</button>
+                                                value="🔒" onclick="selectIcon('🔒')">🔒</button>
                                             <button type="button" class="btn btn-outline-primary" name="icon"
-                                                value="😔" onclick="selectIcon('😔')">😔</button>
+                                                value="📌" onclick="selectIcon('📌')">📌</button>
                                             <button type="button" class="btn btn-outline-primary" name="icon"
-                                                value="🤡" onclick="selectIcon('🤡')">🤡</button>
+                                                value="⌛" onclick="selectIcon('⌛')">⌛</button>
                                         </div>
                                         <input type="hidden" id="selectedIcon" name="icon" required>
                                     </div>
@@ -118,9 +128,9 @@
                             <table id="example" class="table table-striped mt-4">
                                 <thead>
                                     <tr>
-                                        <th>Nama</th>
+                                        <th>Name</th>
                                         <th>Icon</th>
-                                        <th>Aksi</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -129,16 +139,16 @@
                                             <td>{{ $priority->name }}</td>
                                             <td>{{ $priority->icon }}</td>
                                             <td>
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                <button type="button" class="btn" data-bs-toggle="modal"
                                                     data-bs-target="#editModal{{ $priority->id }}">
-                                                    Edit Data
+                                                    <i class="icon-action fa-solid fa-pencil"></i>
                                                 </button>
                                                 <form action="{{ route('priorities.destroy', $priority->id) }}"
                                                     method="POST" style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger"
-                                                        onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
+                                                    <button type="submit" class="btn"
+                                                        onclick="return confirm('Are you sure you want to delete this item?');"> <i class="icon-action fa-solid fa-trash-can"></i></button>
                                                 </form>
                                             </td>
                                         </tr>

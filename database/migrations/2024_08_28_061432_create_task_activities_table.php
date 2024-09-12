@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('task_activities', function (Blueprint $table) {
             $table->id();
+            $table->string('username');
             $table->foreignId('task_id')->constrained()->onDelete('cascade');
             $table->text('activity');
             $table->timestamps();

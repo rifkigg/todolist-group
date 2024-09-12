@@ -60,6 +60,16 @@
                     </div>
                 </div>
             </li>
+            @if (auth()->user()->role == 'admin')
+                <li class="nav-item ">
+                    <a class="nav-link " href="{{ route('manage_user.index') }}" aria-bs-expanded="true"
+                        aria-bs-controls="collapseTwo">
+                        <i class="fa-solid fa-users-gear"></i>
+                        <span>Manage User</span>
+                    </a>
+                </li>
+            @else
+            @endif
         </x-navbar>
 
         <!-- Content Wrapper -->
@@ -82,25 +92,25 @@
                                 <!-- Input Form -->
                                 @csrf
                                 <div class="form-group">
-                                    <label for="name">Nama</label>
+                                    <label for="name">Name</label>
                                     <input type="text" class="form-control" id="name" name="name" required
-                                        value="{{ old('name') }}">
+                                        value="{{ old('name') }}" placeholder="Enter Name of Category">
                                 </div>
                                 <div class="form-group">
                                     <label for="slug">Slug</label>
                                     <input type="text" class="form-control" id="slug" name="slug" required
-                                        value="{{ old('slug') }}">
+                                        value="{{ old('slug') }}" placeholder="Enter Slug">
                                 </div>
-                                <button type="submit" class="btn btn-primary">Tambah</button>
+                                <button type="submit" class="btn btn-primary">Add New</button>
                             </form>
 
                             <!-- Tabel untuk Menampilkan Daftar -->
                             <table id="example" class="table table-striped mt-4">
                                 <thead>
                                     <tr>
-                                        <th>Nama</th>
+                                        <th>Name</th>
                                         <th>Slug</th>
-                                        <th>Aksi</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -109,16 +119,16 @@
                                             <td>{{ $category->name }}</td>
                                             <td>{{ $category->slug }}</td>
                                             <td>
-                                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                                <button type="button" class="btn" data-bs-toggle="modal"
                                                     data-bs-target="#editModal{{ $category->id }}">
-                                                    Edit Data
+                                                    <i class="icon-action fa-solid fa-pencil"></i>
                                                 </button>
                                                 <form action="{{ route('projectcategories.destroy', $category->id) }}"
                                                     method="POST" style="display:inline;">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger"
-                                                        onclick="return confirm('Are you sure you want to delete this item?');">Delete</button>
+                                                    <button type="submit" class="btn"
+                                                        onclick="return confirm('Are you sure you want to delete this item?');"> <i class="icon-action fa-solid fa-trash-can"></i></button>
                                                 </form>
                                             </td>
                                         </tr>
