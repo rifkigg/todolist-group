@@ -13,6 +13,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\AttachmentController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\StatusTaskController;
 use App\Http\Controllers\TaskChecklistController;
 use App\Http\Controllers\TaskPrioritiesController;
@@ -21,18 +22,9 @@ use App\Http\Controllers\ProjectCategoriesController;
 use App\Http\Controllers\UserController;
 use App\Models\TaskChecklist;
 
-Route::get('/dashboard', function () {
-    $total_project = Project::count();
-    $total_user = User::count();
-    $total_task = task::count();
-    $total_board = board::count();
-    $tasks = app(TaskController::class)->getTasksByUser(auth()->id()); // Fetch tasks assigned to the authenticated user
-    return view('pages.dashboard', compact('total_project', 'total_user', 'total_task', 'total_board', 'tasks'));
-})
-    ->middleware(['auth', 'verified'])
-    ->name('dashboard');
-
 Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+    Route::get('/', [DashboardController::class, 'index']);
     Route::get('/manage_user', [UserController::class, 'index'])->name('manage_user.index');
     Route::post('/manage_user/store', [UserController::class, 'store'])->name('manage_user.store');
     Route::put('/manage_user/update/{id}', [UserController::class, 'update'])->name('manage_user.update');
@@ -42,14 +34,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::get('/', function () {
-        $total_project = Project::count();
-        $total_user = User::count();
-        $total_task = task::count();
-        $total_board = board::count();
-        $tasks = app(TaskController::class)->getTasksByUser(auth()->id());
-        return view('pages.dashboard', compact('total_project', 'total_user', 'total_task', 'total_board', 'tasks'));
-    });
     // Route::get('/dashboard', function () {
     //     return view('pages.dashboard');
     // });

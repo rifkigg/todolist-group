@@ -34,18 +34,13 @@ class TaskController extends Controller
         $total_task = Task::count();
 
         $selectedUserId = $request->input('assignee_id');
-        $userRole = $request->user()->role; // Ambil role pengguna
+        $taskQuery = Task::with('project', 'board', 'status', 'priority', 'label', 'users', 'attachments', 'activities', 'checklist', 'description')
+            ->latest();
 
-        // Filter task berdasarkan role
-        if ($userRole === 'admin') {
-            // Admin dapat melihat semua task
-            $taskQuery = Task::with('project', 'board', 'status', 'priority', 'label', 'users', 'attachments', 'activities', 'checklist', 'description')->latest();
-        } else {
-            // Role lain hanya dapat melihat task yang ditugaskan kepada mereka
-            $taskQuery = Task::with('project', 'board', 'status', 'priority', 'label', 'users', 'attachments', 'activities', 'checklist', 'description')
-                ->whereHas('users', function ($query) use ($request) {
-                    $query->where('users.id', $request->user()->id);
-                })->latest();
+        if ($selectedUserId) {
+            $taskQuery->whereHas('users', function ($query) use ($selectedUserId) {
+                $query->where('users.id', $selectedUserId);
+            });
         }
 
         $task = $taskQuery->get()->map(function ($task) {
@@ -55,7 +50,6 @@ class TaskController extends Controller
 
         return view('pages.task.task', compact('task', 'total_project', 'total_user', 'total_task', 'total_board', 'project', 'board', 'status', 'priority', 'label', 'users', 'selectedUserId'));
     }
-
     public function getTasktoBoard()
     {
         $project = Project::all();
@@ -70,53 +64,15 @@ class TaskController extends Controller
         $total_user = User::count();
         $total_task = Task::count();
 
-        // Pastikan pengguna terautentikasi
-        if (auth()->check()) {
-            $user = auth()->user(); // Ambil pengguna yang terautentikasi
-            $userRole = $user->role; // Ambil role pengguna
+        // Ambil tasks yang sesuai dengan board_id
+        $boards = $board->map(function ($board) {
+            $board->tasks = Task::with('project', 'status', 'priority', 'label', 'users', 'attachments', 'activities', 'checklist', 'description')
+                ->where('board_id', $board->id)
+                ->latest()
+                ->get();
 
-            $boards = $board->map(function ($board) use ($userRole, $user) {
-                // Filter berdasarkan role
-                if ($userRole === 'admin') {
-                    // Admin dapat melihat semua task
-                    $board->tasks = Task::with('project', 'status', 'priority', 'label', 'users', 'attachments', 'activities', 'checklist', 'description')
-                        ->where('board_id', $board->id)
-                        ->latest()
-                        ->get();
-                } elseif ($userRole === 'developer') {
-                    // Developer hanya dapat melihat task yang ditugaskan kepada mereka
-                    $board->tasks = Task::with('project', 'status', 'priority', 'label', 'users', 'attachments', 'activities', 'checklist', 'description')
-                        ->where('board_id', $board->id)
-                        ->whereHas('users', function ($query) use ($user) {
-                            $query->where('users.id', $user->id);
-                        })
-                        ->latest()
-                        ->get();
-                } elseif ($userRole === 'manajer') {
-                    // Manajer dapat melihat semua task dalam proyek yang mereka kelola
-                    $board->tasks = Task::with('project', 'status', 'priority', 'label', 'users', 'attachments', 'activities', 'checklist', 'description')
-                        ->where('board_id', $board->id)
-                        ->where('project_id', $user->managed_project_id) // Misalkan ada relasi proyek yang dikelola
-                        ->latest()
-                        ->get();
-                } elseif ($userRole === 'editor') {
-                    // Editor hanya dapat melihat task yang dapat mereka edit
-                    $board->tasks = Task::with('project', 'status', 'priority', 'label', 'users', 'attachments', 'activities', 'checklist', 'description')
-                        ->where('board_id', $board->id)
-                        ->where('editable_by', $user->id) // Misalkan ada kolom yang menunjukkan siapa yang dapat mengedit
-                        ->latest()
-                        ->get();
-                } else {
-                    // Role tidak dikenali, bisa mengembalikan array kosong atau pesan error
-                    $board->tasks = [];
-                }
-
-                return $board;
-            });
-        } else {
-            // Tangani kasus jika pengguna tidak terautentikasi
-            $boards = []; // Atau bisa mengembalikan pesan error
-        }
+            return $board;
+        });
 
         $task = Task::all()->map(function ($task) {
             $task->time_count = json_decode($task->time_count, true)[0] ?? '00:00:00';

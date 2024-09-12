@@ -167,6 +167,8 @@
                         </div>
                     </div>
                     <div id="assignment">
+                        <p>total task yang status === "selesai" / {{ $total_tasknya }}</p>
+                  
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
