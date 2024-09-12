@@ -15,7 +15,7 @@ use Illuminate\Http\RedirectResponse;
 
 class ProjectController extends Controller
 {
-    public function index(): View
+    public function index(Request $request)
     {
         //get all products
         $project = Project::with('category', 'status')->latest()->get();
@@ -24,6 +24,20 @@ class ProjectController extends Controller
         $total_user = User::count();
         $total_task = task::count();
         $total_board = board::count();
+
+        $selectedUserId = $request->input('assignee_id');
+        $projectQuery = Project::with('category', 'status')->latest();
+
+        if ($selectedUserId) {
+            $projectQuery->whereHas('users', function ($query) use ($selectedUserId) {
+                $query->where('users.id', $selectedUserId);
+            });
+        }
+
+        $project = $projectQuery->get()->map(function ($project) {
+            $project->time_count = json_decode($project->time_count, true)[0] ?? '00:00:00';
+            return $project;
+        });
 
         //render view with products
         return view('pages.project.project', compact('project', 'total_project', 'total_user', 'total_task', 'total_board'));
@@ -90,12 +104,12 @@ class ProjectController extends Controller
             'project_detail' => 'required|min:5',
         ]);
 
-        //get product by ID
+        //get project by ID
         $project = Project::findOrFail($id);
 
         $cleanText = strip_tags($request->input('project_detail'));
 
-        //update product without image
+        //update project without image
         $project->update([
             'name' => $request->name,
             'category_id' => $request->category_id,
@@ -103,6 +117,8 @@ class ProjectController extends Controller
             'live_date' => $request->live_date,
             'project_detail' => $cleanText,
         ]);
+
+        $project->users()->sync($request->assignees);
 
         //redirect to index
         return redirect()
@@ -128,4 +144,12 @@ class ProjectController extends Controller
 
         return redirect()->route('project.index')->with('success', 'Project duplicated successfully!');
     }
+
+
+    public function getProjectByUser($userId)
+    {
+        $projects = Project::whereHas('users', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->get();
+        }
 }
