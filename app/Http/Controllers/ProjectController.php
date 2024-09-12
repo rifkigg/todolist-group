@@ -15,18 +15,36 @@ use Illuminate\Http\RedirectResponse;
 
 class ProjectController extends Controller
 {
-    public function index(): View
+    public function index(Request $request)
     {
         //get all products
-        $project = Project::with('category', 'status')->latest()->get();
+        $project = Project::with('users','category', 'status')->latest()->get();
+
+        $users = User::all();
 
         $total_project = Project::count();
         $total_user = User::count();
         $total_task = task::count();
         $total_board = board::count();
 
+        $selectedUserId = $request->input('assignee_id');
+        $userRole = $request->user()->role;
+
+        if ($userRole === 'admin' || $userRole === 'manajer' ) {
+            $projectQuery = Project::with('category', 'status')->latest();
+        } else {
+            $projectQuery = Project::with('category', 'status')->whereHas('users', function ($query) use ($request) {
+                $query->where('users.id', $request->user()->id);
+            });
+        }
+
+        $project = $projectQuery->get()->map(function ($project) {
+            $project->time_count = json_decode($project->time_count, true)[0] ?? '00:00:00';
+            return $project;
+        });
+
         //render view with products
-        return view('pages.project.project', compact('project', 'total_project', 'total_user', 'total_task', 'total_board'));
+        return view('pages.project.project', compact('users','project', 'total_project', 'total_user', 'total_task', 'total_board'));
     }
 
     public function create(): View
@@ -59,6 +77,7 @@ class ProjectController extends Controller
             'project_detail' => $cleanText,
         ]);
 
+
         // Redirect to index
         return redirect()
             ->route('project.index')
@@ -76,7 +95,8 @@ class ProjectController extends Controller
         $project = Project::find($id);
         $categories = ProjectCategories::all();
         $status = ProjectStatus::all();
-        return view('pages.project.editProject', compact('project', 'categories', 'status'));
+        $users = User::all();
+        return view('pages.project.editProject', compact('users','project', 'categories', 'status'));
     }
 
     public function update(Request $request, $id): RedirectResponse
@@ -90,12 +110,12 @@ class ProjectController extends Controller
             'project_detail' => 'required|min:5',
         ]);
 
-        //get product by ID
+        //get project by ID
         $project = Project::findOrFail($id);
 
         $cleanText = strip_tags($request->input('project_detail'));
 
-        //update product without image
+        //update project without image
         $project->update([
             'name' => $request->name,
             'category_id' => $request->category_id,
@@ -103,6 +123,8 @@ class ProjectController extends Controller
             'live_date' => $request->live_date,
             'project_detail' => $cleanText,
         ]);
+
+        $project->users()->sync($request->assignees);
 
         //redirect to index
         return redirect()
@@ -128,4 +150,12 @@ class ProjectController extends Controller
 
         return redirect()->route('project.index')->with('success', 'Project duplicated successfully!');
     }
+
+
+    public function getProjectByUser($userId)
+    {
+        $projects = Project::whereHas('users', function ($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->get();
+        }
 }
