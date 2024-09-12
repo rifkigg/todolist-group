@@ -30,7 +30,7 @@ class ProjectController extends Controller
         $selectedUserId = $request->input('assignee_id');
         $userRole = $request->user()->role;
 
-        if ($userRole === 'admin') {
+        if ($userRole === 'admin' || $userRole === 'manajer' ) {
             $projectQuery = Project::with('category', 'status')->latest();
         } else {
             $projectQuery = Project::with('category', 'status')->whereHas('users', function ($query) use ($request) {
