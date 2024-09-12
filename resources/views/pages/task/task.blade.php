@@ -255,7 +255,8 @@
                                                                         </form>
                                                                     @endforeach
                                                                 @else
-                                                                    <form action="{{ route('description.store') }}"
+                                                                    <form
+                                                                        action="{{ route('description.store', $item->id) }}"
                                                                         method="post" enctype="multipart/form-data"
                                                                         id="formAddDescription">
                                                                         @csrf
@@ -866,6 +867,22 @@
                     text.classList.remove('text-decoration-line-through');
                 }
             }
+        </script>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                var fragment = window.location.hash; // Mendapatkan fragment dari URL
+
+                if (fragment && fragment.startsWith('#view-')) {
+                    var modalId = fragment.replace('#', ''); // Menghapus '#' dari fragment
+                    var modalElement = document.getElementById(modalId); // Mendapatkan elemen modal berdasarkan ID
+
+                    if (modalElement) {
+                        var modalInstance = new bootstrap.Modal(modalElement);
+                        modalInstance.show(); // Membuka modal
+                    }
+                }
+            });
         </script>
 
 </x-layout>

@@ -34,7 +34,7 @@ class AttachmentController extends Controller
             // Redirect dengan pesan sukses
             return redirect()
                 ->back()
-                ->with('openModal', $request->task_id);
+                ->withFragment('view-' . $request->task_id);
         } else {
             // Redirect dengan pesan error jika file tidak diunggah
             return redirect()->back()->with('error', 'File not uploaded');
@@ -54,6 +54,6 @@ class AttachmentController extends Controller
         // Hapus data dari database
         $attachment->delete();
 
-        return redirect()->back()->with('message', 'Attachment deleted successfully');
+        return redirect()->back()->with('message', 'Attachment deleted successfully')->withFragment('view-' . $task_id);
     }
 }

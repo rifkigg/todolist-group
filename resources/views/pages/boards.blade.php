@@ -87,6 +87,7 @@
                                     </option>
                                 @endforeach
                             </select>
+                            <sup class="text-danger m-2">select the project first so you can add boards and tasks.</sup>
                         </div>
                     </form>
 
@@ -97,17 +98,17 @@
                             @forelse ($boards as $board)
                                 <div class="board-item"
                                     style="min-width: 300px; height: auto;  margin-right: 10px; border: 1px solid #ccc; border-radius: 5px; padding: 10px; background-color: #f9f9f9;">
-                                    <h5 style="margin: 0;">{{ $board->board_name }}</h5>
+                                    <h5 style="margin: 0; font-weight: bold" class="text-dark">{{ $board->board_name }}
+                                    </h5>
                                     <br>
 
                                     @forelse ($board->tasks as $item)
                                         <a href="#" data-bs-toggle="modal"
                                             data-bs-target="#view-{{ $item->id }}">
-                                            <div class="text-white bg-secondary rounded p-2">
+                                            <div class="text-white bg-secondary rounded p-2 mb-2    ">
                                                 <p class="mb-0">{{ $item->name }}</p>
                                             </div>
                                         </a>
-                                        <br>
 
                                         <div class="modal fade" id="view-{{ $item->id }}" tabindex="-1"
                                             aria-labelledby="createModalLabel" aria-hidden="true">
@@ -424,28 +425,45 @@
                                                                         </ul>
                                                                     </div>
 
-                                                                    @foreach($board->tasks as $task)
-                                                                    @php
-                                                                        // Mendekode JSON dan mengambil elemen pertama dari array
-                                                                        $time_count = json_decode($task->time_count, true);
-                                                                        $task->time_count = isset($time_count[0]) ? $time_count[0] : '00:00:00';
-                                                                    @endphp
-                                                                    <div class="task-row" data-task-id="{{ $task->id }}">
-                                                                        <p for="time_count_{{ $task->id }}" class="form-label">Time Count</p>
-                                                                        <div id="stopwatch-container-{{ $task->id }}">
-                                                                            <span id="time-display-{{ $task->id }}" class="mb-3">
-                                                                                {{ old('time_count', $task->time_count) }}
-                                                                            </span>
-                                                                            <br>
-                                                                            <button type="button" id="start-stopwatch-{{ $task->id }}" class="btn btn-success">Start</button>
-                                                                            <button type="button" id="stop-stopwatch-{{ $task->id }}" class="btn btn-danger" disabled>Stop</button>
-                                                                            <button type="button" id="reset-stopwatch-{{ $task->id }}" class="btn btn-secondary" disabled>Reset</button>
+                                                                        @php
+                                                                            // Mendekode JSON dan mengambil elemen pertama dari array
+                                                                            $time_count = json_decode(
+                                                                                $item->time_count,
+                                                                                true,
+                                                                            );
+                                                                            $item->time_count = isset($time_count[0])
+                                                                                ? $time_count[0]
+                                                                                : '00:00:00';
+                                                                        @endphp
+                                                                        <div class="task-row"
+                                                                            data-task-id="{{ $item->id }}">
+                                                                            <p for="time_count_{{ $item->id }}"
+                                                                                class="form-label">Time Count</p>
+                                                                            <div
+                                                                                id="stopwatch-container-{{ $item->id }}">
+                                                                                <span
+                                                                                    id="time-display-{{ $item->id }}"
+                                                                                    class="mb-3">
+                                                                                    {{ old('time_count', $item->time_count) }}
+                                                                                </span>
+                                                                                <br>
+                                                                                <button type="button"
+                                                                                    id="start-stopwatch-{{ $item->id }}"
+                                                                                    class="btn btn-success">Start</button>
+                                                                                <button type="button"
+                                                                                    id="stop-stopwatch-{{ $item->id }}"
+                                                                                    class="btn btn-danger"
+                                                                                    disabled>Stop</button>
+                                                                                <button type="button"
+                                                                                    id="reset-stopwatch-{{ $item->id }}"
+                                                                                    class="btn btn-secondary"
+                                                                                    disabled>Reset</button>
+                                                                            </div>
+                                                                            <input type="hidden" name="time_count[]"
+                                                                                id="time_count_{{ $item->id }}"
+                                                                                value="{{ is_array(old('time_count', $item->time_count)) ? implode(',', old('time_count', $item->time_count)) : old('time_count', $item->time_count) }}">
                                                                         </div>
-                                                                        <input type="hidden" name="time_count[]" id="time_count_{{ $task->id }}"
-                                                                            value="{{ is_array(old('time_count', $task->time_count)) ? implode(',', old('time_count', $task->time_count)) : old('time_count', $task->time_count) }}">
-                                                                    </div>
-                                                                @endforeach
-                                                                    
+
                                                                     <label for="due_date" class="form-label">Due
                                                                         Date</label>
                                                                     <input type="date" name="due_date"
@@ -514,7 +532,8 @@
                                     @empty
                                         <p>No tasks found for this board.</p>
                                     @endforelse
-                                    <div class="d-flex gap-2 card-footer">
+                                    <div class="gap-2 border-top border-secondary pt-2 mt-3" id="btn-create-task"
+                                        style="display: none">
                                         <button type="button"
                                             class="btn btn-primary create-task-btn btn-sm w-100 d-flex align-items-center gap-2"
                                             data-board-id="{{ $board->id }}" data-bs-toggle="modal"
@@ -526,8 +545,9 @@
                                             @csrf
                                             @method('DELETE')
                                             <button class="btn btn-danger btn-sm" type="submit"
-                                                onclick="return confirm('Are you sure you want to delete this board?')"><i
-                                                    class="fa-solid fa-trash-can"></i></button>
+                                                onclick="return confirm('Are you sure you want to delete this board?')">
+                                                <i class="fa-solid fa-trash-can"></i>
+                                            </button>
                                         </form>
                                     </div>
                                 </div>
@@ -536,8 +556,8 @@
                             @endforelse
 
                             <!-- Form untuk membuat Board baru -->
-                            <div class="board-item"
-                                style="margin-right: 10px; border-radius: 5px; padding: 10px; background-color: #f9f9f9; ">
+                            <div class="board-item" id="create-board-form"
+                                style="margin-right: 10px; border-radius: 5px; background-color: #f9f9f9; display: none;">
                                 <button class="btn btn-primary" type="button" data-bs-toggle="collapse"
                                     data-bs-target="#collapseExample" aria-expanded="false"
                                     aria-controls="collapseExample" style="min-width: 200px">
@@ -780,12 +800,55 @@
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
                     const projectSelect = document.getElementById('projectSelect');
-                    const projectIdInput = document.getElementById('projectIdInput');
+                    const createBoardForm = document.getElementById('create-board-form');
+                    const btnCreateTasks = document.querySelectorAll('#btn-create-task');
+                    const projectIdInputs = document.querySelectorAll('input[name="project_id"]');
 
+                    function toggleElementsBasedOnProjectSelection() {
+                        if (projectSelect.value === "") {
+                            // Sembunyikan elemen-elemen jika tidak ada proyek yang dipilih
+                            createBoardForm.style.display = 'none';
+                            btnCreateTasks.forEach(function(btn) {
+                                btn.style.display = 'none';
+                            });
+                        } else {
+                            // Tampilkan elemen-elemen jika proyek telah dipilih
+                            createBoardForm.style.display = 'block';
+                            btnCreateTasks.forEach(function(btn) {
+                                btn.style.display = 'flex';
+                            });
+                        }
+
+                        // Update nilai project_id di semua input hidden
+                        projectIdInputs.forEach(function(input) {
+                            input.value = projectSelect.value;
+                        });
+                    }
+
+                    // Panggil fungsi saat halaman dimuat
+                    toggleElementsBasedOnProjectSelection();
+
+                    // Tambahkan event listener untuk memantau perubahan pada select
                     projectSelect.addEventListener('change', function() {
-                        projectIdInput.value = this.value;
+                        toggleElementsBasedOnProjectSelection();
                     });
                 });
             </script>
+            <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    var fragment = window.location.hash; // Mendapatkan fragment dari URL
+
+                    if (fragment && fragment.startsWith('#view-')) {
+                        var modalId = fragment.replace('#', ''); // Menghapus '#' dari fragment
+                        var modalElement = document.getElementById(modalId); // Mendapatkan elemen modal berdasarkan ID
+
+                        if (modalElement) {
+                            var modalInstance = new bootstrap.Modal(modalElement);
+                            modalInstance.show(); // Membuka modal
+                        }
+                    }
+                });
+            </script>
+
 
 </x-layout>
