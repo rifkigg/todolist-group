@@ -4,7 +4,6 @@
         <x-navbar>
             <x-slot name="dashboard">
                 <li class="nav-item active">
-
                     <a class="nav-link active" href="/dashboard">
                         <i class="fas fa-fw fa-tachometer-alt"></i>
                         <span>Dashboard</span></a>
@@ -167,12 +166,31 @@
                             </div>
                         </div>
                     </div>
-
-
+                    <div id="assignment">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th scope="col">NO</th>
+                                    <th scope="col">Task to do</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($tasks as $task)
+                                    <tr>
+                                        <th scope="row">{{ $loop->iteration }}</th>
+                                        <td>{{ $task->name }}</td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="2" class="text-center">No tasks assigned to you.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
 
                 </div>
                 <!-- End of Main Content -->
-
 
             </div>
             <!-- End of Content Wrapper -->
