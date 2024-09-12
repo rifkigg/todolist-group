@@ -83,12 +83,12 @@
                                 @csrf
                                 <div class="form-group">
                                     <label for="name">Nama</label>
-                                    <input type="text" class="form-control" id="name" name="name" required
+                                    <input type="text" class="form-control" id="name" name="name" onkeyup="convertToSlug()" required
                                         value="{{ old('name') }}">
                                 </div>
                                 <div class="form-group">
                                     <label for="slug">Slug</label>
-                                    <input type="text" class="form-control" id="slug" name="slug" required
+                                    <input type="text" class="form-control" id="slug" name="slug" readonly required
                                         value="{{ old('slug') }}">
                                 </div>
                                 <button type="submit" class="btn btn-primary">Tambah</button>
@@ -196,4 +196,11 @@
                 </div>
             </div>
         </div>
+        <script>
+            function generateSlug() {
+                let name = document.getElementById('name').value;
+                let slug = name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
+                document.getElementById('slug').value = slug;
+            }
+        </script>
 </x-layout>

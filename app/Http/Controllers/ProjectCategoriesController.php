@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\ProjectCategories;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Str;
 
 
 class ProjectCategoriesController extends Controller
@@ -22,12 +23,16 @@ class ProjectCategoriesController extends Controller
         //validate form
         $request->validate([
             'name'              => 'required',
-            'slug'       => 'required'
+            'slug'
         ]);
 
+        // Generate slug secara otomatis dari input name
+        $slug = Str::slug($request->input('name'), '-');
+
+        // menyim data
         ProjectCategories::create([
             'name'              => $request->name,
-            'slug'       => $request->slug
+            'slug'
         ]);
 
          //redirect to index
