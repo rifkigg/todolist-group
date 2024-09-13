@@ -18,7 +18,7 @@ class ProjectController extends Controller
     public function index(Request $request)
     {
         //get all products
-        $project = Project::with('users','category', 'status')->latest()->get();
+        $project = Project::with('users', 'category', 'status')->latest()->get();
 
         $users = User::all();
 
@@ -30,7 +30,7 @@ class ProjectController extends Controller
         $selectedUserId = $request->input('assignee_id');
         $userRole = $request->user()->role;
 
-        if ($userRole === 'admin' || $userRole === 'manajer' ) {
+        if ($userRole === 'admin' || $userRole === 'manajer') {
             $projectQuery = Project::with('category', 'status')->latest();
         } else {
             $projectQuery = Project::with('category', 'status')->whereHas('users', function ($query) use ($request) {
@@ -44,7 +44,7 @@ class ProjectController extends Controller
         });
 
         //render view with products
-        return view('pages.project.project', compact('users','project', 'total_project', 'total_user', 'total_task', 'total_board'));
+        return view('pages.project.project', compact('users', 'project', 'total_project', 'total_user', 'total_task', 'total_board'));
     }
 
     public function create(): View
@@ -77,7 +77,6 @@ class ProjectController extends Controller
             'project_detail' => $cleanText,
         ]);
 
-
         // Redirect to index
         return redirect()
             ->route('project.index')
@@ -96,7 +95,7 @@ class ProjectController extends Controller
         $categories = ProjectCategories::all();
         $status = ProjectStatus::all();
         $users = User::all();
-        return view('pages.project.editProject', compact('users','project', 'categories', 'status'));
+        return view('pages.project.editProject', compact('users', 'project', 'categories', 'status'));
     }
 
     public function update(Request $request, $id): RedirectResponse
@@ -151,11 +150,12 @@ class ProjectController extends Controller
         return redirect()->route('project.index')->with('success', 'Project duplicated successfully!');
     }
 
-
     public function getProjectByUser($userId)
     {
         $projects = Project::whereHas('users', function ($query) use ($userId) {
             $query->where('user_id', $userId);
         })->get();
-        }
+
+        return $projects;
+    }
 }

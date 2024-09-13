@@ -132,6 +132,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/checklist/{id}', [TaskChecklistController::class, 'destroy'])->name('checklist.destroy');
 
     Route::get('/tasks/user/{userId}', [TaskController::class, 'getTasksByUser'])->name('tasks.byUser');
+
+    Route::post('/history/start', [TaskController::class, 'start'])->name('history.start');
+    Route::post('/history/pause', [TaskController::class, 'pause'])->name('history.pause');
+    Route::post('/history/finish', [TaskController::class, 'finish'])->name('history.finish');
+    Route::get('/history', [TaskController::class, 'indexTime'])->name('history.index');
 });
 
 require __DIR__ . '/auth.php';

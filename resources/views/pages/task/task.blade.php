@@ -30,10 +30,10 @@
                             <a class="collapse-item " href="{{ route('projectcategories.index') }}">Categories</a>
                             <a class="collapse-item" href="{{ route('project_status.index') }}">Project Status</a>
                         @elseif (auth()->user()->role == 'manajer')
-                            <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
+                            <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
                             <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
                         @else
-                            <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
+                            <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
                         @endif
                     </div>
                 </div>
@@ -77,6 +77,7 @@
                 <!-- Begin Page Content -->
                 <div class="container text-dark">
                     <!-- Content Row -->
+                    @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
                     <div class="row">
                         <!-- Earnings (Monthly) Card Example -->
                         <div class="col-xl-3 col-md-6 mb-4">
@@ -156,6 +157,8 @@
                             </div>
                         </div>
                     </div>
+                    @else
+                    @endif
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">Tasks</h6>

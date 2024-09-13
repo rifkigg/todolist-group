@@ -6,6 +6,7 @@ use App\Models\task;
 use App\Models\User;
 use App\Models\board;
 use App\Models\project;
+use App\Models\History;
 use App\Models\TaskLabel;
 use App\Models\Attachment;
 use App\Models\TaskStatus;
@@ -16,6 +17,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
+use Carbon\Carbon;
 
 class TaskController extends Controller
 {
@@ -211,5 +213,50 @@ class TaskController extends Controller
         $newTask->save();
 
         return redirect()->route('task.index')->with('success', 'Project duplicated successfully!');
+    }
+
+    public function start(Request $request)
+    {
+        $taskName = $request->input('task_name');
+        $task = Task::where('name', $taskName)->first();
+        $task->timer_status = 'Playing';
+        $task->save();
+
+        History::create([
+            'task_name' => $taskName,
+            'start' => now(),
+        ]);
+
+        return redirect()->back();
+    }
+
+    public function pause(Request $request)
+    {
+        $taskName = $request->input('task_name');
+        $task = Task::where('name', $taskName)->first();
+        $task->timer_status = 'Paused';
+        $task->save();
+
+        History::create([
+            'task_name' => $taskName,
+            'paused' => now(),
+        ]);
+
+        return redirect()->back();
+    }
+
+    public function finish(Request $request)
+    {
+        $taskName = $request->input('task_name');
+        $task = Task::where('name', $taskName)->first();
+        $task->timer_status = 'Finished';
+        $task->save();
+
+        History::create([
+            'task_name' => $taskName,
+            'finish' => now(),
+        ]);
+
+        return redirect()->back();
     }
 }

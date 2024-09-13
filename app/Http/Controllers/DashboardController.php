@@ -8,31 +8,73 @@ use App\Models\User;
 use App\Models\board;
 use App\Models\project;
 use App\Models\TaskStatus;
+use App\Models\History;
 use App\Models\task_priority;
 use App\Models\TaskLabel;
+use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
     public function index()
     {
-        $total_project = Project::count();
-        $total_user = User::count();
-        $total_task = Task::count();
-        $total_board = Board::count();
+        // Mengambil data dari berbagai model
+
         $project = Project::all();
         $board = Board::all();
         $status = TaskStatus::all();
         $priority = task_priority::all();
         $label = TaskLabel::all();
         $users = User::all();
-        $tasks = app(DashboardController::class)->getTasksByUser(auth()->id()); // Fetch tasks assigned to the authenticated user
+
+        // Ambil tasks yang ditugaskan ke user yang sedang login
+        $tasks = app(DashboardController::class)->getTasksByUser(auth()->id());
+        $projects = app(ProjectController::class)->getProjectByUser(auth()->id());
         $total_tasknya = $tasks->count();
         $total_selesai = $tasks->where('timer_status', 'Finished')->count();
-        $persenan = ($total_selesai / $total_tasknya) * 100;
+
+        // Cek apakah $total_tasknya tidak nol sebelum melakukan pembagian
+        if ($total_tasknya > 0) {
+            $persenan = ($total_selesai / $total_tasknya) * 100;
+        } else {
+            $persenan = 0;
+        }
         $format_persenan = number_format($persenan, 0);
 
-        return view('pages.dashboard', compact('total_project', 'total_user', 'total_task', 'total_board', 'tasks', 'total_tasknya', 'total_selesai', 'format_persenan', 'board', 'project', 'status', 'priority', 'label', 'users'));
+        $totalTime = 0; // Inisialisasi total waktu sebagai angka
+
+        if ($tasks->isNotEmpty()) {
+            foreach ($tasks as $task) {
+                $taskTime = History::calculateTotalTime($task->name); // Hitung waktu total untuk tiap task
+                if (is_numeric($taskTime)) {
+                    $totalTime += $taskTime; // Tambahkan ke total waktu
+                }
+            }
+        }
+
+        
+        // Hitung waktu dari 00:00:00 dan tambahkan totalTime
+        $startOfDay = Carbon::today()->startOfDay();
+        $endOfDay = Carbon::today()->endOfDay();
+        $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
+
+        $tasksWithTime = $tasks->map(function ($task) {
+            $totalTime = History::calculateTotalTime($task->name);
+            $startOfDay = Carbon::today()->startOfDay();
+            $endOfDay = Carbon::today()->endOfDay();
+            $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
+            $task->totalTime = $totalTime;
+            $task->remainingTime = $remainingTime;
+            $task->isPlaying = $task->timer_status == 'Playing';
+            $task->isPaused = $task->timer_status == 'Paused';
+            return $task;
+        });
+
+        $total_project = $projects->count();
+        $total_task = $tasks->count();
+        // Mengirim data ke view
+        return view('pages.dashboard', compact('total_project', 'total_task', 'tasks', 'total_tasknya', 'total_selesai', 'format_persenan', 'board', 'project', 'status', 'priority', 'label', 'users', 'totalTime', 'remainingTime', 'tasksWithTime'));
     }
+
     public function getTasksByUser($userId)
     {
         $tasks = Task::whereHas('users', function ($query) use ($userId) {
@@ -41,4 +83,22 @@ class DashboardController extends Controller
 
         return $tasks;
     }
+    // public function indexTime(Request $request, $userId)
+    // {
+    //     // Mengambil semua task yang dimiliki oleh user
+    //     $tasks = Task::whereHas('users', function ($query) use ($userId) {
+    //         $query->where('user_id', $userId);
+    //     })->get();
+
+    //     $totalTime = 0; // Inisialisasi total waktu
+
+    //     if ($tasks->isNotEmpty()) {
+    //         // Iterasi setiap task untuk menghitung total waktu
+    //         foreach ($tasks as $task) {
+    //             $totalTime += History::calculateTotalTime($task->name); // Gunakan nama task untuk menghitung total waktu
+    //         }
+    //     }
+
+    //     return view('pages.dashboard', compact('totalTime', 'tasks')); // Kirimkan juga daftar tasks ke view
+    // }
 }
