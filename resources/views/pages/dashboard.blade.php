@@ -429,7 +429,7 @@
                                                                         class="form-select mb-3" disabled>
                                                                         @foreach ($status as $items)
                                                                             <option value="{{ $items->id }}"
-                                                                                {{ old('status_id', $item->status_id) == $items->id ? 'selected' : '' }}>
+                                                                                {{ old('status_id', $task->status_id) == $items->id ? 'selected' : '' }}>
                                                                                 {{ $items->name ?? ' ' }}
                                                                             </option>
                                                                         @endforeach
@@ -441,7 +441,7 @@
                                                                         class="form-select mb-3" disabled>
                                                                         @foreach ($priority as $items)
                                                                             <option value="{{ $items->id }}"
-                                                                                {{ old('priority_id', $item->priority_id) == $items->id ? 'selected' : '' }}>
+                                                                                {{ old('priority_id', $task->priority_id) == $items->id ? 'selected' : '' }}>
                                                                                 {{ $items->name ?? ' ' }}
                                                                             </option>
                                                                         @endforeach
@@ -453,7 +453,7 @@
                                                                         class="form-select mb-3" disabled>
                                                                         @foreach ($label as $items)
                                                                             <option value="{{ $items->id }}"
-                                                                                {{ old('task_label_id', $item->task_label_id) == $items->id ? 'selected' : '' }}>
+                                                                                {{ old('task_label_id', $task->task_label_id) == $items->id ? 'selected' : '' }}>
                                                                                 {{ $items->name ?? ' ' }}
                                                                             </option>
                                                                         @endforeach
