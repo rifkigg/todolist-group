@@ -167,13 +167,16 @@
                         </div>
                     </div>
                     <div id="assignment">
-                        <p>total task yang status === "selesai" / {{ $total_tasknya }}</p>
+                        <p>{{ $total_selesai }} / {{ $total_tasknya }}</p>
+                        <p>{{ $format_persenan }} %</p>
                   
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th scope="col">NO</th>
                                     <th scope="col">Task to do</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -181,6 +184,14 @@
                                     <tr>
                                         <th scope="row">{{ $loop->iteration }}</th>
                                         <td>{{ $task->name }}</td>
+                                        <td>{{ $task->timer_status }}</td>
+                                        <td>
+                                            <button>Play</button>
+                                            <button>Pause</button>
+                                            <button>Stop</button>
+                                            <button>Show</button>
+
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr>

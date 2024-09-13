@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('time_count')->nullable();
             $table->date('due_date')->nullable();
+            $table->string('timer_status')->nullable()->default('Paused');
             $table->timestamps();
 
             // Foreign keys

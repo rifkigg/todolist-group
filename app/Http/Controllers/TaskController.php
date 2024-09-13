@@ -188,7 +188,7 @@ class TaskController extends Controller
             'due_date' => $request->due_date,
         ]);
 
-        // Update assignees
+          // Update assignees
         $task->users()->sync($request->assignees);
 
         return redirect()->route('task.index')->with('success', 'Task updated successfully.');
@@ -211,14 +211,5 @@ class TaskController extends Controller
         $newTask->save();
 
         return redirect()->route('task.index')->with('success', 'Project duplicated successfully!');
-    }
-
-    public function getTasksByUser($userId)
-    {
-        $tasks = Task::whereHas('users', function ($query) use ($userId) {
-            $query->where('user_id', $userId);
-        })->get();
-
-        return $tasks;
     }
 }
