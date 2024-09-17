@@ -594,15 +594,18 @@
                                                                         </div>
 
 
+                                                                        @php
+                                                                            $taskTime = $tasksWithTime->firstWhere(
+                                                                                'id',
+                                                                                $item->id,
+                                                                            );
+                                                                        @endphp
                                                                         <div class="task-row"
                                                                             data-task-id="{{ $item->id }}">
-                                                                            <div class="task-row"
-                                                                                data-task-id="{{ $item->id }}">
-                                                                                <p for="time_count_{{ $item->id }}"
-                                                                                    class="form-label">Time Count</p>
-                                                                                <p>{{ gmdate('H:i:s', $item->remainingTime) }}
-                                                                                </p>
-                                                                            </div>
+                                                                            <p for="time_count_{{ $item->id }}"
+                                                                                class="form-label">Time Count</p>
+                                                                            <p>{{ $taskTime ? gmdate('H:i:s', $taskTime->remainingTime) : $item->time_count }}
+                                                                            </p>
                                                                         </div>
                                                                         <label for="due_date" class="form-label">Due
                                                                             Date</label>
@@ -975,15 +978,18 @@
                                                                             </ul>
                                                                         </div>
 
+                                                                        @php
+                                                                            $taskTime = $tasksWithTime->firstWhere(
+                                                                                'id',
+                                                                                $item->id,
+                                                                            );
+                                                                        @endphp
                                                                         <div class="task-row"
                                                                             data-task-id="{{ $item->id }}">
-                                                                            <div class="task-row"
-                                                                                data-task-id="{{ $item->id }}">
-                                                                                <p for="time_count_{{ $item->id }}"
-                                                                                    class="form-label">Time Count</p>
-                                                                                <p>{{ gmdate('H:i:s', $item->remainingTime) }}
-                                                                                </p>
-                                                                            </div>
+                                                                            <p for="time_count_{{ $item->id }}"
+                                                                                class="form-label">Time Count</p>
+                                                                            <p>{{ $taskTime ? gmdate('H:i:s', $taskTime->remainingTime) : $item->time_count }}
+                                                                            </p>
                                                                         </div>
                                                                         <label for="due_date" class="form-label">Due
                                                                             Date</label>

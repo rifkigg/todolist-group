@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\task;
+use App\Models\Task;
 use App\Models\User;
 use App\Models\Board;
 use App\Models\Project;
@@ -32,7 +32,7 @@ class BoardController extends Controller
         }
     
         $projects = Project::all();
-        $task = Task::all();
+        $tasks = Task::all();
         $status = TaskStatus::all();
         $priority = task_priority::all();
         $label = TaskLabel::all();
@@ -45,30 +45,36 @@ class BoardController extends Controller
     
         $board = Board::with('project', 'tasks')
             ->latest()
-            ->get()
-            ->map(function ($board) {
-                // Memodifikasi data untuk setiap board
-                $board->tasks = $board->tasks->map(function ($task) {
-                    // Dekode JSON dan ambil elemen pertama dari array
-                    $time_count = json_decode($task->time_count, true);
-                    $task->time_count = isset($time_count[0]) ? $time_count[0] : '00:00:00';
+            ->get();
+            $totalTime = 0; // Inisialisasi total waktu sebagai angka
 
-                    // Hitung waktu dari 00:00:00 dan tambahkan totalTime
-                    $totalTime = History::calculateTotalTime($task->name);
-                    $startOfDay = Carbon::today()->startOfDay();
-                    $endOfDay = Carbon::today()->endOfDay();
-                    $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
-                    $task->totalTime = $totalTime;
-                    $task->remainingTime = $remainingTime;
-                    $task->isPlaying = $task->timer_status == 'Playing';
-                    $task->isPaused = $task->timer_status == 'Paused';
+        if ($tasks->isNotEmpty()) {
+            foreach ($tasks as $task) {
+                $taskTime = History::calculateTotalTime($task->name); // Hitung waktu total untuk tiap task
+                if (is_numeric($taskTime)) {
+                    $totalTime += $taskTime; // Tambahkan ke total waktu
+                }
+            }
+        }
 
-                    return $task;
-                });
-                return $board;
-            });
-    
-        return view('pages.boards', compact('boards', 'projects', 'total_user', 'task', 'total_board', 'board', 'status', 'priority', 'label', 'users', 'total_project', 'total_task'));
+        // Hitung waktu dari 00:00:00 dan tambahkan totalTime
+        $startOfDay = Carbon::today()->startOfDay();
+        $endOfDay = Carbon::today()->endOfDay();
+        $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
+
+        $tasksWithTime = $tasks->map(function ($task) {
+            $totalTime = History::calculateTotalTime($task->name);
+            $startOfDay = Carbon::today()->startOfDay();
+            $endOfDay = Carbon::today()->endOfDay();
+            $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
+            $task->totalTime = $totalTime;
+            $task->remainingTime = $remainingTime;
+            $task->isPlaying = $task->timer_status == 'Playing';
+            $task->isPaused = $task->timer_status == 'Paused';
+            return $task;
+        });
+
+        return view('pages.boards', compact('boards', 'projects', 'total_user', 'tasks', 'total_board', 'status', 'priority', 'label', 'users', 'total_project', 'total_task', 'remainingTime', 'tasksWithTime'));
     }
     
     public function store(Request $request): RedirectResponse
@@ -84,8 +90,8 @@ class BoardController extends Controller
         ]);
 
         return redirect()
-        ->back()
-        ->with(['success' => 'Data Berhasil Disimpan!']);
+            ->back()
+            ->with(['success' => 'Data Berhasil Disimpan!']);
     }
 
     public function destroy($id)
