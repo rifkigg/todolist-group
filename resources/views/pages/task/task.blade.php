@@ -78,85 +78,88 @@
                 <div class="container text-dark">
                     <!-- Content Row -->
                     @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
-                    <div class="row">
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-primary shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                                Total Projects</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $total_project }}
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fa-solid fa-list-check fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-success shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                                Boards</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $total_board }}
-                                            </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fa-solid fa-display fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Earnings (Monthly) Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-info shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
-                                            </div>
-                                            <div class="row no-gutters align-items-center">
-                                                <div class="col-auto">
-                                                    <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
-                                                        {{ $total_task }}</div>
+                        <div class="row">
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-primary shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                                    Total Projects</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                    {{ $total_project }}
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="col-auto">
-                                            <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- Pending Requests Card Example -->
-                        <div class="col-xl-3 col-md-6 mb-4">
-                            <div class="card border-left-warning shadow h-100 py-2">
-                                <div class="card-body">
-                                    <div class="row no-gutters align-items-center">
-                                        <div class="col mr-2">
-                                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                                People Involved</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $total_user }}
+                                            <div class="col-auto">
+                                                <i class="fa-solid fa-list-check fa-2x text-gray-300"></i>
                                             </div>
                                         </div>
-                                        <div class="col-auto">
-                                            {{-- <i class="fas fa-comments fa-2x text-gray-300"></i> --}}
-                                            <i class="fa-solid fa-user fa-2x text-gray-300"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-success shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                                    Boards</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $total_board }}
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fa-solid fa-display fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Earnings (Monthly) Card Example -->
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-info shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                                    Tasks
+                                                </div>
+                                                <div class="row no-gutters align-items-center">
+                                                    <div class="col-auto">
+                                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">
+                                                            {{ $total_task }}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                <i class="fas fa-clipboard-list fa-2x text-gray-300"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Pending Requests Card Example -->
+                            <div class="col-xl-3 col-md-6 mb-4">
+                                <div class="card border-left-warning shadow h-100 py-2">
+                                    <div class="card-body">
+                                        <div class="row no-gutters align-items-center">
+                                            <div class="col mr-2">
+                                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                                    People Involved</div>
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                    {{ $total_user }}
+                                                </div>
+                                            </div>
+                                            <div class="col-auto">
+                                                {{-- <i class="fas fa-comments fa-2x text-gray-300"></i> --}}
+                                                <i class="fa-solid fa-user fa-2x text-gray-300"></i>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
                     @else
                     @endif
                     <div class="card shadow mb-4">
@@ -164,6 +167,8 @@
                             <h6 class="m-0 font-weight-bold text-primary">Tasks</h6>
                         </div>
                         <div class="card-body">
+
+
                             @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                     data-bs-target="#createTask">
@@ -386,12 +391,25 @@
                                                                             @foreach ($item->attachments as $img)
                                                                                 <div
                                                                                     class="mb-3 d-flex align-items-start gap-2">
-                                                                                    <a
-                                                                                        href="{{ asset('storage/attachments/' . $img->file_name) }}">
-                                                                                        <img src="{{ asset('storage/attachments/' . $img->file_name) }}"
-                                                                                            alt="{{ $img->file_name }}"
-                                                                                            width="150">
-                                                                                    </a>
+                                                                                    @if (preg_match('/\.(jpg|jpeg|png|gif)$/i', $img->file_name))
+                                                                                        <a
+                                                                                            href="{{ asset('storage/attachments/' . $img->file_name) }}">
+                                                                                            <img src="{{ asset('storage/attachments/' . $img->file_name) }}"
+                                                                                                alt="{{ $img->file_name }}"
+                                                                                                width="150">
+                                                                                        </a>
+                                                                                    @else
+                                                                                        <a
+                                                                                            href="{{ asset('storage/attachments/' . $img->file_name) }}">
+                                                                                            <div class="file-icon d-flex flex-column justify-content-center align-items-center text-dark"
+                                                                                                style="width: 150px ;height: 100px">
+                                                                                                <i
+                                                                                                    class="fa-solid fa-file fs-1"></i>
+                                                                                                <p>{{ $img->file_name }}
+                                                                                                </p>
+                                                                                            </div>
+                                                                                        </a>
+                                                                                    @endif
                                                                                     <div
                                                                                         class="d-flex justify-content-between w-100">
                                                                                         <button type="button"
@@ -578,32 +596,13 @@
 
                                                                         <div class="task-row"
                                                                             data-task-id="{{ $item->id }}">
-                                                                            <p for="time_count_{{ $item->id }}"
-                                                                                class="form-label">Time Count</p>
-                                                                            <div
-                                                                                id="stopwatch-container-{{ $item->id }}">
-                                                                                <span
-                                                                                    id="time-display-{{ $item->id }}"
-                                                                                    class="mb-3">
-                                                                                    {{ old('time_count', $item->time_count) }}
-                                                                                </span>
-                                                                                <br>
-                                                                                <button type="button"
-                                                                                    id="start-stopwatch-{{ $item->id }}"
-                                                                                    class="btn btn-success">Start</button>
-                                                                                <button type="button"
-                                                                                    id="stop-stopwatch-{{ $item->id }}"
-                                                                                    class="btn btn-danger"
-                                                                                    disabled>Stop</button>
-                                                                                <button type="button"
-                                                                                    id="reset-stopwatch-{{ $item->id }}"
-                                                                                    class="btn btn-secondary"
-                                                                                    disabled>Reset</button>
+                                                                            <div class="task-row"
+                                                                                data-task-id="{{ $item->id }}">
+                                                                                <p for="time_count_{{ $item->id }}"
+                                                                                    class="form-label">Time Count</p>
+                                                                                <p>{{ gmdate('H:i:s', $item->remainingTime) }}
+                                                                                </p>
                                                                             </div>
-                                                                            <input type="hidden" name="time_count[]"
-                                                                                id="time_count_{{ $item->id }}"
-                                                                                value="{{ is_array(old('time_count', $item->time_count)) ? implode(',', old('time_count', $item->time_count)) : old('time_count', $item->time_count) }}">
-
                                                                         </div>
                                                                         <label for="due_date" class="form-label">Due
                                                                             Date</label>
@@ -789,12 +788,25 @@
                                                                             @foreach ($item->attachments as $img)
                                                                                 <div
                                                                                     class="mb-3 d-flex align-items-start gap-2">
-                                                                                    <a
-                                                                                        href="{{ asset('storage/attachments/' . $img->file_name) }}">
-                                                                                        <img src="{{ asset('storage/attachments/' . $img->file_name) }}"
-                                                                                            alt="{{ $img->file_name }}"
-                                                                                            width="150">
-                                                                                    </a>
+                                                                                    @if (preg_match('/\.(jpg|jpeg|png|gif)$/i', $img->file_name))
+                                                                                        <a
+                                                                                            href="{{ asset('storage/attachments/' . $img->file_name) }}">
+                                                                                            <img src="{{ asset('storage/attachments/' . $img->file_name) }}"
+                                                                                                alt="{{ $img->file_name }}"
+                                                                                                width="150">
+                                                                                        </a>
+                                                                                    @else
+                                                                                        <a
+                                                                                            href="{{ asset('storage/attachments/' . $img->file_name) }}">
+                                                                                            <div class="file-icon d-flex flex-column justify-content-center align-items-center text-dark"
+                                                                                                style="width: 150px ;height: 100px">
+                                                                                                <i
+                                                                                                    class="fa-solid fa-file fs-1"></i>
+                                                                                                <p>{{ $img->file_name }}
+                                                                                                </p>
+                                                                                            </div>
+                                                                                        </a>
+                                                                                    @endif
                                                                                     <div
                                                                                         class="d-flex justify-content-between w-100">
                                                                                         <p>Created at:
@@ -963,23 +975,15 @@
                                                                             </ul>
                                                                         </div>
 
-
                                                                         <div class="task-row"
                                                                             data-task-id="{{ $item->id }}">
-                                                                            <p for="time_count_{{ $item->id }}"
-                                                                                class="form-label">Time Count</p>
-                                                                            <div
-                                                                                id="stopwatch-container-{{ $item->id }}">
-                                                                                <span
-                                                                                    id="time-display-{{ $item->id }}"
-                                                                                    class="mb-3">
-                                                                                    {{ old('time_count', $item->time_count) }}
-                                                                                </span>
+                                                                            <div class="task-row"
+                                                                                data-task-id="{{ $item->id }}">
+                                                                                <p for="time_count_{{ $item->id }}"
+                                                                                    class="form-label">Time Count</p>
+                                                                                <p>{{ gmdate('H:i:s', $item->remainingTime) }}
+                                                                                </p>
                                                                             </div>
-                                                                            <input type="hidden" name="time_count[]"
-                                                                                id="time_count_{{ $item->id }}"
-                                                                                value="{{ is_array(old('time_count', $item->time_count)) ? implode(',', old('time_count', $item->time_count)) : old('time_count', $item->time_count) }}">
-
                                                                         </div>
                                                                         <label for="due_date" class="form-label">Due
                                                                             Date</label>
@@ -1137,7 +1141,8 @@
                             const userName = option.textContent;
 
                             const userDiv = document.createElement('div');
-                            userDiv.classList.add('selected-user','mb-2' ,'p-2', 'rounded', 'd-flex', 'justify-content-between', 'align-items-center', 'bg-secondary', 'text-white');
+                            userDiv.classList.add('selected-user', 'mb-2', 'p-2', 'rounded', 'd-flex',
+                                'justify-content-between', 'align-items-center', 'bg-secondary', 'text-white');
                             userDiv.dataset.id = userId;
 
 
@@ -1191,71 +1196,72 @@
                 });
             </script>
         @else
-        <script>
-            document.addEventListener('DOMContentLoaded', function() {
-                const selectElements = document.querySelectorAll('[id^="assignees"]');
-                const selectedAssigneesContainers = document.querySelectorAll('[id^="selected-assignees"]');
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    const selectElements = document.querySelectorAll('[id^="assignees"]');
+                    const selectedAssigneesContainers = document.querySelectorAll('[id^="selected-assignees"]');
 
-                // Function to update selected assignees display for a specific pair of select and container
-                function updateSelectedAssignees(selectElement, selectedAssigneesContainer) {
-                    const selectedOptions = Array.from(selectElement.selectedOptions);
-                    selectedAssigneesContainer.innerHTML = '';
+                    // Function to update selected assignees display for a specific pair of select and container
+                    function updateSelectedAssignees(selectElement, selectedAssigneesContainer) {
+                        const selectedOptions = Array.from(selectElement.selectedOptions);
+                        selectedAssigneesContainer.innerHTML = '';
 
-                    selectedOptions.forEach(option => {
-                        const userId = option.value;
-                        const userName = option.textContent;
+                        selectedOptions.forEach(option => {
+                            const userId = option.value;
+                            const userName = option.textContent;
 
-                        const userDiv = document.createElement('div');
-                        userDiv.classList.add('selected-user' ,'p-2', 'rounded', 'd-flex', 'justify-content-between', 'align-items-center', 'bg-secondary', 'text-white');
-                        userDiv.dataset.id = userId;
-                        userDiv.innerHTML = `
+                            const userDiv = document.createElement('div');
+                            userDiv.classList.add('selected-user', 'mb-2', 'p-2', 'rounded', 'd-flex',
+                                'justify-content-between', 'align-items-center', 'bg-secondary', 'text-white');
+                            userDiv.dataset.id = userId;
+                            userDiv.innerHTML = `
                     <span class="me-2 fw-bold w-100 ">${userName}</span>
                 `;
-                        selectedAssigneesContainer.appendChild(userDiv);
-                    });
-                }
+                            selectedAssigneesContainer.appendChild(userDiv);
+                        });
+                    }
 
-                // Iterate over all select elements and attach event listeners
-                selectElements.forEach((selectElement, index) => {
-                    const selectedAssigneesContainer = selectedAssigneesContainers[index];
+                    // Iterate over all select elements and attach event listeners
+                    selectElements.forEach((selectElement, index) => {
+                        const selectedAssigneesContainer = selectedAssigneesContainers[index];
 
-                    // Event listener for when the select value changes
-                    selectElement.addEventListener('change', function() {
-                        updateSelectedAssignees(selectElement, selectedAssigneesContainer);
-                    });
+                        // Event listener for when the select value changes
+                        selectElement.addEventListener('change', function() {
+                            updateSelectedAssignees(selectElement, selectedAssigneesContainer);
+                        });
 
-                    // Event delegation to handle removal of assignees
-                    selectedAssigneesContainer.addEventListener('click', function(event) {
-                        if (event.target.classList.contains('remove-assignee')) {
-                            const userDiv = event.target.closest('.selected-user');
-                            const userId = userDiv.dataset.id;
+                        // Event delegation to handle removal of assignees
+                        selectedAssigneesContainer.addEventListener('click', function(event) {
+                            if (event.target.classList.contains('remove-assignee')) {
+                                const userDiv = event.target.closest('.selected-user');
+                                const userId = userDiv.dataset.id;
 
-                            // Remove the user from the select
-                            const optionToRemove = Array.from(selectElement.options).find(option =>
-                                option.value === userId);
-                            if (optionToRemove) {
-                                optionToRemove.selected = false;
+                                // Remove the user from the select
+                                const optionToRemove = Array.from(selectElement.options).find(option =>
+                                    option.value === userId);
+                                if (optionToRemove) {
+                                    optionToRemove.selected = false;
+                                }
+
+                                // Remove the user div from the display
+                                userDiv.remove();
                             }
+                        });
 
-                            // Remove the user div from the display
-                            userDiv.remove();
-                        }
-                    });
+                        // Initialize display on page load
+                        updateSelectedAssignees(selectElement, selectedAssigneesContainer);
 
-                    // Initialize display on page load
-                    updateSelectedAssignees(selectElement, selectedAssigneesContainer);
-
-                    // Ensure that changes in data after load are reflected in the UI
-                    new MutationObserver(() => updateSelectedAssignees(selectElement,
-                        selectedAssigneesContainer)).observe(selectElement, {
-                        childList: true,
-                        subtree: true,
-                        attributes: true,
-                        characterData: true
+                        // Ensure that changes in data after load are reflected in the UI
+                        new MutationObserver(() => updateSelectedAssignees(selectElement,
+                            selectedAssigneesContainer)).observe(selectElement, {
+                            childList: true,
+                            subtree: true,
+                            attributes: true,
+                            characterData: true
+                        });
                     });
                 });
-            });
-        </script>
+            </script>
         @endif
 
         <script>

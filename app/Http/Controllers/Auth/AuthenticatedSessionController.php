@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Auth\LoginRequest;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\Auth\LoginRequest;
+use App\Models\Task;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -36,6 +37,14 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        // Cek apakah semua task sudah di-pause
+        $tasksNotPaused = Task::whereNotIn('timer_status', ['paused', 'finished'])->count();
+
+        if ($tasksNotPaused > 0) {
+            // Jika ada task yang belum di-pause, munculkan alert
+            return redirect()->back()->with('alert', 'Pastikan semua task sudah di-pause sebelum logout.');
+        }
+
         Auth::guard('web')->logout();
 
         $request->session()->invalidate();

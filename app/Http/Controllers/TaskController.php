@@ -259,4 +259,23 @@ class TaskController extends Controller
 
         return redirect()->back();
     }
+
+    public function calculateTaskTimes()
+{
+    $tasks = Task::all();
+
+    $tasksWithTime = $tasks->map(function ($task) {
+        $totalTime = History::calculateTotalTime($task->name);
+        $startOfDay = Carbon::today()->startOfDay();
+        $endOfDay = Carbon::today()->endOfDay();
+        $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
+        $task->totalTime = $totalTime;
+        $task->remainingTime = $remainingTime;
+        $task->isPlaying = $task->timer_status == 'Playing';
+        $task->isPaused = $task->timer_status == 'Paused';
+        return $task;
+    });
+
+    return view('pages.task.task', compact('tasksWithTime'));
+}
 }

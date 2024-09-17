@@ -153,6 +153,11 @@
                             </div>
                         </div>
                         <div class="card-body">
+                            @if (session('alert'))
+                            <div class="alert alert-warning">
+                                {{ session('alert') }}
+                            </div>
+                        @endif
                             <table id="example" class="table table-striped">
                                 <thead>
                                     <tr>
@@ -503,17 +508,7 @@
                                                                         data-task-id="{{ $task->id }}">
                                                                         <p for="time_count_{{ $task->id }}"
                                                                             class="form-label">Time Count</p>
-                                                                        <div
-                                                                            id="stopwatch-container-{{ $task->id }}">
-                                                                            <span
-                                                                                id="time-display-{{ $task->id }}"
-                                                                                class="mb-3">
-                                                                                {{ old('time_count', $task->time_count) }}
-                                                                            </span>
-                                                                        </div>
-                                                                        <input type="hidden" name="time_count[]"
-                                                                            id="time_count_{{ $task->id }}"
-                                                                            value="{{ is_array(old('time_count', $task->time_count)) ? implode(',', old('time_count', $task->time_count)) : old('time_count', $task->time_count) }}">
+                                                                        <p>{{ gmdate('H:i:s', $task->remainingTime) }}</p>
 
                                                                     </div>
                                                                     <label for="due_date" class="form-label">Due

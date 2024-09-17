@@ -486,31 +486,12 @@
                                                                         @endphp
                                                                         <div class="task-row"
                                                                             data-task-id="{{ $item->id }}">
-                                                                            <p for="time_count_{{ $item->id }}"
-                                                                                class="form-label">Time Count</p>
-                                                                            <div
-                                                                                id="stopwatch-container-{{ $item->id }}">
-                                                                                <span
-                                                                                    id="time-display-{{ $item->id }}"
-                                                                                    class="mb-3">
-                                                                                    {{ old('time_count', $item->time_count) }}
-                                                                                </span>
-                                                                                <br>
-                                                                                <button type="button"
-                                                                                    id="start-stopwatch-{{ $item->id }}"
-                                                                                    class="btn btn-success">Start</button>
-                                                                                <button type="button"
-                                                                                    id="stop-stopwatch-{{ $item->id }}"
-                                                                                    class="btn btn-danger"
-                                                                                    disabled>Stop</button>
-                                                                                <button type="button"
-                                                                                    id="reset-stopwatch-{{ $item->id }}"
-                                                                                    class="btn btn-secondary"
-                                                                                    disabled>Reset</button>
+                                                                                <div class="task-row"
+                                                                                data-task-id="{{ $item->id }}">
+                                                                                <p for="time_count_{{ $item->id }}"
+                                                                                    class="form-label">Time Count</p>
+                                                                                    <p>{{ gmdate('H:i:s', $item->remainingTime) }}</p>
                                                                             </div>
-                                                                            <input type="hidden" name="time_count[]"
-                                                                                id="time_count_{{ $item->id }}"
-                                                                                value="{{ is_array(old('time_count', $item->time_count)) ? implode(',', old('time_count', $item->time_count)) : old('time_count', $item->time_count) }}">
                                                                         </div>
 
                                                                         <label for="due_date" class="form-label">Due
@@ -853,17 +834,7 @@
                                                                             data-task-id="{{ $item->id }}">
                                                                             <p for="time_count_{{ $item->id }}"
                                                                                 class="form-label">Time Count</p>
-                                                                            <div
-                                                                                id="stopwatch-container-{{ $item->id }}">
-                                                                                <span
-                                                                                    id="time-display-{{ $item->id }}"
-                                                                                    class="mb-3">
-                                                                                    {{ old('time_count', $item->time_count) }}
-                                                                                </span>
-                                                                            </div>
-                                                                            <input type="hidden" name="time_count[]"
-                                                                                id="time_count_{{ $item->id }}"
-                                                                                value="{{ is_array(old('time_count', $item->time_count)) ? implode(',', old('time_count', $item->time_count)) : old('time_count', $item->time_count) }}">
+                                                                                <p>{{ gmdate('H:i:s', $item->remainingTime) }}</p>
                                                                         </div>
 
                                                                         <label for="due_date" class="form-label">Due
@@ -1094,8 +1065,7 @@
                                 const userName = option.textContent;
 
                                 const userDiv = document.createElement('div');
-                                userDiv.classList.add('selected-user', 'p-2', 'rounded', 'd-flex',
-                                    'justify-content-between', 'align-items-center', 'bg-secondary', 'text-white');
+                                userDiv.classList.add('selected-user','mb-2' ,'p-2', 'rounded', 'd-flex', 'justify-content-between', 'align-items-center', 'bg-secondary', 'text-white');
                                 userDiv.dataset.id = userId;
                                 userDiv.innerHTML = `
                     <span class="me-2 fw-bold w-100 ">${userName}</span>

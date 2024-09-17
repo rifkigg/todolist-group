@@ -15,6 +15,8 @@ use App\Models\ProjectStatus;
 use App\Models\ProjectCategories;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
+use Carbon\Carbon;
+use App\Models\History;
 
 class BoardController extends Controller
 {
@@ -50,6 +52,17 @@ class BoardController extends Controller
                     // Dekode JSON dan ambil elemen pertama dari array
                     $time_count = json_decode($task->time_count, true);
                     $task->time_count = isset($time_count[0]) ? $time_count[0] : '00:00:00';
+
+                    // Hitung waktu dari 00:00:00 dan tambahkan totalTime
+                    $totalTime = History::calculateTotalTime($task->name);
+                    $startOfDay = Carbon::today()->startOfDay();
+                    $endOfDay = Carbon::today()->endOfDay();
+                    $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
+                    $task->totalTime = $totalTime;
+                    $task->remainingTime = $remainingTime;
+                    $task->isPlaying = $task->timer_status == 'Playing';
+                    $task->isPaused = $task->timer_status == 'Paused';
+
                     return $task;
                 });
                 return $board;
@@ -58,7 +71,6 @@ class BoardController extends Controller
         return view('pages.boards', compact('boards', 'projects', 'total_user', 'task', 'total_board', 'board', 'status', 'priority', 'label', 'users', 'total_project', 'total_task'));
     }
     
-
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
