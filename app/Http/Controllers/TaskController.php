@@ -162,7 +162,7 @@ class TaskController extends Controller
         ]);
 
         return redirect()
-            ->route('boards.index')
+            ->back()
             ->with(['success' => 'Data Berhasil Disimpan!']);
     }
 

@@ -84,8 +84,8 @@ class BoardController extends Controller
         ]);
 
         return redirect()
-            ->route('boards.index')
-            ->with(['success' => 'Data Berhasil Disimpan!']);
+        ->back()
+        ->with(['success' => 'Data Berhasil Disimpan!']);
     }
 
     public function destroy($id)
