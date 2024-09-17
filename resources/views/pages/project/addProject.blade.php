@@ -186,6 +186,29 @@
                                     </div>
                                 </div>
 
+                                   <!-- Assignees (Multi-Select) -->
+                                   <label for="assignees" class="form-label">Assignees</label>
+                                   <select name="assignees[]" id="assignees" class="form-select mb-3" multiple>
+                                       @foreach ($users as $user)
+                                           <option value="{{ $user->id }}"
+                                               {{ in_array($user->id, old('assignees', $project->users->pluck('id')->toArray())) ? 'selected' : '' }}>
+                                               {{ $user->username }}
+                                           </option>
+                                       @endforeach
+                                   </select>
+   
+                                   <!-- Tempat untuk menampilkan hasil pilihan -->
+                                   <div id="selected-assignees">
+                                       <p>Selected Assignees:</p>
+                                       <ul class="d-flex flex-wrap gap-2 list-unstyled">
+                                           @foreach ($project->users as $user)
+                                               <li class="d-flex align-items-center border rounded px-2 py-1">
+                                                   {{ $user->username }}
+                                               </li>
+                                           @endforeach
+                                       </ul>
+                                   </div>
+
                                 <div class="submit">
                                     <div>
                                         <button type="submit" class="btn btn-primary w-100">Create Project</button>
@@ -230,5 +253,24 @@
             <script src="https://cdn.ckeditor.com/4.22.0/full/ckeditor.js"></script>
             <script>
                 CKEDITOR.replace('project_detail');
+            </script>
+            <script>
+                // Menangani perubahan pada select assignees
+                document.getElementById('assignees').addEventListener('change', function() {
+                    const selectedAssignees = Array.from(this.selectedOptions).map(option => option.text);
+                    const selectedAssigneesContainer = document.getElementById('selected-assignees');
+                    
+                    // Menghapus isi sebelumnya
+                    selectedAssigneesContainer.innerHTML = '<p>Selected Assignees:</p><ul class="d-flex flex-wrap gap-2 list-unstyled"></ul>';
+                    
+                    // Menambahkan assignees yang dipilih
+                    const ul = selectedAssigneesContainer.querySelector('ul');
+                    selectedAssignees.forEach(assignee => {
+                        const li = document.createElement('li');
+                        li.className = 'd-flex align-items-center border rounded px-2 py-1';
+                        li.textContent = assignee;
+                        ul.appendChild(li);
+                    });
+                });
             </script>
 </x-layout>
