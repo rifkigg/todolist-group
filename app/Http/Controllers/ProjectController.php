@@ -47,40 +47,32 @@ class ProjectController extends Controller
         return view('pages.project.project', compact('users', 'project', 'total_project', 'total_user', 'total_task', 'total_board'));
     }
 
-    public function create(): View
+    public function create()
     {
         $categories = ProjectCategories::all();
         $status = ProjectStatus::all();
-        return view('pages.project.addProject', compact('categories', 'status'));
+        $users = User::all();
+        $project = new Project(); 
+
+        return view('pages.project.addProject', compact('categories', 'status', 'users', 'project'));
     }
 
     public function store(Request $request): RedirectResponse
     {
-        // Validate form
-        $request->validate([
+        $validatedData = $request->validate([
             'name' => 'required|min:5',
             'category_id' => 'required',
             'status_id' => 'required',
             'live_date' => 'required',
             'project_detail' => 'required|min:5',
+            'assignees' => 'array',
+            'assignees.*' => 'exists:users,id',
         ]);
 
-        // Menghapus tag HTML dari textarea
-        $cleanText = strip_tags($request->input('project_detail'));
+        $project = Project::create($validatedData);
+        $project->users()->sync($request->assignees); // Menyimpan assignees
 
-        // Create a new project with sanitized data
-        Project::create([
-            'name' => $request->name,
-            'category_id' => $request->category_id,
-            'status_id' => $request->status_id,
-            'live_date' => $request->live_date,
-            'project_detail' => $cleanText,
-        ]);
-
-        // Redirect to index
-        return redirect()
-            ->route('project.index')
-            ->with(['success' => 'Data Berhasil Disimpan!']);
+        return redirect()->route('project.index');
     }
 
     public function show(string $id): View
