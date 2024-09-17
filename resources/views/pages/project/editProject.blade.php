@@ -41,12 +41,12 @@
                 </div>
             </li>
             <li class="nav-item ">
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseThree"
                     aria-bs-expanded="true" aria-bs-controls="collapseTwo">
                     <i class="fas fa-clipboard-list"></i>
                     <span>Task</span>
                 </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
+                <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         @if (auth()->user()->role == 'admin')
                             <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
