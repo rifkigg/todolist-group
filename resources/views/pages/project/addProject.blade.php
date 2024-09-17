@@ -255,21 +255,71 @@
                 CKEDITOR.replace('project_detail');
             </script>
             <script>
-                // Menangani perubahan pada select assignees
-                document.getElementById('assignees').addEventListener('change', function() {
-                    const selectedAssignees = Array.from(this.selectedOptions).map(option => option.text);
-                    const selectedAssigneesContainer = document.getElementById('selected-assignees');
-                    
-                    // Menghapus isi sebelumnya
-                    selectedAssigneesContainer.innerHTML = '<p>Selected Assignees:</p><ul class="d-flex flex-wrap gap-2 list-unstyled"></ul>';
-                    
-                    // Menambahkan assignees yang dipilih
-                    const ul = selectedAssigneesContainer.querySelector('ul');
-                    selectedAssignees.forEach(assignee => {
-                        const li = document.createElement('li');
-                        li.className = 'd-flex align-items-center border rounded px-2 py-1';
-                        li.textContent = assignee;
-                        ul.appendChild(li);
+                document.addEventListener('DOMContentLoaded', function() {
+                    const selectElements = document.querySelectorAll('[id^="assignees"]');
+                    const selectedAssigneesContainers = document.querySelectorAll('[id^="selected-assignees"]');
+
+                    // Function to update selected assignees display for a specific pair of select and container
+                    function updateSelectedAssignees(selectElement, selectedAssigneesContainer) {
+                        const selectedOptions = Array.from(selectElement.selectedOptions);
+                        selectedAssigneesContainer.innerHTML = '';
+
+                        selectedOptions.forEach(option => {
+                            const userId = option.value;
+                            const userName = option.textContent;
+
+                            const userDiv = document.createElement('div');
+                            userDiv.classList.add('selected-user', 'mb-2', 'p-2', 'rounded', 'd-flex',
+                                'justify-content-between', 'align-items-center', 'bg-secondary', 'text-white');
+                            userDiv.dataset.id = userId;
+
+
+                            userDiv.innerHTML = `
+                        <span class="me-2">${userName}</span>
+                        <button type="button" class="btn btn-sm btn-danger ms-2 remove-assignee" aria-label="Remove">x</button>
+                    `;
+                            selectedAssigneesContainer.appendChild(userDiv);
+                        });
+                    }
+
+                    // Iterate over all select elements and attach event listeners
+                    selectElements.forEach((selectElement, index) => {
+                        const selectedAssigneesContainer = selectedAssigneesContainers[index];
+
+                        // Event listener for when the select value changes
+                        selectElement.addEventListener('change', function() {
+                            updateSelectedAssignees(selectElement, selectedAssigneesContainer);
+                        });
+
+                        // Event delegation to handle removal of assignees
+                        selectedAssigneesContainer.addEventListener('click', function(event) {
+                            if (event.target.classList.contains('remove-assignee')) {
+                                const userDiv = event.target.closest('.selected-user');
+                                const userId = userDiv.dataset.id;
+
+                                // Remove the user from the select
+                                const optionToRemove = Array.from(selectElement.options).find(option =>
+                                    option.value === userId);
+                                if (optionToRemove) {
+                                    optionToRemove.selected = false;
+                                }
+
+                                // Remove the user div from the display
+                                userDiv.remove();
+                            }
+                        });
+
+                        // Initialize display on page load
+                        updateSelectedAssignees(selectElement, selectedAssigneesContainer);
+
+                        // Ensure that changes in data after load are reflected in the UI
+                        new MutationObserver(() => updateSelectedAssignees(selectElement,
+                            selectedAssigneesContainer)).observe(selectElement, {
+                            childList: true,
+                            subtree: true,
+                            attributes: true,
+                            characterData: true
+                        });
                     });
                 });
             </script>
