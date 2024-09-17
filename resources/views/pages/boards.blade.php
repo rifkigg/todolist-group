@@ -475,14 +475,7 @@
                                                                         </div>
 
                                                                         @php
-                                                                            // Mendekode JSON dan mengambil elemen pertama dari array
-                                                                            $time_count = json_decode(
-                                                                                $item->time_count,
-                                                                                true,
-                                                                            );
-                                                                            $item->time_count = isset($time_count[0])
-                                                                                ? $time_count[0]
-                                                                                : '00:00:00';
+                                                                            $taskTime = $tasksWithTime->firstWhere('id', $item->id);
                                                                         @endphp
                                                                         <div class="task-row"
                                                                             data-task-id="{{ $item->id }}">
@@ -490,7 +483,7 @@
                                                                                 data-task-id="{{ $item->id }}">
                                                                                 <p for="time_count_{{ $item->id }}"
                                                                                     class="form-label">Time Count</p>
-                                                                                    <p>{{ gmdate('H:i:s', $item->remainingTime) }}</p>
+                                                                                    <p>{{ $taskTime ? gmdate('H:i:s', $taskTime->remainingTime) : $item->time_count }}</p>
                                                                             </div>
                                                                         </div>
 
@@ -821,20 +814,13 @@
                                                                         </div>
 
                                                                         @php
-                                                                            // Mendekode JSON dan mengambil elemen pertama dari array
-                                                                            $time_count = json_decode(
-                                                                                $item->time_count,
-                                                                                true,
-                                                                            );
-                                                                            $item->time_count = isset($time_count[0])
-                                                                                ? $time_count[0]
-                                                                                : '00:00:00';
+                                                                            $taskTime = $tasksWithTime->firstWhere('id', $item->id);
                                                                         @endphp
                                                                         <div class="task-row"
                                                                             data-task-id="{{ $item->id }}">
                                                                             <p for="time_count_{{ $item->id }}"
                                                                                 class="form-label">Time Count</p>
-                                                                                <p>{{ gmdate('H:i:s', $item->remainingTime) }}</p>
+                                                                                <p>{{ $taskTime ? gmdate('H:i:s', $taskTime->remainingTime) : $item->time_count }}</p>
                                                                         </div>
 
                                                                         <label for="due_date" class="form-label">Due

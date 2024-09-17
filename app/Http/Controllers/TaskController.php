@@ -55,7 +55,36 @@ class TaskController extends Controller
             return $task;
         });
 
-        return view('pages.task.task', compact('task', 'total_project', 'total_user', 'total_task', 'total_board', 'project', 'board', 'status', 'priority', 'label', 'users', 'selectedUserId'));
+               // Hitung waktu total untuk setiap task
+               $totalTime = 0; // Inisialisasi total waktu sebagai angka
+
+               if ($task->isNotEmpty()) { // Mengganti $tasks dengan $task
+                   foreach ($task as $taskItem) { // Mengganti $tasks dengan $task
+                       $taskTime = History::calculateTotalTime($taskItem->name); // Hitung waktu total untuk tiap task
+                       if (is_numeric($taskTime)) {
+                           $totalTime += $taskTime; // Tambahkan ke total waktu
+                       }
+                   }
+               }
+       
+               // Hitung waktu dari 00:00:00 dan tambahkan totalTime
+               $startOfDay = Carbon::today()->startOfDay();
+               $endOfDay = Carbon::today()->endOfDay();
+               $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
+       
+               $tasksWithTime = $task->map(function ($taskItem) { // Mengganti $tasks dengan $task
+                   $totalTime = History::calculateTotalTime($taskItem->name);
+                   $startOfDay = Carbon::today()->startOfDay();
+                   $endOfDay = Carbon::today()->endOfDay();
+                   $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
+                   $taskItem->totalTime = $totalTime;
+                   $taskItem->remainingTime = $remainingTime;
+                   $taskItem->isPlaying = $taskItem->timer_status == 'Playing';
+                   $taskItem->isPaused = $taskItem->timer_status == 'Paused';
+                   return $taskItem;
+               });
+
+        return view('pages.task.task', compact('task', 'total_project', 'total_user', 'total_task', 'total_board', 'project', 'board', 'status', 'priority', 'label', 'users', 'selectedUserId', 'tasksWithTime', 'remainingTime'));
     }
     public function getTasktoBoard()
     {
