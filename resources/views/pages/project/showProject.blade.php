@@ -95,7 +95,7 @@
                                     <tr>
                                         <th>Project Detail:</th>
                                         <td>
-                                            <div id="editor" style="overflow: auto; height: 350px;">
+                                            <div id="editor" style="overflow: auto; height: 250px;">
                                                 {!! $project->project_detail !!}
                                             </div>
                                         </td>
@@ -115,6 +115,16 @@
                                     <tr>
                                         <th>Project Created:</th>
                                         <td>{{ $project->created_at }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Assignees:</th>
+                                        <td>
+                                            <ul>
+                                                @foreach ($project->users as $user)
+                                                    <li>{{ $user->username }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
