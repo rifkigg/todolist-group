@@ -112,7 +112,7 @@ class ProjectController extends Controller
             'category_id' => $request->category_id,
             'status_id' => $request->status_id,
             'live_date' => $request->live_date,
-            'project_detail' => $cleanText,
+            'project_detail' => $request->project_detail,
         ]);
 
         $project->users()->sync($request->assignees);

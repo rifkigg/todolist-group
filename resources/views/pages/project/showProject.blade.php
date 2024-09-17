@@ -1,5 +1,5 @@
 <x-layout>
-    <div id="wrapper">
+    <div id="wrapper" style="overflow: hidden;">
         <x-navbar>
             <x-slot name="dashboard">
                 <li class="nav-item ">
@@ -71,11 +71,9 @@
         </x-navbar>
 
         <!-- Content Wrapper -->
-        <div id="content-wrapper" class="d-flex flex-column">
-
+        <div id="content-wrapper" style="overflow: hidden;">
             <!-- Main Content -->
-            <div id="content">
-
+            <div id="content" style="overflow: hidden;">
                 <x-navbar-topbar></x-navbar-topbar>
 
                 <!-- Begin Page Content -->
@@ -88,18 +86,38 @@
                             <h6 class="m-0 font-weight-bold text-primary">Project Detail</h6>
                         </div>
                         <div class="card-body">
-                            <h3>Project Name: </h3>
-                            <p>{{ $project->name }}</p>
-                            <h4>Project Detail: </h4>
-                            <p>{{ $project->project_detail }}</p>
-                            <h4>Project Category: </h4>
-                            <p>{{ $project->category->name }}</p>
-                            <h4>Project Status: </h4>
-                            <p>{{ $project->status->name }}</p>
-                            <h4>Project Due Date: </h4>
-                            <p>{{ $project->live_date }} </p>
-                            <h4>Project Created: </h4>
-                            <p>{{ $project->created_at }}</p>
+                            <table class="table">
+                                <tbody>
+                                    <tr>
+                                        <th>Project Name:</th>
+                                        <td>{{ $project->name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Project Detail:</th>
+                                        <td>
+                                            <div id="editor" style="overflow: auto; height: 250px;">
+                                                {!! $project->project_detail !!}
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th>Project Category:</th>
+                                        <td>{{ $project->category->name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Project Status:</th>
+                                        <td>{{ $project->status->name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Project Due Date:</th>
+                                        <td>{{ $project->live_date }}</td>
+                                    </tr>
+                                    <tr>
+                                        <th>Project Created:</th>
+                                        <td>{{ $project->created_at }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                     <!-- End of Main Content -->
@@ -135,4 +153,12 @@
                     </div>
                 </div>
             </div>
+
+            <script>
+                ClassicEditor
+                    .create(document.querySelector('#editor'))
+                    .catch(error => {
+                        console.error(error);
+                    });
+            </script>
 </x-layout>
