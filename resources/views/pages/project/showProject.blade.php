@@ -95,7 +95,7 @@
                                     <tr>
                                         <th>Project Detail:</th>
                                         <td>
-                                            <div id="editor" style="overflow: auto; height: 250px;">
+                                            <div id="editor" style="overflow: auto; height: 350px;">
                                                 {!! $project->project_detail !!}
                                             </div>
                                         </td>
