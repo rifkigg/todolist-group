@@ -179,24 +179,24 @@
                                                                     <div class="icon-options">
                                                                         <button type="button"
                                                                             class="btn btn-outline-primary"
-                                                                            name="icon" value="😎"
-                                                                            onclick="selectIcon('😎', '{{ $priority->id }}')">😎</button>
+                                                                            name="icon" value="📈"
+                                                                            onclick="selectIcon('📈', '{{ $priority->id }}')">📈</button>
                                                                         <button type="button"
                                                                             class="btn btn-outline-primary"
-                                                                            name="icon" value="🐲"
-                                                                            onclick="selectIcon('🐲', '{{ $priority->id }}')">🐲</button>
+                                                                            name="icon" value="📅"
+                                                                            onclick="selectIcon('📅', '{{ $priority->id }}')">📅</button>
                                                                         <button type="button"
                                                                             class="btn btn-outline-primary"
-                                                                            name="icon" value="😄"
-                                                                            onclick="selectIcon('😄', '{{ $priority->id }}')">😄</button>
+                                                                            name="icon" value="🔒"
+                                                                            onclick="selectIcon('🔒', '{{ $priority->id }}')">🔒</button>
                                                                         <button type="button"
                                                                             class="btn btn-outline-primary"
-                                                                            name="icon" value="😔"
-                                                                            onclick="selectIcon('😔', '{{ $priority->id }}')">😔</button>
+                                                                            name="icon" value="📌"
+                                                                            onclick="selectIcon('📌', '{{ $priority->id }}')">📌</button>
                                                                         <button type="button"
                                                                             class="btn btn-outline-primary"
-                                                                            name="icon" value="🤡"
-                                                                            onclick="selectIcon('🤡', '{{ $priority->id }}')">🤡</button>
+                                                                            name="icon" value="⌛"
+                                                                            onclick="selectIcon('⌛', '{{ $priority->id }}')">⌛</button>
                                                                     </div>
                                                                     <input type="hidden"
                                                                         id="selectedIcon{{ $priority->id }}"

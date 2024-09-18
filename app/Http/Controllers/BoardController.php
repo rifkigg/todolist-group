@@ -98,6 +98,8 @@ class BoardController extends Controller
     {
         $boards = Board::findOrFail($id);
         $boards->delete();
-        return redirect()->route('boards.index')->with('success', 'Board deleted successfully.');
+        return redirect()
+        ->back()                                                                                                                                              
+        ->with(['success' => 'Data Berhasil Disimpan!']);
     }
 }
