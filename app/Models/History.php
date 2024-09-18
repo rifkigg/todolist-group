@@ -23,11 +23,28 @@ class History extends Model
         $startTime = null; // Menyimpan waktu mulai sementara
     
         foreach ($histories as $history) {
+            // Tambahkan logika untuk memeriksa nilai start dan paused
+            if (empty($history->start)) {
+                $history->start = 0; // Set start menjadi 0 jika kosong
+            }
+            if (empty($history->paused)) {
+                $history->paused = 0; // Set paused menjadi 0 jika kosong
+            }
+
             if ($history->start) {
                 $startTime = Carbon::parse($history->start); // Set waktu mulai jika ada
             } elseif ($history->paused && $startTime) {
                 $pauseTime = Carbon::parse($history->paused);
-                $totalTime += $pauseTime->diffInSeconds($startTime); // Tambahkan selisih waktu ke total
+                
+                // Validasi untuk memastikan tidak ada nilai negatif
+                if ($pauseTime->greaterThan($startTime)) {
+                    $selisih = $startTime->diffInSeconds($pauseTime); // Selisih dalam detik
+                    $totalTime += $selisih; // Tambahkan selisih ke total
+                    // dd("waktu mulai" ,$startTime, "waktu stop",$pauseTime , "selisih",$selisih, "total",$totalTime);
+                } else {
+                    // Jika selisih negatif, bisa diabaikan atau di-set ke 0
+                    dd("Waktu paused lebih awal dari start");
+                }
                 $startTime = null; // Reset waktu mulai setelah dihitung
             }
         }

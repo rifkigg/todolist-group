@@ -48,33 +48,31 @@ class BoardController extends Controller
             ->get();
             $totalTime = 0; // Inisialisasi total waktu sebagai angka
 
-        if ($tasks->isNotEmpty()) {
-            foreach ($tasks as $task) {
-                $taskTime = History::calculateTotalTime($task->name); // Hitung waktu total untuk tiap task
-                if (is_numeric($taskTime)) {
-                    $totalTime += $taskTime; // Tambahkan ke total waktu
-                }
-            }
+if ($tasks->isNotEmpty()) {
+    foreach ($tasks as $task) {
+        $taskTime = History::calculateTotalTime($task->name); // Hitung waktu total untuk tiap task
+        if (is_numeric($taskTime)) {
+            $totalTime += $taskTime; // Tambahkan ke total waktu
         }
+    }
+}
 
-        // Hitung waktu dari 00:00:00 dan tambahkan totalTime
-        $startOfDay = Carbon::today()->startOfDay();
-        $endOfDay = Carbon::today()->endOfDay();
-        $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
+// Hitung waktu dari 00:00:00 dan tambahkan totalTime
+$startOfDay = Carbon::today()->startOfDay();
+$endOfDay = Carbon::today()->endOfDay();
+$remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
 
-        $tasksWithTime = $tasks->map(function ($task) {
-            $totalTime = History::calculateTotalTime($task->name);
-            $startOfDay = Carbon::today()->startOfDay();
-            $endOfDay = Carbon::today()->endOfDay();
-            $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
-            $task->totalTime = $totalTime;
-            $task->remainingTime = $remainingTime;
-            $task->isPlaying = $task->timer_status == 'Playing';
-            $task->isPaused = $task->timer_status == 'Paused';
-            return $task;
-        });
+$tasksWithTime = $tasks->map(function ($task) use ($startOfDay, $endOfDay) {
+    $totalTime = History::calculateTotalTime($task->name);
+    $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
+    $task->totalTime = $totalTime;
+    $task->remainingTime = $remainingTime;
+    $task->isPlaying = $task->timer_status == 'Playing';
+    $task->isPaused = $task->timer_status == 'Paused';
+    return $task;
+});
 
-        return view('pages.boards', compact('boards', 'projects', 'total_user', 'tasks', 'total_board', 'status', 'priority', 'label', 'users', 'total_project', 'total_task', 'remainingTime', 'tasksWithTime'));
+        return view('pages.boards', compact('boards', 'projects', 'total_user', 'tasks', 'total_board', 'status', 'priority', 'label', 'users', 'total_project', 'total_task', 'remainingTime', 'tasksWithTime', 'totalTime'));
     }
     
     public function store(Request $request): RedirectResponse

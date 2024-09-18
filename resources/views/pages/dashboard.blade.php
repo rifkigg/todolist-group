@@ -183,7 +183,13 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <p>{{ gmdate('H:i:s', $task->remainingTime) }}</p>
+                                                @php
+                                                $totalSeconds = $task->totalTime; // Total waktu dalam detik
+                                                $hours = floor($totalSeconds / 3600); // Hitung jam
+                                                $minutes = floor(($totalSeconds % 3600) / 60); // Hitung menit
+                                                $seconds = $totalSeconds % 60; // Hitung detik
+                                            @endphp
+                                            <p>{{ $hours }} hours, {{ $minutes }} minutes, {{ $seconds }} seconds</p>
                                             </td>
                                             <td>
                                                 <div class="d-flex gap-2 h-100 align-items-center">

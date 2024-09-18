@@ -604,8 +604,13 @@
                                                                             data-task-id="{{ $item->id }}">
                                                                             <p for="time_count_{{ $item->id }}"
                                                                                 class="form-label">Time Count</p>
-                                                                            <p>{{ $taskTime ? gmdate('H:i:s', $taskTime->remainingTime) : $item->time_count }}
-                                                                            </p>
+                                                                                @php
+                                                                                $totalSeconds = $taskTime ? $taskTime->totalTime : $item->time_count; // Total waktu dalam detik
+                                                                                $hours = floor($totalSeconds / 3600); // Hitung jam
+                                                                                $minutes = floor(($totalSeconds % 3600) / 60); // Hitung menit
+                                                                                $seconds = $totalSeconds % 60; // Hitung detik
+                                                                                @endphp
+                                                                                <p>{{ $hours }} hours, {{ $minutes }} minutes, {{ $seconds }} seconds</p>
                                                                         </div>
                                                                         <label for="due_date" class="form-label">Due
                                                                             Date</label>
@@ -988,8 +993,13 @@
                                                                             data-task-id="{{ $item->id }}">
                                                                             <p for="time_count_{{ $item->id }}"
                                                                                 class="form-label">Time Count</p>
-                                                                            <p>{{ $taskTime ? gmdate('H:i:s', $taskTime->remainingTime) : $item->time_count }}
-                                                                            </p>
+                                                                                @php
+                                                                                $totalSeconds = $taskTime ? $taskTime->totalTime : $item->time_count; // Total waktu dalam detik
+                                                                                $hours = floor($totalSeconds / 3600); // Hitung jam
+                                                                                $minutes = floor(($totalSeconds % 3600) / 60); // Hitung menit
+                                                                                $seconds = $totalSeconds % 60; // Hitung detik
+                                                                                @endphp
+                                                                                <p>{{ $hours }} hours, {{ $minutes }} minutes, {{ $seconds }} seconds</p>
                                                                         </div>
                                                                         <label for="due_date" class="form-label">Due
                                                                             Date</label>

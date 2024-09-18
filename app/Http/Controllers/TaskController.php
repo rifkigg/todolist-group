@@ -70,7 +70,7 @@ class TaskController extends Controller
                // Hitung waktu dari 00:00:00 dan tambahkan totalTime
                $startOfDay = Carbon::today()->startOfDay();
                $endOfDay = Carbon::today()->endOfDay();
-               $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
+               $remainingTime = max(0, $endOfDay->diffInSeconds($startOfDay) - $totalTime); // Pastikan tidak negatif
        
                $tasksWithTime = $task->map(function ($taskItem) { // Mengganti $tasks dengan $task
                    $totalTime = History::calculateTotalTime($taskItem->name);
@@ -78,13 +78,13 @@ class TaskController extends Controller
                    $endOfDay = Carbon::today()->endOfDay();
                    $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
                    $taskItem->totalTime = $totalTime;
-                   $taskItem->remainingTime = $remainingTime;
+                   $taskItem->remainingTime = $remainingTime; // Waktu tersisa dalam detik
                    $taskItem->isPlaying = $taskItem->timer_status == 'Playing';
                    $taskItem->isPaused = $taskItem->timer_status == 'Paused';
                    return $taskItem;
                });
 
-        return view('pages.task.task', compact('task', 'total_project', 'total_user', 'total_task', 'total_board', 'project', 'board', 'status', 'priority', 'label', 'users', 'selectedUserId', 'tasksWithTime', 'remainingTime'));
+        return view('pages.task.task', compact('task', 'total_project', 'total_user', 'total_task', 'total_board', 'project', 'board', 'status', 'priority', 'label', 'users', 'selectedUserId', 'tasksWithTime', 'remainingTime', 'totalTime'));
     }
     public function getTasktoBoard()
     {

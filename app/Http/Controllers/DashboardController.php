@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\task;
-use App\Models\User;
+use App\Models\User;    
 use App\Models\board;
 use App\Models\project;
 use App\Models\TaskStatus;
@@ -45,6 +45,7 @@ class DashboardController extends Controller
         if ($tasks->isNotEmpty()) {
             foreach ($tasks as $task) {
                 $taskTime = History::calculateTotalTime($task->name); // Hitung waktu total untuk tiap task
+                // dd($task->name, $taskTime); // Debugging
                 if (is_numeric($taskTime)) {
                     $totalTime += $taskTime; // Tambahkan ke total waktu
                 }
@@ -55,15 +56,15 @@ class DashboardController extends Controller
         // Hitung waktu dari 00:00:00 dan tambahkan totalTime
         $startOfDay = Carbon::today()->startOfDay();
         $endOfDay = Carbon::today()->endOfDay();
-        $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
+        $remainingTime = max(0, $endOfDay->diffInSeconds($startOfDay) - $totalTime); // Pastikan tidak negatif
 
         $tasksWithTime = $tasks->map(function ($task) {
             $totalTime = History::calculateTotalTime($task->name);
             $startOfDay = Carbon::today()->startOfDay();
             $endOfDay = Carbon::today()->endOfDay();
             $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
-            $task->totalTime = $totalTime;
-            $task->remainingTime = $remainingTime;
+            $task->totalTime = $totalTime; // Total waktu dalam detik
+            $task->remainingTime = $remainingTime; // Waktu tersisa dalam detik
             $task->isPlaying = $task->timer_status == 'Playing';
             $task->isPaused = $task->timer_status == 'Paused';
             return $task;
