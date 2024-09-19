@@ -451,7 +451,8 @@
                                                                         <label for="assignees"
                                                                             class="form-label">Assignees</label>
                                                                         <select name="assignees[]" id="assignees"
-                                                                            class="form-select mb-3" multiple>
+                                                                            class="form-select mb-3">
+                                                                            <option value="" disabled selected>Select Assignees</option>
                                                                             @foreach ($users as $user)
                                                                                 <option value="{{ $user->id }}"
                                                                                     {{ in_array($user->id, old('assignees', $item->users->pluck('id')->toArray())) ? 'selected' : '' }}>
@@ -796,7 +797,8 @@
                                                                         <label for="assignees"
                                                                             class="form-label">Assignees</label>
                                                                         <select name="assignees[]" id="assignees"
-                                                                            class="form-select mb-3" multiple disabled>
+                                                                            class="form-select mb-3" disabled>
+                                                                            <option value="" disabled selected>Select Assignees</option>
                                                                             @foreach ($users as $user)
                                                                                 <option value="{{ $user->id }}"
                                                                                     {{ in_array($user->id, old('assignees', $item->users->pluck('id')->toArray())) ? 'selected' : '' }}>
