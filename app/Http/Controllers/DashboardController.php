@@ -31,6 +31,7 @@ class DashboardController extends Controller
         $projects = app(ProjectController::class)->getProjectByUser(auth()->id());
         $total_tasknya = $tasks->count();
         $total_selesai = $tasks->where('timer_status', 'Finished')->count();
+        $total_belum_selesai = $tasks->where('timer_status', '!=', 'Finished')->count();
 
         // Cek apakah $total_tasknya tidak nol sebelum melakukan pembagian
         if ($total_tasknya > 0) {
@@ -73,7 +74,7 @@ class DashboardController extends Controller
         $total_project = $projects->count();
         $total_task = $tasks->count();
         // Mengirim data ke view
-        return view('pages.dashboard', compact('total_project', 'total_task', 'tasks', 'total_tasknya', 'total_selesai', 'format_persenan', 'board', 'project', 'status', 'priority', 'label', 'users', 'totalTime', 'remainingTime', 'tasksWithTime'));
+        return view('pages.dashboard', compact('total_belum_selesai','total_project', 'total_task', 'tasks', 'total_tasknya', 'total_selesai', 'format_persenan', 'board', 'project', 'status', 'priority', 'label', 'users', 'totalTime', 'remainingTime', 'tasksWithTime'));
     }
 
     public function getTasksByUser($userId)
