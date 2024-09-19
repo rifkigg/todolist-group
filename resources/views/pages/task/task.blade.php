@@ -1069,7 +1069,7 @@
                                         <div class="modal-dialog">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="createModalLabel">Create Data
+                                                    <h5 class="modal-title" id="createModalLabel">Create Task
                                                     </h5>
                                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                                         aria-label="Close"></button>
@@ -1084,7 +1084,7 @@
                                                             <input type="text"
                                                                 class="form-control @error('name') is-invalid @enderror"
                                                                 name="name" value="{{ old('name') }}"
-                                                                placeholder="Enter Project Name">
+                                                                placeholder="Enter Task Name">
                                                             @error('name')
                                                                 <div class="alert alert-danger mt-2">
                                                                     {{ $message }}
