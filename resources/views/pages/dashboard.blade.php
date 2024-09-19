@@ -227,17 +227,26 @@
                                             </td>
                                             <td>
                                                 <div class="d-flex gap-2 h-100 align-items-center">
-                                                    <form action="{{ route('history.start') }}" method="POST">
+                                                    @php
+                                                        $isPlaying = $task->isPlaying;
+                                                        $isFinished = $task->status == 'finished';
+                                                    @endphp
+
+                                                    <form action="{{ route('history.start') }}" method="POST"
+                                                        onsubmit="return handleStart('{{ $task->id }}', {{ $isPlaying ? 'true' : 'false' }});"
+                                                        class="task-row">
                                                         @csrf
                                                         <input type="text" value="{{ $task->name }}" hidden
                                                             name="task_name">
                                                         <button type="submit" class="btn btn-primary"
-                                                            {{ $task->isPlaying ? 'disabled' : '' }}>
+                                                            {{ $isPlaying ? 'disabled' : '' }}>
                                                             <i class="fa-solid fa-play"></i>
                                                         </button>
                                                     </form>
 
-                                                    <form action="{{ route('history.pause') }}" method="POST">
+                                                    <form action="{{ route('history.pause') }}" method="POST"
+                                                        {{ $isFinished ? 'style=display:none' : '' }}
+                                                        class="task-row">
                                                         @csrf
                                                         <input type="text" value="{{ $task->name }}" hidden
                                                             name="task_name">
@@ -247,12 +256,12 @@
                                                         </button>
                                                     </form>
 
-                                                    <form action="{{ route('history.finish') }}" method="POST">
+                                                    <form action="{{ route('history.finish') }}" method="POST"
+                                                        class="task-row">
                                                         @csrf
                                                         <input type="text" value="{{ $task->name }}" hidden
                                                             name="task_name">
-                                                        <button type="submit" class="btn btn-success"
-                                                            {{ $task->isPlaying ? 'disabled' : '' }}>
+                                                        <button type="submit" class="btn btn-success">
                                                             <i class="fa-solid fa-stop"></i>
                                                         </button>
                                                     </form>
@@ -840,5 +849,25 @@
                     }
                 }
             });
+        </script>
+        <script>
+            function handleStart(taskId, isPlaying) {
+                if (isPlaying) {
+                    alert('Task is already playing.');
+                    return false;
+                }
+
+                // Pause all other tasks
+                document.querySelectorAll('.task-row').forEach(row => {
+                    const rowTaskId = row.dataset.taskId;
+                    const pauseForm = row.querySelector('form[action="{{ route('history.pause') }}"]');
+
+                    if (rowTaskId !== taskId && pauseForm) {
+                        pauseForm.querySelector('button.btn-warning').click(); // Trigger pause for other tasks
+                    }
+                });
+
+                return true; // Allow the form to submit
+            }
         </script>
 </x-layout>

@@ -259,6 +259,19 @@ class TaskController extends Controller
     {
         $taskName = $request->input('task_name');
         $task = Task::where('name', $taskName)->first();
+        
+        // Pause all other tasks and save their time
+        $playingTasks = Task::where('timer_status', 'Playing')->get();
+        foreach ($playingTasks as $playingTask) {
+            // Simpan waktu total sebelum dipause
+            History::create([
+                'task_name' => $playingTask->name,
+                'paused' => now(),
+            ]);
+            $playingTask->timer_status = 'Paused';
+            $playingTask->save();
+        }
+        
         $task->timer_status = 'Playing';
         $task->save();
 
@@ -294,6 +307,7 @@ class TaskController extends Controller
 
         History::create([
             'task_name' => $taskName,
+            'paused' => now(),
             'finish' => now(),
         ]);
 
