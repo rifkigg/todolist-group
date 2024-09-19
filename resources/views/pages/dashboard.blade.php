@@ -131,7 +131,8 @@
                                         <div class="col mr-2">
                                             <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">
                                                 total tasks that you have not finished</div>
-                                            <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $total_belum_selesai }}
+                                            <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                {{ $total_belum_selesai }}
                                             </div>
                                         </div>
                                         <div class="col-auto">
@@ -171,15 +172,19 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="d-none" width="16" height="16"> <!-- Menambahkan width dan height untuk memperkecil logo -->
-                                <symbol id="exclamation-triangle-fill" viewBox="0 0 16 16" fill="red"> <!-- Mengubah warna logo menjadi merah -->
+                            <svg xmlns="http://www.w3.org/2000/svg" class="d-none" width="16" height="16">
+                                <!-- Menambahkan width dan height untuk memperkecil logo -->
+                                <symbol id="exclamation-triangle-fill" viewBox="0 0 16 16" fill="red">
+                                    <!-- Mengubah warna logo menjadi merah -->
                                     <path
                                         d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
                                 </symbol>
                             </svg>
                             @if (session('alert'))
                                 <div class="alert alert-danger d-flex align-items-center" role="alert">
-                                    <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Danger:" width="16" height="16"> <!-- Menambahkan width dan height untuk memperkecil logo -->
+                                    <svg class="bi flex-shrink-0 me-2" role="img" aria-label="Danger:"
+                                        width="16" height="16">
+                                        <!-- Menambahkan width dan height untuk memperkecil logo -->
                                         <use xlink:href="#exclamation-triangle-fill" />
                                     </svg>
                                     <div>
@@ -218,8 +223,7 @@
                                                     $minutes = floor(($totalSeconds % 3600) / 60); // Hitung menit
                                                     $seconds = $totalSeconds % 60; // Hitung detik
                                                 @endphp
-                                                <p>{{ $hours }} hours, {{ $minutes }} minutes,
-                                                    {{ $seconds }} seconds</p>
+                                                <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}</p>
                                             </td>
                                             <td>
                                                 <div class="d-flex gap-2 h-100 align-items-center">
@@ -239,7 +243,7 @@
                                                             name="task_name">
                                                         <button type="submit" class="btn btn-warning"
                                                             {{ $task->isPaused ? 'disabled' : '' }}>
-                                                            <i class="fa-solid fa-pause"></i> 
+                                                            <i class="fa-solid fa-pause"></i>
                                                         </button>
                                                     </form>
 
@@ -249,12 +253,12 @@
                                                             name="task_name">
                                                         <button type="submit" class="btn btn-success"
                                                             {{ $task->isPlaying ? 'disabled' : '' }}>
-                                                            <i class="fa-solid fa-stop"></i> 
+                                                            <i class="fa-solid fa-stop"></i>
                                                         </button>
                                                     </form>
                                                     <button class="btn btn-info" data-bs-toggle="modal"
                                                         data-bs-target="#view-{{ $task->id }}">
-                                                        <i class="icon-action fa-solid fa-eye"></i> 
+                                                        <i class="icon-action fa-solid fa-eye"></i>
                                                     </button>
                                                 </div>
                                             </td>
@@ -370,17 +374,34 @@
                                                                     @if ($task->attachments && count($task->attachments) > 0)
                                                                         @foreach ($task->attachments as $img)
                                                                             <div
-                                                                                class="mb-3 d-flex align-items-start gap-2">
-                                                                                <a
-                                                                                    href="{{ asset('storage/attachments/' . $img->file_name) }}">
-                                                                                    <img src="{{ asset('storage/attachments/' . $img->file_name) }}"
-                                                                                        alt="{{ $img->file_name }}"
-                                                                                        width="150">
-                                                                                </a>
+                                                                                class="mb-3 d-flex justify-content-between align-items-start gap-2">
+                                                                                @if (preg_match('/\.(jpg|jpeg|png|gif)$/i', $img->file_name))
+                                                                                    <a
+                                                                                        href="{{ asset('storage/attachments/' . $img->file_name) }}">
+                                                                                        <img src="{{ asset('storage/attachments/' . $img->file_name) }}"
+                                                                                            alt="{{ $img->file_name }}"
+                                                                                            width="150">
+                                                                                    </a>
+                                                                                @else
+                                                                                    <a
+                                                                                        href="{{ asset('storage/attachments/' . $img->file_name) }}">
+                                                                                        <div class="file-icon d-flex flex-column justify-content-center align-items-center text-dark"
+                                                                                            style="width: 150px ;height: 100px">
+                                                                                            <i
+                                                                                                class="fa-solid fa-file fs-1"></i>
+                                                                                            <p>{{ $img->file_name }}
+                                                                                            </p>
+                                                                                        </div>
+                                                                                    </a>
+                                                                                @endif
                                                                                 <div
-                                                                                    class="d-flex justify-content-between w-100">
-                                                                                    <p>Created at:
-                                                                                        {{ $img->created_at }}</p>
+                                                                                    class="d-flex justify-content-end w-100">
+                                                                                    <button type="button"
+                                                                                        onclick="if(confirm('Are you sure you want to delete this attachment?')) { document.getElementById('deleteGambar-{{ $img->id }}').submit(); }"
+                                                                                        class="btn btn-danger btn-sm">
+                                                                                        <i
+                                                                                            class="fa-solid fa-trash"></i>
+                                                                                    </button>
                                                                                 </div>
                                                                             </div>
                                                                         @endforeach
@@ -545,7 +566,15 @@
                                                                         data-task-id="{{ $task->id }}">
                                                                         <p for="time_count_{{ $task->id }}"
                                                                             class="form-label">Time Count</p>
-                                                                        <p>{{ gmdate('H:i:s', $task->remainingTime) }}
+                                                                        @php
+                                                                            $totalSeconds = $task->totalTime; // Total waktu dalam detik
+                                                                            $hours = floor($totalSeconds / 3600); // Hitung jam
+                                                                            $minutes = floor(
+                                                                                ($totalSeconds % 3600) / 60,
+                                                                            ); // Hitung menit
+                                                                            $seconds = $totalSeconds % 60; // Hitung detik
+                                                                        @endphp
+                                                                        <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}
                                                                         </p>
 
                                                                     </div>

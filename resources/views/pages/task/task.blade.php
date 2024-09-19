@@ -603,12 +603,12 @@
                                                                             <p for="time_count_{{ $item->id }}"
                                                                                 class="form-label">Time Count</p>
                                                                                 @php
-                                                                                $totalSeconds = $taskTime ? $taskTime->totalTime : $item->time_count; // Total waktu dalam detik
+                                                                                $totalSeconds = $task->totalTime; // Total waktu dalam detik
                                                                                 $hours = floor($totalSeconds / 3600); // Hitung jam
                                                                                 $minutes = floor(($totalSeconds % 3600) / 60); // Hitung menit
                                                                                 $seconds = $totalSeconds % 60; // Hitung detik
-                                                                                @endphp
-                                                                                <p>{{ $hours }} hours, {{ $minutes }} minutes, {{ $seconds }} seconds</p>
+                                                                            @endphp
+                                                                            <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}</p>
                                                                         </div>
                                                                         <label for="due_date" class="form-label">Due
                                                                             Date</label>
@@ -987,12 +987,12 @@
                                                                             <p for="time_count_{{ $item->id }}"
                                                                                 class="form-label">Time Count</p>
                                                                                 @php
-                                                                                $totalSeconds = $taskTime ? $taskTime->totalTime : $item->time_count; // Total waktu dalam detik
+                                                                                $totalSeconds = $task->totalTime; // Total waktu dalam detik
                                                                                 $hours = floor($totalSeconds / 3600); // Hitung jam
                                                                                 $minutes = floor(($totalSeconds % 3600) / 60); // Hitung menit
                                                                                 $seconds = $totalSeconds % 60; // Hitung detik
-                                                                                @endphp
-                                                                                <p>{{ $hours }} hours, {{ $minutes }} minutes, {{ $seconds }} seconds</p>
+                                                                            @endphp
+                                                                            <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}</p>
                                                                         </div>
                                                                         <label for="due_date" class="form-label">Due
                                                                             Date</label>
