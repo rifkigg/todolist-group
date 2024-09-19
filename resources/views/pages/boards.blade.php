@@ -451,8 +451,7 @@
                                                                         <label for="assignees"
                                                                             class="form-label">Assignees</label>
                                                                         <select name="assignees[]" id="assignees"
-                                                                            class="form-select mb-3">
-                                                                            <option value="" disabled selected>Select Assignees</option>
+                                                                            class="form-select mb-3" >
                                                                             @foreach ($users as $user)
                                                                                 <option value="{{ $user->id }}"
                                                                                     {{ in_array($user->id, old('assignees', $item->users->pluck('id')->toArray())) ? 'selected' : '' }}>
@@ -485,12 +484,13 @@
                                                                                 <p for="time_count_{{ $item->id }}"
                                                                                     class="form-label">Time Count</p>
                                                                                     @php
-                                                                                    $totalSeconds = $task->totalTime; // Total waktu dalam detik
-                                                                                    $hours = floor($totalSeconds / 3600); // Hitung jam
-                                                                                    $minutes = floor(($totalSeconds % 3600) / 60); // Hitung menit
-                                                                                    $seconds = $totalSeconds % 60; // Hitung detik
+                                                                                $totalSeconds = $taskTime ? $taskTime->totalTime : $item->time_count; // Total waktu dalam detik
+                                                                                $hours = floor($totalSeconds / 3600); // Hitung jam
+                                                                                $minutes = floor(($totalSeconds % 3600) / 60); // Hitung menit
+                                                                                $seconds = $totalSeconds % 60; // Hitung detik
                                                                                 @endphp
-                                                                                <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}</p>  
+                                                                                <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}
+                                                                                </p>
                                                                                 </div>
                                                                         </div>
 
@@ -797,8 +797,7 @@
                                                                         <label for="assignees"
                                                                             class="form-label">Assignees</label>
                                                                         <select name="assignees[]" id="assignees"
-                                                                            class="form-select mb-3" disabled>
-                                                                            <option value="" disabled selected>Select Assignees</option>
+                                                                            class="form-select mb-3"  disabled>
                                                                             @foreach ($users as $user)
                                                                                 <option value="{{ $user->id }}"
                                                                                     {{ in_array($user->id, old('assignees', $item->users->pluck('id')->toArray())) ? 'selected' : '' }}>
@@ -829,12 +828,13 @@
                                                                             <p for="time_count_{{ $item->id }}"
                                                                                 class="form-label">Time Count</p>
                                                                                 @php
-                                                                                $totalSeconds = $task->totalTime; // Total waktu dalam detik
+                                                                                $totalSeconds = $taskTime ? $taskTime->totalTime : $item->time_count; // Total waktu dalam detik
                                                                                 $hours = floor($totalSeconds / 3600); // Hitung jam
                                                                                 $minutes = floor(($totalSeconds % 3600) / 60); // Hitung menit
                                                                                 $seconds = $totalSeconds % 60; // Hitung detik
-                                                                            @endphp
-                                                                            <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}</p>
+                                                                                @endphp
+                                                                                <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}
+                                                                                </p>
                                                                         </div>
 
                                                                         <label for="due_date" class="form-label">Due

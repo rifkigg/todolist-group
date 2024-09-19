@@ -169,13 +169,13 @@
                         <div class="card-body">
 
 
-                            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                            {{-- @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer') --}}
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal"
                                     data-bs-target="#createTask">
                                     Create Task
                                 </button>
-                            @else
-                            @endif
+                            {{-- @else
+                            @endif --}}
                             <table id="example" class="table table-striped">
                                 <thead>
                                     <tr>
@@ -390,7 +390,7 @@
                                                                         @if ($item->attachments && count($item->attachments) > 0)
                                                                             @foreach ($item->attachments as $img)
                                                                                 <div
-                                                                                    class="mb-3 d-flex justify-content-between align-items-start gap-2">
+                                                                                    class="mb-3 d-flex align-items-start gap-2">
                                                                                     @if (preg_match('/\.(jpg|jpeg|png|gif)$/i', $img->file_name))
                                                                                         <a
                                                                                             href="{{ asset('storage/attachments/' . $img->file_name) }}">
@@ -411,13 +411,16 @@
                                                                                         </a>
                                                                                     @endif
                                                                                     <div
-                                                                                        class="d-flex justify-content-end w-100">
+                                                                                        class="d-flex justify-content-between w-100">
                                                                                         <button type="button"
                                                                                             onclick="if(confirm('Are you sure you want to delete this attachment?')) { document.getElementById('deleteGambar-{{ $img->id }}').submit(); }"
-                                                                                            class="btn btn-danger btn-sm">
+                                                                                            class="btn btn-danger btn-sm">Delete
+                                                                                            this Attachment
                                                                                             <i
                                                                                                 class="fa-solid fa-trash"></i>
                                                                                         </button>
+                                                                                        <p>Created at:
+                                                                                            {{ $img->created_at }}</p>
                                                                                     </div>
                                                                                 </div>
                                                                             @endforeach
@@ -568,7 +571,7 @@
                                                                             class="form-label">Assignees</label>
                                                                         <select name="assignees[]" id="assignees"
                                                                             class="form-select mb-3">
-                                                                            <option value="" selected disabled>Select Assignees</option>
+
                                                                             @foreach ($users as $user)
                                                                                 <option value="{{ $user->id }}"
                                                                                     {{ in_array($user->id, old('assignees', $item->users->pluck('id')->toArray())) ? 'selected' : '' }}>
@@ -603,12 +606,13 @@
                                                                             <p for="time_count_{{ $item->id }}"
                                                                                 class="form-label">Time Count</p>
                                                                                 @php
-                                                                                $totalSeconds = $task->totalTime; // Total waktu dalam detik
+                                                                                $totalSeconds = $taskTime ? $taskTime->totalTime : $item->time_count; // Total waktu dalam detik
                                                                                 $hours = floor($totalSeconds / 3600); // Hitung jam
                                                                                 $minutes = floor(($totalSeconds % 3600) / 60); // Hitung menit
                                                                                 $seconds = $totalSeconds % 60; // Hitung detik
-                                                                            @endphp
-                                                                            <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}</p>
+                                                                                @endphp
+                                                                                <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}
+                                                                                </p>
                                                                         </div>
                                                                         <label for="due_date" class="form-label">Due
                                                                             Date</label>
@@ -813,6 +817,11 @@
                                                                                             </div>
                                                                                         </a>
                                                                                     @endif
+                                                                                    <div
+                                                                                        class="d-flex justify-content-between w-100">
+                                                                                        <p>Created at:
+                                                                                            {{ $img->created_at }}</p>
+                                                                                    </div>
                                                                                 </div>
                                                                             @endforeach
                                                                         @else
@@ -987,12 +996,13 @@
                                                                             <p for="time_count_{{ $item->id }}"
                                                                                 class="form-label">Time Count</p>
                                                                                 @php
-                                                                                $totalSeconds = $task->totalTime; // Total waktu dalam detik
+                                                                                $totalSeconds = $taskTime ? $taskTime->totalTime : $item->time_count; // Total waktu dalam detik
                                                                                 $hours = floor($totalSeconds / 3600); // Hitung jam
                                                                                 $minutes = floor(($totalSeconds % 3600) / 60); // Hitung menit
                                                                                 $seconds = $totalSeconds % 60; // Hitung detik
-                                                                            @endphp
-                                                                            <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}</p>
+                                                                                @endphp
+                                                                                <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}
+                                                                                </p>
                                                                         </div>
                                                                         <label for="due_date" class="form-label">Due
                                                                             Date</label>

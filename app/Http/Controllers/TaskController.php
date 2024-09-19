@@ -23,7 +23,6 @@ class TaskController extends Controller
 {
     public function index(Request $request)
     {
-        $project = Project::all();
         $board = Board::all();
         $status = TaskStatus::all();
         $priority = task_priority::all();
@@ -39,7 +38,7 @@ class TaskController extends Controller
         $userRole = $request->user()->role; // Ambil role pengguna
 
         // Filter task berdasarkan role
-        if ($userRole === 'admin' || $userRole === 'manajer' ) {
+        if ($userRole === 'admin' || $userRole === 'manajer') {
             // Admin dapat melihat semua task
             $taskQuery = Task::with('project', 'board', 'status', 'priority', 'label', 'users', 'attachments', 'activities', 'checklist', 'description')->latest();
         } else {
@@ -47,7 +46,8 @@ class TaskController extends Controller
             $taskQuery = Task::with('project', 'board', 'status', 'priority', 'label', 'users', 'attachments', 'activities', 'checklist', 'description')
                 ->whereHas('users', function ($query) use ($request) {
                     $query->where('users.id', $request->user()->id);
-                })->latest();
+                })
+                ->latest();
         }
 
         $task = $taskQuery->get()->map(function ($task) {
@@ -55,34 +55,46 @@ class TaskController extends Controller
             return $task;
         });
 
-               // Hitung waktu total untuk setiap task
-               $totalTime = 0; // Inisialisasi total waktu sebagai angka
+        // Hitung waktu total untuk setiap task
+        $totalTime = 0; // Inisialisasi total waktu sebagai angka
 
-               if ($task->isNotEmpty()) { // Mengganti $tasks dengan $task
-                   foreach ($task as $taskItem) { // Mengganti $tasks dengan $task
-                       $taskTime = History::calculateTotalTime($taskItem->name); // Hitung waktu total untuk tiap task
-                       if (is_numeric($taskTime)) {
-                           $totalTime += $taskTime; // Tambahkan ke total waktu
-                       }
-                   }
-               }
-       
-               // Hitung waktu dari 00:00:00 dan tambahkan totalTime
-               $startOfDay = Carbon::today()->startOfDay();
-               $endOfDay = Carbon::today()->endOfDay();
-               $remainingTime = max(0, $endOfDay->diffInSeconds($startOfDay) - $totalTime); // Pastikan tidak negatif
-       
-               $tasksWithTime = $task->map(function ($taskItem) { // Mengganti $tasks dengan $task
-                   $totalTime = History::calculateTotalTime($taskItem->name);
-                   $startOfDay = Carbon::today()->startOfDay();
-                   $endOfDay = Carbon::today()->endOfDay();
-                   $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
-                   $taskItem->totalTime = $totalTime;
-                   $taskItem->remainingTime = $remainingTime; // Waktu tersisa dalam detik
-                   $taskItem->isPlaying = $taskItem->timer_status == 'Playing';
-                   $taskItem->isPaused = $taskItem->timer_status == 'Paused';
-                   return $taskItem;
-               });
+        if ($task->isNotEmpty()) {
+            // Mengganti $tasks dengan $task
+            foreach ($task as $taskItem) {
+                // Mengganti $tasks dengan $task
+                $taskTime = History::calculateTotalTime($taskItem->name); // Hitung waktu total untuk tiap task
+                if (is_numeric($taskTime)) {
+                    $totalTime += $taskTime; // Tambahkan ke total waktu
+                }
+            }
+        }
+
+        // Hitung waktu dari 00:00:00 dan tambahkan totalTime
+        $startOfDay = Carbon::today()->startOfDay();
+        $endOfDay = Carbon::today()->endOfDay();
+        $remainingTime = max(0, $endOfDay->diffInSeconds($startOfDay) - $totalTime); // Pastikan tidak negatif
+
+        $tasksWithTime = $task->map(function ($taskItem) {
+            // Mengganti $tasks dengan $task
+            $totalTime = History::calculateTotalTime($taskItem->name);
+            $startOfDay = Carbon::today()->startOfDay();
+            $endOfDay = Carbon::today()->endOfDay();
+            $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
+            $taskItem->totalTime = $totalTime;
+            $taskItem->remainingTime = $remainingTime; // Waktu tersisa dalam detik
+            $taskItem->isPlaying = $taskItem->timer_status == 'Playing';
+            $taskItem->isPaused = $taskItem->timer_status == 'Paused';
+            return $taskItem;
+        });
+
+        $userId = $request->user()->id; // Ambil ID pengguna yang login
+        if ($userRole === 'admin' || $userRole === 'manajer') {
+            $project = Project::all();
+        } else {
+            $project = Project::whereHas('users', function ($query) use ($userId) {
+                $query->where('users.id', $userId);
+            })->get();
+        }
 
         return view('pages.task.task', compact('task', 'total_project', 'total_user', 'total_task', 'total_board', 'project', 'board', 'status', 'priority', 'label', 'users', 'selectedUserId', 'tasksWithTime', 'remainingTime', 'totalTime'));
     }
@@ -148,7 +160,6 @@ class TaskController extends Controller
             // Tangani kasus jika pengguna tidak terautentikasi
             $boards = []; // Atau bisa mengembalikan pesan error
         }
-
 
         $task = Task::all()->map(function ($task) {
             $task->time_count = json_decode($task->time_count, true)[0] ?? '00:00:00';
@@ -219,7 +230,7 @@ class TaskController extends Controller
             'due_date' => $request->due_date,
         ]);
 
-          // Update assignees
+        // Update assignees
         $task->users()->sync($request->assignees);
 
         return redirect()->route('task.index')->with('success', 'Task updated successfully.');
@@ -290,21 +301,21 @@ class TaskController extends Controller
     }
 
     public function calculateTaskTimes()
-{
-    $tasks = Task::all();
+    {
+        $tasks = Task::all();
 
-    $tasksWithTime = $tasks->map(function ($task) {
-        $totalTime = History::calculateTotalTime($task->name);
-        $startOfDay = Carbon::today()->startOfDay();
-        $endOfDay = Carbon::today()->endOfDay();
-        $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
-        $task->totalTime = $totalTime;
-        $task->remainingTime = $remainingTime;
-        $task->isPlaying = $task->timer_status == 'Playing';
-        $task->isPaused = $task->timer_status == 'Paused';
-        return $task;
-    });
+        $tasksWithTime = $tasks->map(function ($task) {
+            $totalTime = History::calculateTotalTime($task->name);
+            $startOfDay = Carbon::today()->startOfDay();
+            $endOfDay = Carbon::today()->endOfDay();
+            $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
+            $task->totalTime = $totalTime;
+            $task->remainingTime = $remainingTime;
+            $task->isPlaying = $task->timer_status == 'Playing';
+            $task->isPaused = $task->timer_status == 'Paused';
+            return $task;
+        });
 
-    return view('pages.task.task', compact('tasksWithTime'));
-}
+        return view('pages.task.task', compact('tasksWithTime'));
+    }
 }
