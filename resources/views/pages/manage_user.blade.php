@@ -184,6 +184,18 @@
                                                                         <option value="editor">Editor</option>
                                                                     </select>
                                                                 </div>
+                                                                <div class="mb-3">
+                                                                    <label for="field_name" class="form-label">
+                                                                        Password</label>
+                                                                    <input type="password"
+                                                                        class="form-control @error('password') is-invalid @enderror"
+                                                                        name="password" placeholder="Enter Password">
+                                                                    @error('password')
+                                                                        <div class="alert alert-danger mt-2">
+                                                                            {{ $message }}
+                                                                        </div>
+                                                                    @enderror
+                                                                </div>
                                                                 <button type="submit" class="btn btn-primary">Update
                                                                     User</button>
                                                             </form>

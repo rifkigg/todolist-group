@@ -39,12 +39,14 @@ class UserController extends Controller
             'username' => 'required',
             'email' => 'required',
             'role' => 'required',
+            'password' => 'required',
         ]);
         $user = User::find($id);
         $user->update([
             'username' => $request->username,
             'email' => $request->email,
             'role' => $request->role,
+            'password' => Hash::make($request->password),
         ]);
         return redirect()->route('manage_user.index');
     }
