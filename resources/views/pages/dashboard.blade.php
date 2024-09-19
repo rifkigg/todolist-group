@@ -211,7 +211,7 @@
                                                             name="task_name">
                                                         <button type="submit" class="btn btn-primary"
                                                             {{ $task->isPlaying ? 'disabled' : '' }}>
-                                                            <i class="fa-solid fa-play"></i> Play
+                                                            <i class="fa-solid fa-play"></i>
                                                         </button>
                                                     </form>
 
@@ -221,7 +221,7 @@
                                                             name="task_name">
                                                         <button type="submit" class="btn btn-warning"
                                                             {{ $task->isPaused ? 'disabled' : '' }}>
-                                                            <i class="fa-solid fa-pause"></i> Pause
+                                                            <i class="fa-solid fa-pause"></i> 
                                                         </button>
                                                     </form>
 
@@ -231,12 +231,12 @@
                                                             name="task_name">
                                                         <button type="submit" class="btn btn-success"
                                                             {{ $task->isPlaying ? 'disabled' : '' }}>
-                                                            <i class="fa-solid fa-stop"></i> Stop
+                                                            <i class="fa-solid fa-stop"></i> 
                                                         </button>
                                                     </form>
                                                     <button class="btn btn-info" data-bs-toggle="modal"
                                                         data-bs-target="#view-{{ $task->id }}">
-                                                        <i class="icon-action fa-solid fa-eye"></i> Show
+                                                        <i class="icon-action fa-solid fa-eye"></i> 
                                                     </button>
                                                 </div>
                                             </td>
