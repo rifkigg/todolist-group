@@ -97,9 +97,9 @@
                                         onkeyup="generateSlug('name', 'slug')" required placeholder="Enter Name">
                                 </div>
                                 <div class="form-group">
-                                    <label for="slug">Slug</label>
+                                    <label for="slug" hidden>Slug</label>
                                     <input type="text" class="form-control" id="slug" name="slug" readonly
-                                        required>
+                                    required hidden>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Add New</button>
                             </form>
@@ -109,7 +109,7 @@
                                 <thead>
                                     <tr>
                                         <th>Name</th>
-                                        <th>Slug</th>
+                                        {{-- <th hidden>Slug</th> --}}
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -117,7 +117,7 @@
                                     @foreach ($categories as $category)
                                         <tr>
                                             <td>{{ $category->name }}</td>
-                                            <td>{{ $category->slug }}</td>
+                                            <td hidden>{{ $category->slug }}</td>
                                             <td>
                                                 <button type="button" class="btn" data-bs-toggle="modal"
                                                     data-bs-target="#editModal{{ $category->id }}">
@@ -172,8 +172,8 @@
                                                                 <label for="field_name_{{ $category->id }}" class="form-label">Nama</label>
                                                                 <input type="text" class="form-control" id="field_name_{{ $category->id }}" name="name"
                                                                     oninput="generateSlug('field_name_{{ $category->id }}', 'field_slug_{{ $category->id }}')" value="{{ $category->name }}" required>
-                                                                <label for="field_slug_{{ $category->id }}" class="form-label">Slug</label>
-                                                                <input type="text" class="form-control" id="field_slug_{{ $category->id }}" name="slug" value="{{ $category->slug }}" readonly>
+                                                                <label for="field_slug_{{ $category->id }}" class="form-label" hidden>Slug</label>
+                                                                <input type="text" class="form-control" id="field_slug_{{ $category->id }}" name="slug" value="{{ $category->slug }}" readonly hidden>
                                                             </div>
                                                             <button type="submit" class="btn btn-success">Perbarui</button>
                                                         </form>
