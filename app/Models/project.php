@@ -32,4 +32,9 @@ class project extends Model
     {
         return $this->belongsToMany(User::class, 'project_users');
     }
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class); // Relasi satu ke banyak
+    }
 }

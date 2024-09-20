@@ -43,7 +43,6 @@ class History extends Model
                     // dd("waktu mulai" ,$startTime, "waktu stop",$pauseTime , "selisih",$selisih, "total",$totalTime);
                 } else {
                     // Jika selisih negatif, bisa diabaikan atau di-set ke 0
-                    dd("Waktu paused lebih awal dari start");
                 }
                 $startTime = null; // Reset waktu mulai setelah dihitung
             }

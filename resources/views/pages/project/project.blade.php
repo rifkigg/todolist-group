@@ -191,17 +191,21 @@
                                         <th>Category</th>
                                         <th>Status</th>
                                         <th>Live Date</th>
+                                        <th>Proggress</th>
                                         <th>Created</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @forelse ($project as $item)
+                                    @forelse ($projects as $item)
                                         <tr>
                                             <td>{{ $item->name }}</td>
                                             <td>{{ $item->category->name }}</td>
                                             <td>{{ $item->status->name }}</td>
                                             <td>{{ $item->live_date }}</td>
+                                            <td>
+                                                {{ $item->progress }} 
+                                            </td>
                                             <td>{{ $item->created_at }}</td>
                                             <td class="d-flex">
                                                 @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
@@ -256,7 +260,6 @@
                                     @endforelse
                                 </tbody>
                             </table>
-
                         </div>
                     </div>
                 </div>

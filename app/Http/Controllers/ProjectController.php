@@ -43,8 +43,34 @@ class ProjectController extends Controller
             return $project;
         });
 
+        // Ambil semua task untuk setiap project
+        $tasks = Project::with('tasks')->get()->flatMap(function ($project) {
+            return $project->tasks;
+        });
+
+        $projects = Project::with('tasks')->get()->map(function ($project) {
+            $totalTasks = $project->tasks->count();
+            $completedTasks = $project->tasks->where('timer_status', 'Finished')->count();
+            
+            $progress = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
+            $project->progress = number_format($progress, 0) . ' %'; // Format progress
+        
+            return $project;
+        });
+
+        $total_tasknya = $tasks->count();
+        $total_selesai = $tasks->where('timer_status', 'Finished')->count();
+
+        // Cek apakah $total_tasknya tidak nol sebelum melakukan pembagian
+        if ($total_tasknya > 0) {
+            $persenan = ($total_selesai / $total_tasknya) * 100;
+        } else {
+            $persenan = 0;
+        }
+        $format_persenan = number_format($persenan, 0);
+
         //render view with products
-        return view('pages.project.project', compact('users', 'project', 'total_project', 'total_user', 'total_task', 'total_board'));
+        return view('pages.project.project', compact('users', 'project', 'total_project', 'total_user', 'total_task', 'total_board', 'selectedUserId', 'format_persenan', 'tasks', 'total_tasknya', 'total_selesai', 'projects' ));
     }
 
     public function create()
@@ -52,7 +78,7 @@ class ProjectController extends Controller
         $categories = ProjectCategories::all();
         $status = ProjectStatus::all();
         $users = User::all();
-        $project = new Project(); 
+        $project = new Project();
 
         return view('pages.project.addProject', compact('categories', 'status', 'users', 'project'));
     }

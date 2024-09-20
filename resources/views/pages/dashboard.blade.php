@@ -149,27 +149,7 @@
                     <div id="assignment" class="card shadow mb-4">
                         <div class="card-header d-flex justify-content-between align-items-center   ">
                             <h6 class="m-0 font-weight-bold text-primary">Assignment</h6>
-                            <div class="d-flex justify-content-end align-items-center gap-2">
-                                <p class="m-0 bg-secondary py-1 px-3 rounded-pill text-white fw-bold">
-                                    {{ $total_selesai }} / {{ $total_tasknya }}</p>
 
-                                @if ($format_persenan <= 50)
-                                    <div class="d-flex justify-content-center align-items-center bg-danger"
-                                        style="width: 50px; height: 50px; border-radius: 50%">
-                                        <p class="m-0 text-white fw-bold">{{ $format_persenan }}%</p>
-                                    </div>
-                                @elseif ($format_persenan <= 75)
-                                    <div class="d-flex justify-content-center align-items-center bg-warning"
-                                        style="width: 50px; height: 50px; border-radius: 50%">
-                                        <p class="m-0 text-white fw-bold">{{ $format_persenan }}%</p>
-                                    </div>
-                                @else
-                                    <div class="d-flex justify-content-center align-items-center bg-success"
-                                        style="width: 50px; height: 50px; border-radius: 50%">
-                                        <p class="m-0 text-white fw-bold">{{ $format_persenan }}%</p>
-                                    </div>
-                                @endif
-                            </div>
                         </div>
                         <div class="card-body">
                             <svg xmlns="http://www.w3.org/2000/svg" class="d-none" width="16" height="16">
