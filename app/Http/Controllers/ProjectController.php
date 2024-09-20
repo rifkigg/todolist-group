@@ -43,20 +43,26 @@ class ProjectController extends Controller
             return $project;
         });
 
+        // Ambil semua project berdasarkan user yang sedang login
+        
         // Ambil semua task untuk setiap project
         $tasks = Project::with('tasks')->get()->flatMap(function ($project) {
             return $project->tasks;
         });
 
-        $projects = Project::with('tasks')->get()->map(function ($project) {
+        $projects = app(ProjectController::class)->getProjectByUser(auth()->id());
+
+        $projects = $projects->map(function ($project) {
             $totalTasks = $project->tasks->count();
             $completedTasks = $project->tasks->where('timer_status', 'Finished')->count();
             
             $progress = $totalTasks > 0 ? ($completedTasks / $totalTasks) * 100 : 0;
-            $project->progress = number_format($progress, 0) . ' %'; // Format progress
-        
+            $project->progress = number_format($progress, 0); // Format progress
+            
             return $project;
         });
+        
+
 
         $total_tasknya = $tasks->count();
         $total_selesai = $tasks->where('timer_status', 'Finished')->count();

@@ -1129,22 +1129,18 @@
                                                                 @endforeach
                                                             </select>
                                                         </div>
-                                                        <div class="mb-3">
-                                                            <label for="field_name" class="form-label">
-                                                                Created_by</label>
+                                                        <div>
                                                             <input type="text"
                                                                 class="form-control @error('created_by') is-invalid @enderror"
-                                                                name="created_by" value="{{ auth()->user()->username }}" readonly>
+                                                                name="created_by" value="{{ auth()->user()->username }}" hidden>
                                                             @error('created_by')
                                                                 <div class="alert alert-danger mt-2">
                                                                     {{ $message }}
                                                                 </div>
                                                             @enderror
                                                         </div>
-                                                        <div class="mb-3">
-                                                            <label for="field_name" class="form-label">
-                                                                Assignees</label>
-                                                            <select name="assignees[]" id="assignees" class="form-control" multiple>
+                                                        <div>
+                                                            <select name="assignees[]" id="assignees" class="form-control" hidden>
                                                                 <option value="{{ auth()->user()->id }}" selected disabled>
                                                                     {{ auth()->user()->username }}
                                                                 </option>

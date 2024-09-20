@@ -180,12 +180,16 @@ class TaskController extends Controller
             'created_by' => 'required',
         ]);
 
+        $task = new task();
+
         task::create([
             'name' => $request->name,
             'project_id' => $request->project_id,
             'board_id' => $request->board_id,
             'created_by' => $request->created_by,
         ]);
+
+        $task->users()->sync($request->assignees);
 
         return redirect()
             ->route('task.index')
