@@ -184,6 +184,7 @@
                                         <th>Task Status</th>
                                         <th>Task Priority</th>
                                         <th>Due Date</th>
+                                        <th>Created By</th>
                                         <th>Created At</th>
                                         <th>Action</th>
                                     </tr>
@@ -196,10 +197,11 @@
                                             <td>{{ $item->status->name ?? ' ' }}</td>
                                             <td>{{ $item->priority->name ?? ' ' }}</td>
                                             <td>{{ $item->due_date ?? ' ' }}</td>
+                                            <td>{{ $item->created_by ?? ' ' }}</td>
                                             <td>{{ $item->created_at }}</td>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                                                    @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer' || auth()->user()->username == $item->created_by)
                                                         <!-- Form untuk duplikasi -->
                                                         <form id="duplicate-form-{{ $item->id }}"
                                                             action="{{ route('task.duplicate', $item->id) }}"
@@ -228,8 +230,15 @@
                                                             </button>
                                                         </form>
                                                     @else
+                                                        @if (auth()->user()->id == $item->created_by)
+                                                            <button type="button" class="btn" data-bs-toggle="modal"
+                                                                data-bs-target="#view-{{ $item->id }}">
+                                                                <i class="icon-action fa-solid fa-eye"></i>
+                                                            </button>
+                                                        @else
+                                                        @endif
                                                         <button type="button" class="btn" data-bs-toggle="modal"
-                                                            data-bs-target="#view-{{ $item->id }}">
+                                                        data-bs-target="#view-{{ $item->id }}">
                                                             <i class="icon-action fa-solid fa-eye"></i>
                                                         </button>
                                                     @endif
@@ -237,7 +246,7 @@
                                             </td>
                                         </tr>
 
-                                        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                                        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer' || auth()->user()->username == $item->created_by)
                                             <div class="modal fade" id="view-{{ $item->id }}" tabindex="-1"
                                                 aria-labelledby="createModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-xl">
@@ -1120,6 +1129,27 @@
                                                                 @endforeach
                                                             </select>
                                                         </div>
+                                                        <div class="mb-3">
+                                                            <label for="field_name" class="form-label">
+                                                                Created_by</label>
+                                                            <input type="text"
+                                                                class="form-control @error('created_by') is-invalid @enderror"
+                                                                name="created_by" value="{{ auth()->user()->username }}" readonly>
+                                                            @error('created_by')
+                                                                <div class="alert alert-danger mt-2">
+                                                                    {{ $message }}
+                                                                </div>
+                                                            @enderror
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="field_name" class="form-label">
+                                                                Assignees</label>
+                                                            <select name="assignees[]" id="assignees" class="form-control" multiple>
+                                                                <option value="{{ auth()->user()->id }}" selected disabled>
+                                                                    {{ auth()->user()->username }}
+                                                                </option>
+                                                            </select>
+                                                        </div>
                                                         <button type="submit" class="btn btn-primary">Create
                                                             Task</button>
                                                     </form>
@@ -1144,7 +1174,7 @@
             <i class="fas fa-angle-up"></i>
         </a>
 
-        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer' )
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
                     const selectElements = document.querySelectorAll('[id^="assignees"]');

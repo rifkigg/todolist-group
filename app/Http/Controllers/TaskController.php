@@ -37,15 +37,17 @@ class TaskController extends Controller
         $selectedUserId = $request->input('assignee_id');
         $userRole = $request->user()->role; // Ambil role pengguna
 
-        // Filter task berdasarkan role
+        // Filter task berdasarkan role dan created_by
         if ($userRole === 'admin' || $userRole === 'manajer') {
             // Admin dapat melihat semua task
             $taskQuery = Task::with('project', 'board', 'status', 'priority', 'label', 'users', 'attachments', 'activities', 'checklist', 'description')->latest();
         } else {
-            // Role lain hanya dapat melihat task yang ditugaskan kepada mereka
+            // Role lain hanya dapat melihat task yang ditugaskan kepada mereka dan yang mereka buat
             $taskQuery = Task::with('project', 'board', 'status', 'priority', 'label', 'users', 'attachments', 'activities', 'checklist', 'description')
-                ->whereHas('users', function ($query) use ($request) {
-                    $query->where('users.id', $request->user()->id);
+                ->where(function ($query) use ($request) {
+                    $query->whereHas('users', function ($subQuery) use ($request) {
+                        $subQuery->where('users.id', $request->user()->id);
+                    })->orWhere('created_by', $request->user()->username); // Menambahkan kondisi untuk created_by
                 })
                 ->latest();
         }
@@ -175,12 +177,14 @@ class TaskController extends Controller
             'name' => 'required',
             'project_id' => 'required',
             'board_id' => 'required',
+            'created_by' => 'required',
         ]);
 
         task::create([
             'name' => $request->name,
             'project_id' => $request->project_id,
             'board_id' => $request->board_id,
+            'created_by' => $request->created_by,
         ]);
 
         return redirect()
@@ -193,12 +197,14 @@ class TaskController extends Controller
             'name' => 'required',
             'project_id' => 'required',
             'board_id' => 'required',
+            'created_by' => 'required',
         ]);
 
         task::create([
             'name' => $request->name,
             'project_id' => $request->project_id,
             'board_id' => $request->board_id,
+            'created_by' => $request->created_by,
         ]);
 
         return redirect()
