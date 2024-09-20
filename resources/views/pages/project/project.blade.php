@@ -205,11 +205,14 @@
                                             <td>{{ $item->live_date }}</td>
                                             <td>
                                                 @if ($item->progress == 100)
-                                                    <h5><span class="badge bg-success">{{ $item->progress }} %</span></h5>
-                                                @elseif ($item->progress < 60 && $item->progress > 40)
-                                                    <h5><span class="badge bg-warning">{{ $item->progress }} %</span></h5>
+                                                    <h5><span class="badge bg-success">{{ $item->progress }} %</span>
+                                                    </h5>
+                                                @elseif ($item->progress >= 60)
+                                                    <h5><span class="badge bg-warning">{{ $item->progress }} %</span>
+                                                    </h5>
                                                 @else
-                                                    <h5><span class="badge bg-danger">{{ $item->progress }} %</span></h5>
+                                                    <h5><span class="badge bg-danger">{{ $item->progress }} %</span>
+                                                    </h5>
                                                 @endif
                                             </td>
                                             <td>{{ $item->created_at }}</td>
