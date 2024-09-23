@@ -1172,16 +1172,62 @@
                                                                 class="form-control">
                                                         </div>
                                                         <div class="mb-3">
-                                                            <label for="assignees"
-                                                                class="form-label">Assignees</label>
-                                                            <select name="assignees[]" id="assignees"
-                                                                class="form-control">
+                                                            <label for="assignees" class="form-label">Assignees</label>
+                                                            <select name="assignees[]" id="assignees" class="form-control">
                                                                 @foreach ($users as $user)
                                                                     <option value="{{ $user->id }}">
                                                                         {{ $user->username }}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
+                                                        <div id="selected-assignees">
+                                                            <p>Selected Assignees:</p>
+                                                            <ul class="d-flex flex-wrap gap-2 list-unstyled"></ul>
+                                                        </div>
+                                                        <script>
+                                                            document.addEventListener('DOMContentLoaded', function() {
+                                                                const selectElement = document.getElementById('assignees');
+                                                                const selectedAssigneesContainer = document.getElementById('selected-assignees').querySelector('ul');
+
+                                                                function updateSelectedAssignees() {
+                                                                    const selectedOptions = Array.from(selectElement.selectedOptions);
+                                                                    selectedAssigneesContainer.innerHTML = '';
+
+                                                                    selectedOptions.forEach(option => {
+                                                                        const userId = option.value;
+                                                                        const userName = option.textContent;
+
+                                                                        const userDiv = document.createElement('li');
+                                                                        userDiv.classList.add('selected-user', 'border', 'rounded', 'p-2', 'bg-secondary', 'text-white');
+                                                                        userDiv.dataset.id = userId;
+                                                                        userDiv.innerHTML = `
+                                                                            <span>${userName}</span>
+                                                                            <button type="button" class="btn btn-sm btn-danger ms-2 remove-assignee" aria-label="Remove">x</button>
+                                                                        `;
+                                                                        selectedAssigneesContainer.appendChild(userDiv);
+                                                                    });
+                                                                }
+
+                                                                selectElement.addEventListener('change', updateSelectedAssignees);
+                                                                updateSelectedAssignees(); // Initialize display on page load
+
+                                                                selectedAssigneesContainer.addEventListener('click', function(event) {
+                                                                    if (event.target.classList.contains('remove-assignee')) {
+                                                                        const userDiv = event.target.closest('.selected-user');
+                                                                        const userId = userDiv.dataset.id;
+
+                                                                        // Remove the user from the select
+                                                                        const optionToRemove = Array.from(selectElement.options).find(option => option.value === userId);
+                                                                        if (optionToRemove) {
+                                                                            optionToRemove.selected = false;
+                                                                        }
+
+                                                                        // Remove the user div from the display
+                                                                        userDiv.remove();
+                                                                    }
+                                                                });
+                                                            });
+                                                        </script>
                                                         <div>
                                                             <input type="text"
                                                                 class="form-control @error('created_by') is-invalid @enderror"
