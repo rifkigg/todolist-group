@@ -22,7 +22,6 @@ return new class extends Migration
             $table->string('time_count')->nullable();
             $table->date('due_date')->nullable();
             $table->string('timer_status')->nullable()->default('Paused');
-            $table->string('created_by');
             $table->timestamps();
 
             // Foreign keys
