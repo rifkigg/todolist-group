@@ -26,24 +26,28 @@
                 </a>
             </li>
 
-            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
-                <li class="nav-item ">
-                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-                        aria-bs-expanded="true" aria-bs-controls="collapseTwo">
-                        <i class="fa-solid fa-list-check"></i>
-                        <span>Project</span>
-                    </a>
-                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
-                        data-bs-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
+            <li class="nav-item ">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                    aria-bs-expanded="true" aria-bs-controls="collapseTwo">
+                    <i class="fa-solid fa-list-check"></i>
+                    <span>Project</span>
+                </a>
+                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        @if (auth()->user()->role == 'admin')
                             <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
                             <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
                             <a class="collapse-item " href="{{ route('projectcategories.index') }}">Categories</a>
                             <a class="collapse-item" href="{{ route('project_status.index') }}">Project Status</a>
-                        </div>
+                        @elseif (auth()->user()->role == 'manajer')
+                            <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
+                            <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
+                        @else
+                            <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
+                        @endif
                     </div>
-                </li>
-            @endif
+                </div>
+            </li>
             <li class="nav-item active">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseThree"
                     aria-bs-expanded="true" aria-bs-controls="collapseThree">
@@ -53,7 +57,7 @@
                 <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
                     data-bs-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                        @if (auth()->user()->role == 'admin')
                             <a class="collapse-item active" href="{{ route('task.index') }}">Task</a>
                             <a class="collapse-item" href="{{ route('task_status.index') }}">Task Status</a>
                             <a class="collapse-item " href="{{ route('priorities.index') }}">Task Priorities</a>
@@ -64,7 +68,7 @@
                     </div>
                 </div>
             </li>
-            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+            @if (auth()->user()->role == 'admin')
                 <li class="nav-item ">
                     <a class="nav-link " href="{{ route('manage_user.index') }}" aria-bs-expanded="true"
                         aria-bs-controls="collapseTwo">
@@ -176,10 +180,10 @@
 
 
                             {{-- @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer') --}}
-                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                data-bs-target="#createTask">
-                                Create Task
-                            </button>
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#createTask">
+                                    Create Task
+                                </button>
                             {{-- @else
                             @endif --}}
                             <table id="example" class="table table-striped">
@@ -207,9 +211,7 @@
                                             <td>{{ $item->created_at }}</td>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    @if (auth()->user()->role == 'admin' ||
-                                                            auth()->user()->role == 'manajer' ||
-                                                            auth()->user()->username == $item->created_by)
+                                                    @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer' || auth()->user()->username == $item->created_by)
                                                         <!-- Form untuk duplikasi -->
                                                         <form id="duplicate-form-{{ $item->id }}"
                                                             action="{{ route('task.duplicate', $item->id) }}"
@@ -239,15 +241,14 @@
                                                         </form>
                                                     @else
                                                         @if (auth()->user()->id == $item->created_by)
-                                                            <button type="button" class="btn"
-                                                                data-bs-toggle="modal"
+                                                            <button type="button" class="btn" data-bs-toggle="modal"
                                                                 data-bs-target="#view-{{ $item->id }}">
                                                                 <i class="icon-action fa-solid fa-eye"></i>
                                                             </button>
                                                         @else
                                                         @endif
                                                         <button type="button" class="btn" data-bs-toggle="modal"
-                                                            data-bs-target="#view-{{ $item->id }}">
+                                                        data-bs-target="#view-{{ $item->id }}">
                                                             <i class="icon-action fa-solid fa-eye"></i>
                                                         </button>
                                                     @endif
@@ -255,9 +256,7 @@
                                             </td>
                                         </tr>
 
-                                        @if (auth()->user()->role == 'admin' ||
-                                                auth()->user()->role == 'manajer' ||
-                                                auth()->user()->username == $item->created_by)
+                                        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer' || auth()->user()->username == $item->created_by)
                                             <div class="modal fade" id="view-{{ $item->id }}" tabindex="-1"
                                                 aria-labelledby="createModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-xl">
@@ -411,32 +410,31 @@
                                                                             @foreach ($item->attachments as $img)
                                                                                 <div
                                                                                     class="mb-3 d-flex align-items-start justify-content-between">
-                                                                                    @if (preg_match('/\.(jpg|jpeg|png|gif)$/i', $img->file_name))
-                                                                                        <a
-                                                                                            href="{{ asset('storage/attachments/' . $img->file_name) }}">
-                                                                                            <img src="{{ asset('storage/attachments/' . $img->file_name) }}"
-                                                                                                alt="{{ $img->file_name }}"
-                                                                                                width="150">
-                                                                                        </a>
-                                                                                    @else
-                                                                                        <a
-                                                                                            href="{{ asset('storage/attachments/' . $img->file_name) }}">
-                                                                                            <div class="file-icon d-flex flex-column justify-content-center align-items-center text-dark"
-                                                                                                style="width: 150px ;height: 100px">
-                                                                                                <i
-                                                                                                    class="fa-solid fa-file fs-1"></i>
-                                                                                                <p>{{ $img->file_name }}
-                                                                                                </p>
-                                                                                            </div>
-                                                                                        </a>
-                                                                                    @endif
-                                                                                    <div
-                                                                                        class="d-flex justify-content-end w-100">
-                                                                                        <button type="button"
-                                                                                            onclick="if(confirm('Are you sure you want to delete this attachment?')) { document.getElementById('deleteGambar-{{ $img->id }}').submit(); }"
-                                                                                            class="btn btn-danger btn-sm">
-                                                                                            <i
-                                                                                                class="fa-solid fa-trash"></i>
+                                                                                    <div class="d-flex align-items-center">
+                                                                                        @if (preg_match('/\.(jpg|jpeg|png|gif)$/i', $img->file_name))
+                                                                                            <a
+                                                                                                href="{{ asset('storage/attachments/' . $img->file_name) }}">
+                                                                                                <img src="{{ asset('storage/attachments/' . $img->file_name) }}"
+                                                                                                    alt="{{ $img->file_name }}"
+                                                                                                    width="150">
+                                                                                            </a>
+                                                                                        @else
+                                                                                            <a
+                                                                                                href="{{ asset('storage/attachments/' . $img->file_name) }}">
+                                                                                                <div class="file-icon d-flex flex-column justify-content-center align-items-center text-dark"
+                                                                                                    style="width: 150px ;height: 100px">
+                                                                                                    <i
+                                                                                                        class="fa-solid fa-file fs-1"></i>
+                                                                                                    <p>{{ $img->file_name }}
+                                                                                                    </p>
+                                                                                                </div>
+                                                                                            </a>
+                                                                                        @endif
+                                                                                    </div>
+                                                                                    <div class="ms-auto">
+                                                                                        <button class="btn btn-danger btn-sm"
+                                                                                            onclick="if(confirm('Are you sure you want to delete this attachment?')) { document.getElementById('deleteGambar-{{ $img->id }}').submit(); }">
+                                                                                            <i class="fa-solid fa-trash"></i>
                                                                                         </button>
                                                                                     </div>
                                                                                 </div>
@@ -622,18 +620,14 @@
                                                                             data-task-id="{{ $item->id }}">
                                                                             <p for="time_count_{{ $item->id }}"
                                                                                 class="form-label">Time Count</p>
-                                                                            @php
-                                                                                $totalSeconds = $taskTime
-                                                                                    ? $taskTime->totalTime
-                                                                                    : $item->time_count; // Total waktu dalam detik
+                                                                                @php
+                                                                                $totalSeconds = $taskTime ? $taskTime->totalTime : $item->time_count; // Total waktu dalam detik
                                                                                 $hours = floor($totalSeconds / 3600); // Hitung jam
-                                                                                $minutes = floor(
-                                                                                    ($totalSeconds % 3600) / 60,
-                                                                                ); // Hitung menit
+                                                                                $minutes = floor(($totalSeconds % 3600) / 60); // Hitung menit
                                                                                 $seconds = $totalSeconds % 60; // Hitung detik
-                                                                            @endphp
-                                                                            <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}
-                                                                            </p>
+                                                                                @endphp
+                                                                                <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}
+                                                                                </p>
                                                                         </div>
                                                                         <label for="due_date" class="form-label">Due
                                                                             Date</label>
@@ -819,32 +813,31 @@
                                                                             @foreach ($item->attachments as $img)
                                                                                 <div
                                                                                     class="mb-3 d-flex align-items-start justify-content-between">
-                                                                                    @if (preg_match('/\.(jpg|jpeg|png|gif)$/i', $img->file_name))
-                                                                                        <a
-                                                                                            href="{{ asset('storage/attachments/' . $img->file_name) }}">
-                                                                                            <img src="{{ asset('storage/attachments/' . $img->file_name) }}"
-                                                                                                alt="{{ $img->file_name }}"
-                                                                                                width="150">
-                                                                                        </a>
-                                                                                    @else
-                                                                                        <a
-                                                                                            href="{{ asset('storage/attachments/' . $img->file_name) }}">
-                                                                                            <div class="file-icon d-flex flex-column justify-content-center align-items-center text-dark"
-                                                                                                style="width: 150px ;height: 100px">
-                                                                                                <i
-                                                                                                    class="fa-solid fa-file fs-1"></i>
-                                                                                                <p>{{ $img->file_name }}
-                                                                                                </p>
-                                                                                            </div>
-                                                                                        </a>
-                                                                                    @endif
-                                                                                    <div
-                                                                                        class="d-flex justify-content-end w-100">
-                                                                                        <button type="button"
-                                                                                            onclick="if(confirm('Are you sure you want to delete this attachment?')) { document.getElementById('deleteGambar-{{ $img->id }}').submit(); }"
-                                                                                            class="btn btn-danger btn-sm">
-                                                                                            <i
-                                                                                                class="fa-solid fa-trash"></i>
+                                                                                    <div class="d-flex align-items-center">
+                                                                                        @if (preg_match('/\.(jpg|jpeg|png|gif)$/i', $img->file_name))
+                                                                                            <a
+                                                                                                href="{{ asset('storage/attachments/' . $img->file_name) }}">
+                                                                                                <img src="{{ asset('storage/attachments/' . $img->file_name) }}"
+                                                                                                    alt="{{ $img->file_name }}"
+                                                                                                    width="150">
+                                                                                            </a>
+                                                                                        @else
+                                                                                            <a
+                                                                                                href="{{ asset('storage/attachments/' . $img->file_name) }}">
+                                                                                                <div class="file-icon d-flex flex-column justify-content-center align-items-center text-dark"
+                                                                                                    style="width: 150px ;height: 100px">
+                                                                                                    <i
+                                                                                                        class="fa-solid fa-file fs-1"></i>
+                                                                                                    <p>{{ $img->file_name }}
+                                                                                                    </p>
+                                                                                                </div>
+                                                                                            </a>
+                                                                                        @endif
+                                                                                    </div>
+                                                                                    <div class="ms-auto">
+                                                                                        <button class="btn btn-danger btn-sm"
+                                                                                            onclick="if(confirm('Are you sure you want to delete this attachment?')) { document.getElementById('deleteGambar-{{ $img->id }}').submit(); }">
+                                                                                            <i class="fa-solid fa-trash"></i>
                                                                                         </button>
                                                                                     </div>
                                                                                 </div>
@@ -1020,18 +1013,14 @@
                                                                             data-task-id="{{ $item->id }}">
                                                                             <p for="time_count_{{ $item->id }}"
                                                                                 class="form-label">Time Count</p>
-                                                                            @php
-                                                                                $totalSeconds = $taskTime
-                                                                                    ? $taskTime->totalTime
-                                                                                    : $item->time_count; // Total waktu dalam detik
+                                                                                @php
+                                                                                $totalSeconds = $taskTime ? $taskTime->totalTime : $item->time_count; // Total waktu dalam detik
                                                                                 $hours = floor($totalSeconds / 3600); // Hitung jam
-                                                                                $minutes = floor(
-                                                                                    ($totalSeconds % 3600) / 60,
-                                                                                ); // Hitung menit
+                                                                                $minutes = floor(($totalSeconds % 3600) / 60); // Hitung menit
                                                                                 $seconds = $totalSeconds % 60; // Hitung detik
-                                                                            @endphp
-                                                                            <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}
-                                                                            </p>
+                                                                                @endphp
+                                                                                <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}
+                                                                                </p>
                                                                         </div>
                                                                         <label for="due_date" class="form-label">Due
                                                                             Date</label>
@@ -1149,11 +1138,31 @@
                                                                 @endforeach
                                                             </select>
                                                         </div>
+                                                        <div class="mb-3">
+                                                            <label for="priority_id" class="form-label">Task Priority</label>
+                                                            <select name="priority_id" id="priority_id" class="form-control">
+                                                                <option value="" selected>Choose Priority:</option>
+                                                                @foreach ($priority as $items)
+                                                                    <option value="{{ $items->id }}">{{ $items->name }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="due_date" class="form-label">Due Date</label>
+                                                            <input type="date" name="due_date" id="due_date" class="form-control">
+                                                        </div>
+                                                        <div class="mb-3">
+                                                            <label for="assignees" class="form-label">Assignees</label>
+                                                            <select name="assignees[]" id="assignees" class="form-control" multiple>
+                                                                @foreach ($users as $user)
+                                                                    <option value="{{ $user->id }}">{{ $user->username }}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
                                                         <div>
                                                             <input type="text"
                                                                 class="form-control @error('created_by') is-invalid @enderror"
-                                                                name="created_by"
-                                                                value="{{ auth()->user()->username }}" hidden>
+                                                                name="created_by" value="{{ auth()->user()->username }}" hidden>
                                                             @error('created_by')
                                                                 <div class="alert alert-danger mt-2">
                                                                     {{ $message }}
@@ -1161,10 +1170,8 @@
                                                             @enderror
                                                         </div>
                                                         <div>
-                                                            <select name="assignees[]" id="assignees"
-                                                                class="form-control" hidden>
-                                                                <option value="{{ auth()->user()->id }}" selected
-                                                                    disabled>
+                                                            <select name="assignees[]" id="assignees" class="form-control" hidden>
+                                                                <option value="{{ auth()->user()->id }}" selected disabled>
                                                                     {{ auth()->user()->username }}
                                                                 </option>
                                                             </select>
@@ -1193,7 +1200,7 @@
             <i class="fas fa-angle-up"></i>
         </a>
 
-        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer' )
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
                     const selectElements = document.querySelectorAll('[id^="assignees"]');
