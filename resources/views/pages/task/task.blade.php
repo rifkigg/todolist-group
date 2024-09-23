@@ -16,28 +16,24 @@
                 </li>
             </x-slot>
 
-            <li class="nav-item ">
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-                    aria-bs-expanded="true" aria-bs-controls="collapseTwo">
-                    <i class="fa-solid fa-list-check"></i>
-                    <span>Project</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        @if (auth()->user()->role == 'admin')
+            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                <li class="nav-item ">
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                        aria-bs-expanded="true" aria-bs-controls="collapseTwo">
+                        <i class="fa-solid fa-list-check"></i>
+                        <span>Project</span>
+                    </a>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                        data-bs-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
                             <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
                             <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
                             <a class="collapse-item " href="{{ route('projectcategories.index') }}">Categories</a>
                             <a class="collapse-item" href="{{ route('project_status.index') }}">Project Status</a>
-                        @elseif (auth()->user()->role == 'manajer')
-                            <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
-                            <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
-                        @else
-                            <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
-                        @endif
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
+            @endif
             <li class="nav-item active">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseThree"
                     aria-bs-expanded="true" aria-bs-controls="collapseThree">
@@ -47,7 +43,7 @@
                 <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
                     data-bs-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        @if (auth()->user()->role == 'admin')
+                        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
                             <a class="collapse-item active" href="{{ route('task.index') }}">Task</a>
                             <a class="collapse-item" href="{{ route('task_status.index') }}">Task Status</a>
                             <a class="collapse-item " href="{{ route('priorities.index') }}">Task Priorities</a>
@@ -58,7 +54,7 @@
                     </div>
                 </div>
             </li>
-            @if (auth()->user()->role == 'admin')
+            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
                 <li class="nav-item ">
                     <a class="nav-link " href="{{ route('manage_user.index') }}" aria-bs-expanded="true"
                         aria-bs-controls="collapseTwo">
@@ -170,10 +166,10 @@
 
 
                             {{-- @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer') --}}
-                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#createTask">
-                                    Create Task
-                                </button>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#createTask">
+                                Create Task
+                            </button>
                             {{-- @else
                             @endif --}}
                             <table id="example" class="table table-striped">
@@ -201,7 +197,9 @@
                                             <td>{{ $item->created_at }}</td>
                                             <td>
                                                 <div class="d-flex align-items-center">
-                                                    @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer' || auth()->user()->username == $item->created_by)
+                                                    @if (auth()->user()->role == 'admin' ||
+                                                            auth()->user()->role == 'manajer' ||
+                                                            auth()->user()->username == $item->created_by)
                                                         <!-- Form untuk duplikasi -->
                                                         <form id="duplicate-form-{{ $item->id }}"
                                                             action="{{ route('task.duplicate', $item->id) }}"
@@ -231,14 +229,15 @@
                                                         </form>
                                                     @else
                                                         @if (auth()->user()->id == $item->created_by)
-                                                            <button type="button" class="btn" data-bs-toggle="modal"
+                                                            <button type="button" class="btn"
+                                                                data-bs-toggle="modal"
                                                                 data-bs-target="#view-{{ $item->id }}">
                                                                 <i class="icon-action fa-solid fa-eye"></i>
                                                             </button>
                                                         @else
                                                         @endif
                                                         <button type="button" class="btn" data-bs-toggle="modal"
-                                                        data-bs-target="#view-{{ $item->id }}">
+                                                            data-bs-target="#view-{{ $item->id }}">
                                                             <i class="icon-action fa-solid fa-eye"></i>
                                                         </button>
                                                     @endif
@@ -246,7 +245,9 @@
                                             </td>
                                         </tr>
 
-                                        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer' || auth()->user()->username == $item->created_by)
+                                        @if (auth()->user()->role == 'admin' ||
+                                                auth()->user()->role == 'manajer' ||
+                                                auth()->user()->username == $item->created_by)
                                             <div class="modal fade" id="view-{{ $item->id }}" tabindex="-1"
                                                 aria-labelledby="createModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-xl">
@@ -614,14 +615,18 @@
                                                                             data-task-id="{{ $item->id }}">
                                                                             <p for="time_count_{{ $item->id }}"
                                                                                 class="form-label">Time Count</p>
-                                                                                @php
-                                                                                $totalSeconds = $taskTime ? $taskTime->totalTime : $item->time_count; // Total waktu dalam detik
+                                                                            @php
+                                                                                $totalSeconds = $taskTime
+                                                                                    ? $taskTime->totalTime
+                                                                                    : $item->time_count; // Total waktu dalam detik
                                                                                 $hours = floor($totalSeconds / 3600); // Hitung jam
-                                                                                $minutes = floor(($totalSeconds % 3600) / 60); // Hitung menit
+                                                                                $minutes = floor(
+                                                                                    ($totalSeconds % 3600) / 60,
+                                                                                ); // Hitung menit
                                                                                 $seconds = $totalSeconds % 60; // Hitung detik
-                                                                                @endphp
-                                                                                <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}
-                                                                                </p>
+                                                                            @endphp
+                                                                            <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}
+                                                                            </p>
                                                                         </div>
                                                                         <label for="due_date" class="form-label">Due
                                                                             Date</label>
@@ -1004,14 +1009,18 @@
                                                                             data-task-id="{{ $item->id }}">
                                                                             <p for="time_count_{{ $item->id }}"
                                                                                 class="form-label">Time Count</p>
-                                                                                @php
-                                                                                $totalSeconds = $taskTime ? $taskTime->totalTime : $item->time_count; // Total waktu dalam detik
+                                                                            @php
+                                                                                $totalSeconds = $taskTime
+                                                                                    ? $taskTime->totalTime
+                                                                                    : $item->time_count; // Total waktu dalam detik
                                                                                 $hours = floor($totalSeconds / 3600); // Hitung jam
-                                                                                $minutes = floor(($totalSeconds % 3600) / 60); // Hitung menit
+                                                                                $minutes = floor(
+                                                                                    ($totalSeconds % 3600) / 60,
+                                                                                ); // Hitung menit
                                                                                 $seconds = $totalSeconds % 60; // Hitung detik
-                                                                                @endphp
-                                                                                <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}
-                                                                                </p>
+                                                                            @endphp
+                                                                            <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}
+                                                                            </p>
                                                                         </div>
                                                                         <label for="due_date" class="form-label">Due
                                                                             Date</label>
@@ -1132,7 +1141,8 @@
                                                         <div>
                                                             <input type="text"
                                                                 class="form-control @error('created_by') is-invalid @enderror"
-                                                                name="created_by" value="{{ auth()->user()->username }}" hidden>
+                                                                name="created_by"
+                                                                value="{{ auth()->user()->username }}" hidden>
                                                             @error('created_by')
                                                                 <div class="alert alert-danger mt-2">
                                                                     {{ $message }}
@@ -1140,8 +1150,10 @@
                                                             @enderror
                                                         </div>
                                                         <div>
-                                                            <select name="assignees[]" id="assignees" class="form-control" hidden>
-                                                                <option value="{{ auth()->user()->id }}" selected disabled>
+                                                            <select name="assignees[]" id="assignees"
+                                                                class="form-control" hidden>
+                                                                <option value="{{ auth()->user()->id }}" selected
+                                                                    disabled>
                                                                     {{ auth()->user()->username }}
                                                                 </option>
                                                             </select>
@@ -1170,7 +1182,7 @@
             <i class="fas fa-angle-up"></i>
         </a>
 
-        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer' )
+        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
             <script>
                 document.addEventListener('DOMContentLoaded', function() {
                     const selectElements = document.querySelectorAll('[id^="assignees"]');

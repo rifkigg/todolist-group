@@ -50,9 +50,9 @@ class ProjectController extends Controller
             return $project->tasks;
         });
 
-        $projects = app(ProjectController::class)->getProjectByUser(auth()->id());
+        // $projects = app(ProjectController::class)->getProjectByUser(auth()->id()); //ini code untuk nge filter
 
-        $projects = $projects->map(function ($project) {
+        $projects = $project->map(function ($project) {
             $totalTasks = $project->tasks->count();
             $completedTasks = $project->tasks->where('timer_status', 'Finished')->count();
             

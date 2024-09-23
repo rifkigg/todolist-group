@@ -18,37 +18,34 @@
             </x-slot>
 
 
-            <li class="nav-item ">
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-                    aria-bs-expanded="true" aria-bs-controls="collapseTwo">
-                    <i class="fa-solid fa-list-check"></i>
-                    <span>Project</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        @if (auth()->user()->role == 'admin')
+            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                <li class="nav-item ">
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                        aria-bs-expanded="true" aria-bs-controls="collapseTwo">
+                        <i class="fa-solid fa-list-check"></i>
+                        <span>Project</span>
+                    </a>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                        data-bs-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
                             <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
                             <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
                             <a class="collapse-item " href="{{ route('projectcategories.index') }}">Categories</a>
                             <a class="collapse-item" href="{{ route('project_status.index') }}">Project Status</a>
-                        @elseif (auth()->user()->role == 'manajer')
-                            <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
-                            <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
-                        @else
-                            <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
-                        @endif
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
+            @endif
             <li class="nav-item ">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseThree"
                     aria-bs-expanded="true" aria-bs-controls="collapseTwo">
                     <i class="fas fa-clipboard-list"></i>
                     <span>Task</span>
                 </a>
-                <div id="collapseThree" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
+                <div id="collapseThree" class="collapse" aria-labelledby="headingTwo"
+                    data-bs-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        @if (auth()->user()->role == 'admin')
+                        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
                             <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
                             <a class="collapse-item" href="{{ route('task_status.index') }}">Task Status</a>
                             <a class="collapse-item " href="{{ route('priorities.index') }}">Task Priorities</a>
@@ -59,7 +56,7 @@
                     </div>
                 </div>
             </li>
-            @if (auth()->user()->role == 'admin')
+            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
                 <li class="nav-item ">
                     <a class="nav-link " href="{{ route('manage_user.index') }}" aria-bs-expanded="true"
                         aria-bs-controls="collapseTwo">
@@ -122,52 +119,46 @@
 
                                     </div>
                                     <div class="mb-3">
-                                        <div class="form-select">
 
-                                            <label for="category_id">Project Category: </label>
-                                            <select id="category_id" name="category_id"
-                                                class=" form-control @error('category_id') is-invalid @enderror">
-                                                <option disabled>Pilih Category:</option>
-                                                @foreach ($categories as $items)
-                                                    <option value="{{ $items->id }}"
-                                                        {{ old('category_id', $project->category_id) }}>
-                                                        {{ $items->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            @error('category_id')
-                                                <div class="alert alert-danger mt-2">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-
-                                            <p>The type of project you are creating.</p>
-                                        </div>
-                                    </div>
-                            </div>
-
-                            <div class="wrapper">
-                                <div class="">
-                                    <div class="form-select">
-                                        <label for="status_id">Project Status</label>
-                                        <select id="status_id" name="status_id"
-                                            class="form-control @error('status_id') is-invalid @enderror">
-                                            <option disabled>Pilih Status:</option>
-                                            @foreach ($status as $items)
+                                        <label for="category_id">Project Category: </label>
+                                        <select id="category_id" name="category_id"
+                                            class=" form-control @error('category_id') is-invalid @enderror">
+                                            <option disabled>Pilih Category:</option>
+                                            @foreach ($categories as $items)
                                                 <option value="{{ $items->id }}"
-                                                    {{ old('status_id', $project->status_id) }}>{{ $items->name }}
+                                                    {{ old('category_id', $project->category_id) }}>
+                                                    {{ $items->name }}
                                                 </option>
                                             @endforeach
                                         </select>
-                                        @error('status_id')
+                                        @error('category_id')
                                             <div class="alert alert-danger mt-2">
                                                 {{ $message }}
                                             </div>
                                         @enderror
 
-                                        <p>The project status - current status of project.</p>
+                                        <p>The type of project you are creating.</p>
                                     </div>
-                                </div>
+                            </div>
+
+                            <div class="wrapper">
+                                <label for="status_id">Project Status</label>
+                                <select id="status_id" name="status_id"
+                                    class="form-control @error('status_id') is-invalid @enderror">
+                                    <option disabled>Pilih Status:</option>
+                                    @foreach ($status as $items)
+                                        <option value="{{ $items->id }}"
+                                            {{ old('status_id', $project->status_id) }}>{{ $items->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('status_id')
+                                    <div class="alert alert-danger mt-2">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+
+                                <p>The project status - current status of project.</p>
                                 {{--  --}}
 
                                 {{-- project details start --}}

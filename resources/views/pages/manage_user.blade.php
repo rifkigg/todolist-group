@@ -18,29 +18,24 @@
                     </li>
                 </x-slot>
 
-                <li class="nav-item ">
-                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-                        aria-bs-expanded="true" aria-bs-controls="collapseTwo">
-                        <i class="fa-solid fa-list-check"></i>
-                        <span>Project</span>
-                    </a>
-                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
-                        data-bs-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            @if (auth()->user()->role == 'admin')
+                @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                    <li class="nav-item ">
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                            data-bs-target="#collapseTwo" aria-bs-expanded="true" aria-bs-controls="collapseTwo">
+                            <i class="fa-solid fa-list-check"></i>
+                            <span>Project</span>
+                        </a>
+                        <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                            data-bs-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
                                 <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
                                 <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
                                 <a class="collapse-item " href="{{ route('projectcategories.index') }}">Categories</a>
                                 <a class="collapse-item" href="{{ route('project_status.index') }}">Project Status</a>
-                            @elseif (auth()->user()->role == 'manajer')
-                                <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
-                                <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
-                            @else
-                                <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
-                            @endif
+                            </div>
                         </div>
-                    </div>
-                </li>
+                    </li>
+                @endif
                 <li class="nav-item ">
                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
                         data-bs-target="#collapseThree" aria-bs-expanded="true" aria-bs-controls="collapseTwo">
@@ -50,7 +45,7 @@
                     <div id="collapseThree" class="collapse" aria-labelledby="headingTwo"
                         data-bs-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            @if (auth()->user()->role == 'admin')
+                            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
                                 <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
                                 <a class="collapse-item" href="{{ route('task_status.index') }}">Task Status</a>
                                 <a class="collapse-item " href="{{ route('priorities.index') }}">Task Priorities</a>
@@ -61,7 +56,7 @@
                         </div>
                     </div>
                 </li>
-                @if (auth()->user()->role == 'admin')
+                @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
                     <li class="nav-item active">
                         <a class="nav-link active" href="{{ route('manage_user.index') }}" aria-bs-expanded="true"
                             aria-bs-controls="collapseTwo">
@@ -148,8 +143,8 @@
                                                                     <input type="text"
                                                                         class="form-control @error('username') is-invalid @enderror"
                                                                         name="username"
-                                                                        value="{{ old('username', $user->username) }}" required
-                                                                        placeholder="Enter Username">
+                                                                        value="{{ old('username', $user->username) }}"
+                                                                        required placeholder="Enter Username">
                                                                     @error('username')
                                                                         <div class="alert alert-danger mt-2">
                                                                             {{ $message }}
@@ -175,7 +170,8 @@
                                                                         Choose Role</label>
                                                                     <select id="role" name="role"
                                                                         class="form-control"
-                                                                        value="{{ old('role', $user->role) }}" required>
+                                                                        value="{{ old('role', $user->role) }}"
+                                                                        required>
                                                                         <option value="" selected disabled>Choose
                                                                             Role:</option>
                                                                         <option value="admin">Admin</option>
@@ -250,7 +246,8 @@
                                                     <div class="mb-3">
                                                         <label for="field_name" class="form-label">
                                                             Choose Role</label>
-                                                        <select id="role" name="role" class="form-control" required>
+                                                        <select id="role" name="role" class="form-control"
+                                                            required>
                                                             <option value="" selected disabled>Choose Role:
                                                             </option>
                                                             <option value="admin">Admin</option>
