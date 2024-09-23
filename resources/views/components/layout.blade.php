@@ -29,7 +29,14 @@
     <script src="https://cdn.datatables.net/2.1.4/js/dataTables.js"></script>
     <script src="https://cdn.datatables.net/2.1.4/js/dataTables.bootstrap5.js"></script>
     <script>
-        new DataTable('#example');
+        $(document).ready(function() {
+            new DataTable('#example', {
+                columnDefs: [{
+                    targets: "_all", // Menerapkan ke semua kolom
+                    defaultContent: "-" // Menampilkan "-" jika tidak ada data
+                }]
+            });
+        });
     </script>
     <script src="https://kit.fontawesome.com/87dd173a0d.js" crossorigin="anonymous"></script>
     <!-- Bootstrap core JavaScript-->
@@ -43,7 +50,7 @@
     <!-- Core plugin JavaScript-->
     <script src="{{ asset('/assets/vendor/jquery-easing/jquery.easing.min.js') }}"></script>
     <script src="{{ asset('/assets/js/sb-admin-2.min.js') }}"></script>
-    
+
 </body>
 
 </html>
