@@ -583,7 +583,7 @@
                                                                 <input type="text" class="form-control border-0"
                                                                     id="name" name="name"
                                                                     value="{{ $item->name }}"
-                                                                    onchange="updateHiddenInput(this.value)">
+                                                                    onchange="updateHiddenInput(this.value)" disabled>
                                                             </h5>
                                                             <button type="button" class="btn-close"
                                                                 data-bs-dismiss="modal" aria-label="Close"></button>

@@ -197,7 +197,7 @@
                                         <th>Category</th>
                                         <th>Status</th>
                                         <th>Live Date</th>
-                                        <th>Proggress</th>
+                                        <th>Progress</th>
                                         <th>Created</th>
                                         <th>Action</th>
                                     </tr>

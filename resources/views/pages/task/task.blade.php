@@ -266,7 +266,7 @@
                                                         <div class="modal-header">
                                                             <h5 class="modal-title w-100" id="createModalLabel">
                                                                 <input type="text" class="form-control border-0"
-                                                                    id="name" name="name"
+                                                                    id="name-{{ $item->id }}" name="name"
                                                                     value="{{ $item->name }}"
                                                                     onchange="updateHiddenInput(this.value)">
                                                             </h5>
@@ -656,6 +656,12 @@
                                                                             onclick="document.getElementById('deleteForm-{{ $item->id }}').submit();">
                                                                             Delete
                                                                         </button>
+
+                                                                        <button id="editButton-{{ $item->id }}"
+                                                                            type="button"
+                                                                            onclick="focusInput('{{ $item->id }}')" class="btn btn-success">
+                                                                            Edit Task Name
+                                                                        </button>
                                                                     </form>
                                                                 </div>
                                                             </div>
@@ -717,7 +723,7 @@
                                                                 <input type="text" class="form-control border-0"
                                                                     id="name" name="name"
                                                                     value="{{ $item->name }}"
-                                                                    onchange="updateHiddenInput(this.value)">
+                                                                    onchange="updateHiddenInput(this.value)" disabled>
                                                             </h5>
                                                             <button type="button" class="btn-close"
                                                                 data-bs-dismiss="modal" aria-label="Close"></button>
@@ -1172,8 +1178,10 @@
                                                                 class="form-control">
                                                         </div>
                                                         <div class="mb-3">
-                                                            <label for="assignees" class="form-label">Assignees</label>
-                                                            <select name="assignees[]" id="assignees" class="form-control">
+                                                            <label for="assignees"
+                                                                class="form-label">Assignees</label>
+                                                            <select name="assignees[]" id="assignees"
+                                                                class="form-control">
                                                                 @foreach ($users as $user)
                                                                     <option value="{{ $user->id }}">
                                                                         {{ $user->username }}</option>
@@ -1198,7 +1206,8 @@
                                                                         const userName = option.textContent;
 
                                                                         const userDiv = document.createElement('li');
-                                                                        userDiv.classList.add('selected-user', 'border', 'rounded', 'p-2', 'bg-secondary', 'text-white');
+                                                                        userDiv.classList.add('selected-user', 'border', 'rounded', 'p-2', 'bg-secondary',
+                                                                            'text-white');
                                                                         userDiv.dataset.id = userId;
                                                                         userDiv.innerHTML = `
                                                                             <span>${userName}</span>
@@ -1217,7 +1226,8 @@
                                                                         const userId = userDiv.dataset.id;
 
                                                                         // Remove the user from the select
-                                                                        const optionToRemove = Array.from(selectElement.options).find(option => option.value === userId);
+                                                                        const optionToRemove = Array.from(selectElement.options).find(option => option.value ===
+                                                                            userId);
                                                                         if (optionToRemove) {
                                                                             optionToRemove.selected = false;
                                                                         }
@@ -1510,6 +1520,12 @@
                     }
                 }
             });
+        </script>
+
+        <script>
+            function focusInput(itemId) {
+                document.getElementById('name-' + itemId).focus();
+            }
         </script>
 
 </x-layout>
