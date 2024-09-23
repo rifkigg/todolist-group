@@ -182,7 +182,7 @@
                             <table id="example" class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th scope="col">NO</th>
+                                        <th scope="col">No</th>
                                         <th scope="col">Task Name</th>
                                         <th scope="col">Status</th>
                                         <th scope="col">Total Time</th>

@@ -33,7 +33,7 @@
             new DataTable('#example', {
                 columnDefs: [{
                     targets: "_all", // Menerapkan ke semua kolom
-                    defaultContent: "-" // Menampilkan "-" jika tidak ada data
+                    defaultContent: " " // Menampilkan "-" jika tidak ada data
                 }]
             });
         });

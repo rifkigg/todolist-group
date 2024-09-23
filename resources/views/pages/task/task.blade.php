@@ -1101,7 +1101,7 @@
                                     @empty
                                         <tr>
                                             <td colspan="6" class="alert alert-danger">
-                                                Data Project belum Tersedia.
+                                                Project data is not available.
                                             </td>
                                         </tr>
 
