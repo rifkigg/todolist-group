@@ -171,30 +171,33 @@ class TaskController extends Controller
         return view('pages.boards', compact('total_project', 'total_user', 'total_task', 'total_board', 'project', 'boards', 'status', 'priority', 'label', 'users'));
     }
 
-    public function store(Request $request): RedirectResponse
+    public function store(Request $request)
     {
-        $request->validate([
-            'name' => 'required',
-            'project_id' => 'required',
-            'board_id' => 'required',
-            'created_by' => 'required',
+        // Validasi input
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'project_id' => 'required|integer',
+            'board_id' => 'required|integer',
+            'priority_id' => 'required|integer',
+            'due_date' => 'required|date',
+            'assignees' => 'array',
+            'assignees.*' => 'integer',
         ]);
 
-        $task = new task();
+        // Tambahkan created_by ke data yang akan disimpan
+        $validatedData['created_by'] = auth()->user()->username; // atau auth()->user()->id jika menggunakan ID
 
-        task::create([
-            'name' => $request->name,
-            'project_id' => $request->project_id,
-            'board_id' => $request->board_id,
-            'created_by' => $request->created_by,
-        ]);
+        // Simpan tugas
+        $task = Task::create($validatedData);
 
-        $task->users()->sync($request->assignees);
+        // Simpan relasi ke task_user
+        if (!empty($request->assignees)) {
+            $task->users()->attach($request->assignees);
+        }
 
-        return redirect()
-            ->route('task.index')
-            ->with(['success' => 'Data Berhasil Disimpan!']);
+        return redirect()->route('task.index')->with('success', 'Task created successfully.');
     }
+
     public function storeToBoard(Request $request): RedirectResponse
     {
         $request->validate([
