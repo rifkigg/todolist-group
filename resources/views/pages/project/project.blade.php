@@ -19,28 +19,24 @@
             </x-slot>
 
 
-            <li class="nav-item active">
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-                    aria-bs-expanded="true" aria-bs-controls="collapseTwo">
-                    <i class="fa-solid fa-list-check"></i>
-                    <span>Project</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        @if (auth()->user()->role == 'admin')
+            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                <li class="nav-item active">
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                        aria-bs-expanded="true" aria-bs-controls="collapseTwo">
+                        <i class="fa-solid fa-list-check"></i>
+                        <span>Project</span>
+                    </a>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                        data-bs-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
                             <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
                             <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
                             <a class="collapse-item " href="{{ route('projectcategories.index') }}">Categories</a>
                             <a class="collapse-item" href="{{ route('project_status.index') }}">Project Status</a>
-                        @elseif (auth()->user()->role == 'manajer')
-                            <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
-                            <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
-                        @else
-                            <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
-                        @endif
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
+            @endif
             <li class="nav-item ">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseThree"
                     aria-bs-expanded="true" aria-bs-controls="collapseThree">
@@ -50,7 +46,7 @@
                 <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
                     data-bs-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        @if (auth()->user()->role == 'admin')
+                        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
                             <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
                             <a class="collapse-item" href="{{ route('task_status.index') }}">Task Status</a>
                             <a class="collapse-item " href="{{ route('priorities.index') }}">Task Priorities</a>
@@ -61,7 +57,7 @@
                     </div>
                 </div>
             </li>
-            @if (auth()->user()->role == 'admin')
+            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
                 <li class="nav-item ">
                     <a class="nav-link " href="{{ route('manage_user.index') }}" aria-bs-expanded="true"
                         aria-bs-controls="collapseTwo">

@@ -17,30 +17,25 @@
                     </a>
                 </li>
             </x-slot>
+            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                <li class="nav-item active">
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                        data-bs-target="#collapseThree" aria-bs-expanded="true" aria-bs-controls="collapseThree">
+                        <i class="fa-solid fa-list-check"></i>
+                        <span>Project</span>
+                    </a>
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                        data-bs-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
 
-            <li class="nav-item active">
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseThree"
-                    aria-bs-expanded="true" aria-bs-controls="collapseThree">
-                    <i class="fa-solid fa-list-check"></i>
-                    <span>Project</span>
-                </a>
-                <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
-                    data-bs-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        @if (auth()->user()->role == 'admin')
                             <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
                             <a class="collapse-item active" href="{{ route('project.create') }}">Add New</a>
                             <a class="collapse-item " href="{{ route('projectcategories.index') }}">Categories</a>
                             <a class="collapse-item" href="{{ route('project_status.index') }}">Project Status</a>
-                        @elseif (auth()->user()->role == 'manajer')
-                            <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
-                            <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
-                        @else
-                            <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
-                        @endif
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
+            @endif
             <li class="nav-item ">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
                     aria-bs-expanded="true" aria-bs-controls="collapseTwo">
@@ -49,7 +44,7 @@
                 </a>
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        @if (auth()->user()->role == 'admin')
+                        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
                             <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
                             <a class="collapse-item" href="{{ route('task_status.index') }}">Task Status</a>
                             <a class="collapse-item " href="{{ route('priorities.index') }}">Task Priorities</a>
@@ -60,7 +55,7 @@
                     </div>
                 </div>
             </li>
-            @if (auth()->user()->role == 'admin')
+            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
                 <li class="nav-item ">
                     <a class="nav-link " href="{{ route('manage_user.index') }}" aria-bs-expanded="true"
                         aria-bs-controls="collapseTwo">
@@ -123,204 +118,199 @@
 
                                     </div>
                                     <div class="mb-3">
-                                        <div class="form-select">
 
-                                            <label for="category_id">Project Category: </label>
-                                            <select id="category_id" name="category_id"
-                                                class=" form-control @error('category_id') is-invalid @enderror"
-                                                value="{{ old('category_id') }}">
-                                                <option disabled>Pilih Category:</option>
-                                                @foreach ($categories as $items)
-                                                    <option value="{{ $items->id }}">{{ $items->name }}
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            @error('category_id')
-                                                <div class="alert alert-danger mt-2">
-                                                    {{ $message }}
-                                                </div>
-                                            @enderror
-
-                                            <p>The type of project you are creating.</p>
-                                        </div>
-                                    </div>
-                            </div>
-
-                            <div class="wrapper">
-                                <div class="">
-                                    <div class="form-select">
-                                        <label for="status_id">Project Status</label>
-                                        <select id="status_id" name="status_id"
-                                            class="form-control @error('status_id') is-invalid @enderror"
-                                            value="{{ old('status_id') }}">
-                                            <option disabled>Pilih Status:</option>
-                                            @foreach ($status as $items)
+                                        <label for="category_id">Project Category: </label>
+                                        <select id="category_id" name="category_id"
+                                            class=" form-control @error('category_id') is-invalid @enderror"
+                                            value="{{ old('category_id') }}">
+                                            <option disabled>Pilih Category:</option>
+                                            @foreach ($categories as $items)
                                                 <option value="{{ $items->id }}">{{ $items->name }}
                                                 </option>
                                             @endforeach
                                         </select>
-                                        @error('status_id')
+                                        @error('category_id')
                                             <div class="alert alert-danger mt-2">
                                                 {{ $message }}
                                             </div>
                                         @enderror
 
-                                        <p>The project status - current status of project.</p>
+                                        <p>The type of project you are creating.</p>
                                     </div>
-                                </div>
-                                {{--  --}}
-
-                                {{-- project details start --}}
-                                <div class="wrapper mb-3">
-                                    <div class="textarea">
-                                        <label for="project_detail">Project Details: </label>
-                                        <textarea id="project_detail" class="form-control @error('project_detail') is-invalid @enderror"
-                                            name="project_detail" value="{{ old('project_detail') }}" placeholder="Masukkan Judul Product">
-                                            </textarea>
-                                        @error('project_detail')
-                                            <div class="alert alert-danger mt-2">
-                                                {{ $message }}
-                                            </div>
-                                        @enderror
-
-                                    </div>
-                                </div>
-
-                                   <!-- Assignees (Multi-Select) -->
-                                   <label for="assignees" class="form-label">Assignees</label>
-                                   <select name="assignees[]" id="assignees" class="form-select mb-3" multiple>
-                                       @foreach ($users as $user)
-                                           <option value="{{ $user->id }}"
-                                               {{ in_array($user->id, old('assignees', $project->users->pluck('id')->toArray())) ? 'selected' : '' }}>
-                                               {{ $user->username }}
-                                           </option>
-                                       @endforeach
-                                   </select>
-   
-                                   <!-- Tempat untuk menampilkan hasil pilihan -->
-                                   <div id="selected-assignees">
-                                       <p>Selected Assignees:</p>
-                                       <ul class="d-flex flex-wrap gap-2 list-unstyled">
-                                           @foreach ($project->users as $user)
-                                               <li class="d-flex align-items-center border rounded px-2 py-1">
-                                                   {{ $user->username }}
-                                               </li>
-                                           @endforeach
-                                       </ul>
-                                   </div>
-
-                                <div class="submit">
-                                    <div>
-                                        <button type="submit" class="btn btn-primary w-100">Create Project</button>
-                                    </div>
-                                </div>
-                                </form>
                             </div>
+
+                            <div class="wrapper">
+                                <label for="status_id">Project Status</label>
+                                <select id="status_id" name="status_id"
+                                    class="form-control @error('status_id') is-invalid @enderror"
+                                    value="{{ old('status_id') }}">
+                                    <option disabled>Pilih Status:</option>
+                                    @foreach ($status as $items)
+                                        <option value="{{ $items->id }}">{{ $items->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                @error('status_id')
+                                    <div class="alert alert-danger mt-2">
+                                        {{ $message }}
+                                    </div>
+                                @enderror
+
+                                <p>The project status - current status of project.</p>
+                            </div>
+                            {{--  --}}
+
+                            {{-- project details start --}}
+                            <div class="wrapper mb-3">
+                                <div class="textarea">
+                                    <label for="project_detail">Project Details: </label>
+                                    <textarea id="project_detail" class="form-control @error('project_detail') is-invalid @enderror"
+                                        name="project_detail" value="{{ old('project_detail') }}" placeholder="Masukkan Judul Product">
+                                            </textarea>
+                                    @error('project_detail')
+                                        <div class="alert alert-danger mt-2">
+                                            {{ $message }}
+                                        </div>
+                                    @enderror
+
+                                </div>
+                            </div>
+
+                            <!-- Assignees (Multi-Select) -->
+                            <label for="assignees" class="form-label">Assignees</label>
+                            <select name="assignees[]" id="assignees" class="form-select mb-3" multiple>
+                                @foreach ($users as $user)
+                                    <option value="{{ $user->id }}"
+                                        {{ in_array($user->id, old('assignees', $project->users->pluck('id')->toArray())) ? 'selected' : '' }}>
+                                        {{ $user->username }}
+                                    </option>
+                                @endforeach
+                            </select>
+
+                            <!-- Tempat untuk menampilkan hasil pilihan -->
+                            <div id="selected-assignees">
+                                <p>Selected Assignees:</p>
+                                <ul class="d-flex flex-wrap gap-2 list-unstyled">
+                                    @foreach ($project->users as $user)
+                                        <li class="d-flex align-items-center border rounded px-2 py-1">
+                                            {{ $user->username }}
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            </div>
+
+                            <div class="submit">
+                                <div>
+                                    <button type="submit" class="btn btn-primary w-100">Create Project</button>
+                                </div>
+                            </div>
+                            </form>
                         </div>
-                        <!-- End of Main Content -->
+                    </div>
+                    <!-- End of Main Content -->
+                </div>
+            </div>
+            <!-- End of Content Wrapper -->
+
+        </div>
+        <!-- End of Page Wrapper -->
+
+        <!-- Scroll to Top Button-->
+        <a class="scroll-to-top rounded" href="#page-top">
+            <i class="fas fa-angle-up"></i>
+        </a>
+
+        <!-- Logout Modal-->
+        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">Select "Logout" below if you are ready to end your current session.
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                        <a class="btn btn-primary" href="login.html">Logout</a>
                     </div>
                 </div>
-                <!-- End of Content Wrapper -->
-
             </div>
-            <!-- End of Page Wrapper -->
+        </div>
+        <script src="https://cdn.ckeditor.com/4.22.0/full/ckeditor.js"></script>
+        <script>
+            CKEDITOR.replace('project_detail');
+        </script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const selectElements = document.querySelectorAll('[id^="assignees"]');
+                const selectedAssigneesContainers = document.querySelectorAll('[id^="selected-assignees"]');
 
-            <!-- Scroll to Top Button-->
-            <a class="scroll-to-top rounded" href="#page-top">
-                <i class="fas fa-angle-up"></i>
-            </a>
+                // Function to update selected assignees display for a specific pair of select and container
+                function updateSelectedAssignees(selectElement, selectedAssigneesContainer) {
+                    const selectedOptions = Array.from(selectElement.selectedOptions);
+                    selectedAssigneesContainer.innerHTML = '';
 
-            <!-- Logout Modal-->
-            <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
-                aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">Select "Logout" below if you are ready to end your current session.
-                        </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                            <a class="btn btn-primary" href="login.html">Logout</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <script src="https://cdn.ckeditor.com/4.22.0/full/ckeditor.js"></script>
-            <script>
-                CKEDITOR.replace('project_detail');
-            </script>
-            <script>
-                document.addEventListener('DOMContentLoaded', function() {
-                    const selectElements = document.querySelectorAll('[id^="assignees"]');
-                    const selectedAssigneesContainers = document.querySelectorAll('[id^="selected-assignees"]');
+                    selectedOptions.forEach(option => {
+                        const userId = option.value;
+                        const userName = option.textContent;
 
-                    // Function to update selected assignees display for a specific pair of select and container
-                    function updateSelectedAssignees(selectElement, selectedAssigneesContainer) {
-                        const selectedOptions = Array.from(selectElement.selectedOptions);
-                        selectedAssigneesContainer.innerHTML = '';
-
-                        selectedOptions.forEach(option => {
-                            const userId = option.value;
-                            const userName = option.textContent;
-
-                            const userDiv = document.createElement('div');
-                            userDiv.classList.add('selected-user', 'mb-2', 'p-2', 'rounded', 'd-flex',
-                                'justify-content-between', 'align-items-center', 'bg-secondary', 'text-white');
-                            userDiv.dataset.id = userId;
+                        const userDiv = document.createElement('div');
+                        userDiv.classList.add('selected-user', 'mb-2', 'p-2', 'rounded', 'd-flex',
+                            'justify-content-between', 'align-items-center', 'bg-secondary', 'text-white');
+                        userDiv.dataset.id = userId;
 
 
-                            userDiv.innerHTML = `
+                        userDiv.innerHTML = `
                         <span class="me-2">${userName}</span>
                         <button type="button" class="btn btn-sm btn-danger ms-2 remove-assignee" aria-label="Remove">x</button>
                     `;
-                            selectedAssigneesContainer.appendChild(userDiv);
-                        });
-                    }
+                        selectedAssigneesContainer.appendChild(userDiv);
+                    });
+                }
 
-                    // Iterate over all select elements and attach event listeners
-                    selectElements.forEach((selectElement, index) => {
-                        const selectedAssigneesContainer = selectedAssigneesContainers[index];
+                // Iterate over all select elements and attach event listeners
+                selectElements.forEach((selectElement, index) => {
+                    const selectedAssigneesContainer = selectedAssigneesContainers[index];
 
-                        // Event listener for when the select value changes
-                        selectElement.addEventListener('change', function() {
-                            updateSelectedAssignees(selectElement, selectedAssigneesContainer);
-                        });
-
-                        // Event delegation to handle removal of assignees
-                        selectedAssigneesContainer.addEventListener('click', function(event) {
-                            if (event.target.classList.contains('remove-assignee')) {
-                                const userDiv = event.target.closest('.selected-user');
-                                const userId = userDiv.dataset.id;
-
-                                // Remove the user from the select
-                                const optionToRemove = Array.from(selectElement.options).find(option =>
-                                    option.value === userId);
-                                if (optionToRemove) {
-                                    optionToRemove.selected = false;
-                                }
-
-                                // Remove the user div from the display
-                                userDiv.remove();
-                            }
-                        });
-
-                        // Initialize display on page load
+                    // Event listener for when the select value changes
+                    selectElement.addEventListener('change', function() {
                         updateSelectedAssignees(selectElement, selectedAssigneesContainer);
+                    });
 
-                        // Ensure that changes in data after load are reflected in the UI
-                        new MutationObserver(() => updateSelectedAssignees(selectElement,
-                            selectedAssigneesContainer)).observe(selectElement, {
-                            childList: true,
-                            subtree: true,
-                            attributes: true,
-                            characterData: true
-                        });
+                    // Event delegation to handle removal of assignees
+                    selectedAssigneesContainer.addEventListener('click', function(event) {
+                        if (event.target.classList.contains('remove-assignee')) {
+                            const userDiv = event.target.closest('.selected-user');
+                            const userId = userDiv.dataset.id;
+
+                            // Remove the user from the select
+                            const optionToRemove = Array.from(selectElement.options).find(option =>
+                                option.value === userId);
+                            if (optionToRemove) {
+                                optionToRemove.selected = false;
+                            }
+
+                            // Remove the user div from the display
+                            userDiv.remove();
+                        }
+                    });
+
+                    // Initialize display on page load
+                    updateSelectedAssignees(selectElement, selectedAssigneesContainer);
+
+                    // Ensure that changes in data after load are reflected in the UI
+                    new MutationObserver(() => updateSelectedAssignees(selectElement,
+                        selectedAssigneesContainer)).observe(selectElement, {
+                        childList: true,
+                        subtree: true,
+                        attributes: true,
+                        characterData: true
                     });
                 });
-            </script>
+            });
+        </script>
 </x-layout>

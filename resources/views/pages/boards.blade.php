@@ -18,28 +18,24 @@
                 </li>
             </x-slot>
 
-            <li class="nav-item ">
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
-                    aria-bs-expanded="true" aria-bs-controls="collapseTwo">
-                    <i class="fa-solid fa-list-check"></i>
-                    <span>Project</span>
-                </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        @if (auth()->user()->role == 'admin')
+            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                <li class="nav-item ">
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                        aria-bs-expanded="true" aria-bs-controls="collapseTwo">
+                        <i class="fa-solid fa-list-check"></i>
+                        <span>Project</span>
+                    </a>
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
+                        data-bs-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
                             <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
                             <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
                             <a class="collapse-item " href="{{ route('projectcategories.index') }}">Categories</a>
                             <a class="collapse-item" href="{{ route('project_status.index') }}">Project Status</a>
-                        @elseif (auth()->user()->role == 'manajer')
-                            <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
-                            <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
-                        @else
-                            <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
-                        @endif
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
+            @endif
             <li class="nav-item ">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseThree"
                     aria-bs-expanded="true" aria-bs-controls="collapseTwo">
@@ -49,7 +45,7 @@
                 <div id="collapseThree" class="collapse" aria-labelledby="headingTwo"
                     data-bs-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        @if (auth()->user()->role == 'admin')
+                        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
                             <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
                             <a class="collapse-item" href="{{ route('task_status.index') }}">Task Status</a>
                             <a class="collapse-item " href="{{ route('priorities.index') }}">Task Priorities</a>
@@ -60,7 +56,7 @@
                     </div>
                 </div>
             </li>
-            @if (auth()->user()->role == 'admin')
+            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
                 <li class="nav-item ">
                     <a class="nav-link " href="{{ route('manage_user.index') }}" aria-bs-expanded="true"
                         aria-bs-controls="collapseTwo">
@@ -445,7 +441,7 @@
                                                                         <label for="assignees"
                                                                             class="form-label">Assignees</label>
                                                                         <select name="assignees[]" id="assignees"
-                                                                            class="form-select mb-3" >
+                                                                            class="form-select mb-3">
                                                                             @foreach ($users as $user)
                                                                                 <option value="{{ $user->id }}"
                                                                                     {{ in_array($user->id, old('assignees', $item->users->pluck('id')->toArray())) ? 'selected' : '' }}>
@@ -469,23 +465,32 @@
                                                                         </div>
 
                                                                         @php
-                                                                            $taskTime = $tasksWithTime->firstWhere('id', $item->id);
+                                                                            $taskTime = $tasksWithTime->firstWhere(
+                                                                                'id',
+                                                                                $item->id,
+                                                                            );
                                                                         @endphp
                                                                         <div class="task-row"
                                                                             data-task-id="{{ $item->id }}">
-                                                                                <div class="task-row"
+                                                                            <div class="task-row"
                                                                                 data-task-id="{{ $item->id }}">
                                                                                 <p for="time_count_{{ $item->id }}"
                                                                                     class="form-label">Time Count</p>
-                                                                                    @php
-                                                                                $totalSeconds = $taskTime ? $taskTime->totalTime : $item->time_count; // Total waktu dalam detik
-                                                                                $hours = floor($totalSeconds / 3600); // Hitung jam
-                                                                                $minutes = floor(($totalSeconds % 3600) / 60); // Hitung menit
-                                                                                $seconds = $totalSeconds % 60; // Hitung detik
+                                                                                @php
+                                                                                    $totalSeconds = $taskTime
+                                                                                        ? $taskTime->totalTime
+                                                                                        : $item->time_count; // Total waktu dalam detik
+                                                                                    $hours = floor(
+                                                                                        $totalSeconds / 3600,
+                                                                                    ); // Hitung jam
+                                                                                    $minutes = floor(
+                                                                                        ($totalSeconds % 3600) / 60,
+                                                                                    ); // Hitung menit
+                                                                                    $seconds = $totalSeconds % 60; // Hitung detik
                                                                                 @endphp
                                                                                 <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}
                                                                                 </p>
-                                                                                </div>
+                                                                            </div>
                                                                         </div>
 
                                                                         <label for="due_date" class="form-label">Due
@@ -792,7 +797,7 @@
                                                                         <label for="assignees"
                                                                             class="form-label">Assignees</label>
                                                                         <select name="assignees[]" id="assignees"
-                                                                            class="form-select mb-3"  disabled>
+                                                                            class="form-select mb-3" disabled>
                                                                             @foreach ($users as $user)
                                                                                 <option value="{{ $user->id }}"
                                                                                     {{ in_array($user->id, old('assignees', $item->users->pluck('id')->toArray())) ? 'selected' : '' }}>
@@ -816,20 +821,27 @@
                                                                         </div>
 
                                                                         @php
-                                                                            $taskTime = $tasksWithTime->firstWhere('id', $item->id);
+                                                                            $taskTime = $tasksWithTime->firstWhere(
+                                                                                'id',
+                                                                                $item->id,
+                                                                            );
                                                                         @endphp
                                                                         <div class="task-row"
                                                                             data-task-id="{{ $item->id }}">
                                                                             <p for="time_count_{{ $item->id }}"
                                                                                 class="form-label">Time Count</p>
-                                                                                @php
-                                                                                $totalSeconds = $taskTime ? $taskTime->totalTime : $item->time_count; // Total waktu dalam detik
+                                                                            @php
+                                                                                $totalSeconds = $taskTime
+                                                                                    ? $taskTime->totalTime
+                                                                                    : $item->time_count; // Total waktu dalam detik
                                                                                 $hours = floor($totalSeconds / 3600); // Hitung jam
-                                                                                $minutes = floor(($totalSeconds % 3600) / 60); // Hitung menit
+                                                                                $minutes = floor(
+                                                                                    ($totalSeconds % 3600) / 60,
+                                                                                ); // Hitung menit
                                                                                 $seconds = $totalSeconds % 60; // Hitung detik
-                                                                                @endphp
-                                                                                <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}
-                                                                                </p>
+                                                                            @endphp
+                                                                            <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}
+                                                                            </p>
                                                                         </div>
 
                                                                         <label for="due_date" class="form-label">Due
@@ -1060,7 +1072,8 @@
                                 const userName = option.textContent;
 
                                 const userDiv = document.createElement('div');
-                                userDiv.classList.add('selected-user','mb-2' ,'p-2', 'rounded', 'd-flex', 'justify-content-between', 'align-items-center', 'bg-secondary', 'text-white');
+                                userDiv.classList.add('selected-user', 'mb-2', 'p-2', 'rounded', 'd-flex',
+                                    'justify-content-between', 'align-items-center', 'bg-secondary', 'text-white');
                                 userDiv.dataset.id = userId;
                                 userDiv.innerHTML = `
                     <span class="me-2 fw-bold w-100 ">${userName}</span>
