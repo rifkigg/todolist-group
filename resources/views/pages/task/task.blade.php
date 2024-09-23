@@ -399,7 +399,7 @@
                                                                         @if ($item->attachments && count($item->attachments) > 0)
                                                                             @foreach ($item->attachments as $img)
                                                                                 <div
-                                                                                    class="mb-3 d-flex align-items-start gap-2">
+                                                                                    class="mb-3 d-flex align-items-start justify-content-between">
                                                                                     @if (preg_match('/\.(jpg|jpeg|png|gif)$/i', $img->file_name))
                                                                                         <a
                                                                                             href="{{ asset('storage/attachments/' . $img->file_name) }}">
@@ -420,16 +420,13 @@
                                                                                         </a>
                                                                                     @endif
                                                                                     <div
-                                                                                        class="d-flex justify-content-between w-100">
+                                                                                        class="d-flex justify-content-end w-100">
                                                                                         <button type="button"
                                                                                             onclick="if(confirm('Are you sure you want to delete this attachment?')) { document.getElementById('deleteGambar-{{ $img->id }}').submit(); }"
-                                                                                            class="btn btn-danger btn-sm">Delete
-                                                                                            this Attachment
+                                                                                            class="btn btn-danger btn-sm">
                                                                                             <i
                                                                                                 class="fa-solid fa-trash"></i>
                                                                                         </button>
-                                                                                        <p>Created at:
-                                                                                            {{ $img->created_at }}</p>
                                                                                     </div>
                                                                                 </div>
                                                                             @endforeach
@@ -806,7 +803,7 @@
                                                                         @if ($item->attachments && count($item->attachments) > 0)
                                                                             @foreach ($item->attachments as $img)
                                                                                 <div
-                                                                                    class="mb-3 d-flex align-items-start gap-2">
+                                                                                    class="mb-3 d-flex align-items-start justify-content-between">
                                                                                     @if (preg_match('/\.(jpg|jpeg|png|gif)$/i', $img->file_name))
                                                                                         <a
                                                                                             href="{{ asset('storage/attachments/' . $img->file_name) }}">
@@ -827,9 +824,13 @@
                                                                                         </a>
                                                                                     @endif
                                                                                     <div
-                                                                                        class="d-flex justify-content-between w-100">
-                                                                                        <p>Created at:
-                                                                                            {{ $img->created_at }}</p>
+                                                                                        class="d-flex justify-content-end w-100">
+                                                                                        <button type="button"
+                                                                                            onclick="if(confirm('Are you sure you want to delete this attachment?')) { document.getElementById('deleteGambar-{{ $img->id }}').submit(); }"
+                                                                                            class="btn btn-danger btn-sm">
+                                                                                            <i
+                                                                                                class="fa-solid fa-trash"></i>
+                                                                                        </button>
                                                                                     </div>
                                                                                 </div>
                                                                             @endforeach
