@@ -271,7 +271,9 @@ class TaskController extends Controller
         $task = Task::where('name', $taskName)->first();
         
         // Pause all other tasks and save their time
-        $playingTasks = Task::where('timer_status', 'Playing')->get();
+        $playingTasks = app(TaskController::class)->getTasksByUser(auth()->id());
+        // app(TaskController::class)->getTasksByUser(auth()->id());
+        // Task::where('timer_status', 'Playing')->get();
         foreach ($playingTasks as $playingTask) {
             // Simpan waktu total sebelum dipause
             History::create([
@@ -341,5 +343,13 @@ class TaskController extends Controller
         });
 
         return view('pages.task.task', compact('tasksWithTime'));
+    }
+    public function getTasksByUser($userId)
+    {
+        $tasks = Task::whereHas('users', function ($query) use ($userId) {
+            $query->where('user_id', $userId)->where('timer_status', 'Playing');
+        })->get();
+
+        return $tasks;
     }
 }

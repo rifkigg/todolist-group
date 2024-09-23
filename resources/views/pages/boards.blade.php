@@ -10,13 +10,23 @@
                     </a>
 
                 </li>
-                <li class="nav-item active">
-                    <a class="nav-link active" href="/boards">
-                        <i class="fa-solid fa-chess-board"></i>
-                        <span>Boards</span>
+                @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('ongoing.index') }}" aria-bs-expanded="true"
+                        aria-bs-controls="collapseTwo">
+                        <i class="fa-solid fa-hourglass-half"></i>
+                        <span>On Going</span>
                     </a>
                 </li>
+            @else
+            @endif
             </x-slot>
+            <li class="nav-item active">
+                <a class="nav-link active" href="/boards">
+                    <i class="fa-solid fa-chess-board"></i>
+                    <span>Boards</span>
+                </a>
+            </li>
 
             @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
                 <li class="nav-item ">

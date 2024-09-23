@@ -14,6 +14,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\OnGoingController;
 use App\Http\Controllers\StatusTaskController;
 use App\Http\Controllers\TaskChecklistController;
 use App\Http\Controllers\TaskPrioritiesController;
@@ -137,6 +138,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/history/pause', [TaskController::class, 'pause'])->name('history.pause');
     Route::post('/history/finish', [TaskController::class, 'finish'])->name('history.finish');
     Route::get('/history', [TaskController::class, 'indexTime'])->name('history.index');
+
+    Route::get('/ongoing', [OnGoingController::class, 'index'])->name('ongoing.index');
 });
 
 require __DIR__ . '/auth.php';

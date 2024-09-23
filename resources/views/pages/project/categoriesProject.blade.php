@@ -10,13 +10,23 @@
                         <i class="fas fa-fw fa-tachometer-alt"></i>
                         <span>Dashboard</span></a>
                 </li>
+                @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
                 <li class="nav-item">
-                    <a class="nav-link active" href="/boards">
-                        <i class="fa-solid fa-chess-board"></i>
-                        <span>Boards</span>
+                    <a class="nav-link" href="{{ route('ongoing.index') }}" aria-bs-expanded="true"
+                        aria-bs-controls="collapseTwo">
+                        <i class="fa-solid fa-hourglass-half"></i>
+                        <span>On Going</span>
                     </a>
                 </li>
+            @else
+            @endif
             </x-slot>
+            <li class="nav-item">
+                <a class="nav-link active" href="/boards">
+                    <i class="fa-solid fa-chess-board"></i>
+                    <span>Boards</span>
+                </a>
+            </li>
 
             @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
                 <li class="nav-item active">
@@ -87,7 +97,7 @@
                                 <!-- Input Form -->
                                 @csrf
                                 <div class="form-group">
-                                    <label for="name">Nama</label>
+                                    <label for="name">Name</label>
                                     <input type="text" class="form-control" id="name" name="name"
                                         onkeyup="generateSlug('name', 'slug')" required placeholder="Enter Name">
                                 </div>
@@ -112,7 +122,7 @@
                                     @foreach ($categories as $category)
                                         <tr>
                                             <td>{{ $category->name }}</td>
-                                            <td hidden>{{ $category->slug }}</td>
+                                            {{-- <td hidden>{{ $category->slug }}</td> --}}
                                             <td>
                                                 <button type="button" class="btn" data-bs-toggle="modal"
                                                     data-bs-target="#editModal{{ $category->id }}">
@@ -146,7 +156,7 @@
                                                             @method('PUT')
                                                             <div class="mb-3">
                                                                 <label for="field_name_{{ $category->id }}"
-                                                                    class="form-label">Nama</label>
+                                                                    class="form-label">Name</label>
                                                                 <input type="text" class="form-control"
                                                                     id="field_name_{{ $category->id }}"
                                                                     name="name"
