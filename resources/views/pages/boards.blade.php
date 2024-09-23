@@ -11,15 +11,15 @@
 
                 </li>
                 @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('ongoing.index') }}" aria-bs-expanded="true"
-                        aria-bs-controls="collapseTwo">
-                        <i class="fa-solid fa-hourglass-half"></i>
-                        <span>On Going</span>
-                    </a>
-                </li>
-            @else
-            @endif
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('ongoing.index') }}" aria-bs-expanded="true"
+                            aria-bs-controls="collapseTwo">
+                            <i class="fa-solid fa-hourglass-half"></i>
+                            <span>On Going</span>
+                        </a>
+                    </li>
+                @else
+                @endif
             </x-slot>
             <li class="nav-item active">
                 <a class="nav-link active" href="/boards">
@@ -114,8 +114,47 @@
                             @forelse ($boards as $board)
                                 <div class="board-item"
                                     style="min-width: 300px; height: auto;  margin-right: 10px; border: 1px solid #ccc; border-radius: 5px; padding: 10px; background-color: #f9f9f9;">
-                                    <h5 style="margin: 0; font-weight: bold" class="text-dark">{{ $board->board_name }}
-                                    </h5>
+                                    <div class="d-flex justify-content-between align-items-center">
+
+                                        <h5 style="margin: 0; font-weight: bold" class="text-dark">
+                                            {{ $board->board_name }}
+                                        </h5>
+                                        <button class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                            data-bs-target="#edit-{{ $board->id }}" type="button"><i
+                                                class="icon-action fa-solid fa-pencil"></i></button>
+                                    </div>
+
+                                    <div class="modal fade" id="edit-{{ $board->id }}" tabindex="-1"
+                                        aria-labelledby="createModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="createModalLabel">Edit Board
+                                                    </h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form action="{{ route('boards.update', $board->id) }}"
+                                                        method="POST" enctype="multipart/form-data"
+                                                        id="formUpdate-{{ $board->id }}">
+                                                        @csrf
+                                                        @method('PUT')
+                                                        <label for="board_id" class="form-label">Board Name</label>
+                                                        <input type="text" class="form-control mb-3"
+                                                            id="hiddenName" name="board_name"
+                                                            value="{{ $board->board_name }}">
+                                                        <input type="text" value="{{ request('project_id') }}"
+                                                            name="project_id" hidden>
+                                                        <button type="submit"
+                                                            class="btn btn-primary w-100">Update</button>
+                                                    </form>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <br>
 
                                     @forelse ($board->tasks as $item)
@@ -133,10 +172,11 @@
 
                                                         <div class="modal-header">
                                                             <h5 class="modal-title w-100" id="createModalLabel">
-                                                                <input type="text" class="form-control border-0"
-                                                                    id="name" name="name"
+                                                                <input type="text"
+                                                                    class="name form-control border-0"
+                                                                    id="name-{{ $item->id }}" name="name"
                                                                     value="{{ $item->name }}"
-                                                                    onchange="updateHiddenInput(this.value)">
+                                                                    onchange="updateHiddenInput(this.value, '{{ $item->id }}')">
                                                             </h5>
                                                             <button type="button" class="btn-close"
                                                                 data-bs-dismiss="modal" aria-label="Close"></button>
@@ -380,10 +420,10 @@
                                                                         id="formUpdate-{{ $item->id }}">
                                                                         @csrf
                                                                         @method('PUT')
-                                                                        <input type="text"
-                                                                            class="form-control border-0"
-                                                                            id="hiddenName" name="name"
-                                                                            value="{{ $item->name }}" hidden>
+                                                                        <input type="hidden"
+                                                                            id="hiddenName-{{ $item->id }}"
+                                                                            name="name"
+                                                                            value="{{ $item->name }}">
 
                                                                         <label for="board_id" class="form-label">Task
                                                                             Board</label>
@@ -521,6 +561,13 @@
                                                                         <button type="button" class="btn btn-danger"
                                                                             onclick="document.getElementById('deleteForm-{{ $item->id }}').submit();">
                                                                             Delete
+                                                                        </button>
+
+                                                                        <button id="editButton-{{ $item->id }}"
+                                                                            type="button"
+                                                                            onclick="focusInput('{{ $item->id }}')"
+                                                                            class="btn btn-success">
+                                                                            Edit Task Name
                                                                         </button>
                                                                     </form>
                                                                 </div>
@@ -961,8 +1008,7 @@
                                             <div class="mb-3">
                                                 <label for="priority_id" class="form-label">Task
                                                     Priority</label>
-                                                <select name="priority_id" id="priority_id"
-                                                    class="form-control">
+                                                <select name="priority_id" id="priority_id" class="form-control">
                                                     <option value="" selected>Choose Priority:
                                                     </option>
                                                     @foreach ($priority as $items)
@@ -977,10 +1023,8 @@
                                                     class="form-control">
                                             </div>
                                             <div class="mb-3">
-                                                <label for="assignees"
-                                                    class="form-label">Assignees</label>
-                                                <select name="assignees[]" id="assignees"
-                                                    class="form-control">
+                                                <label for="assignees" class="form-label">Assignees</label>
+                                                <select name="assignees[]" id="assignees" class="form-control">
                                                     @foreach ($users as $user)
                                                         <option value="{{ $user->id }}">
                                                             {{ $user->username }}</option>
@@ -1040,8 +1084,7 @@
                                             <div>
                                                 <input type="text"
                                                     class="form-control @error('created_by') is-invalid @enderror"
-                                                    name="created_by"
-                                                    value="{{ auth()->user()->username }}" hidden>
+                                                    name="created_by" value="{{ auth()->user()->username }}" hidden>
                                                 @error('created_by')
                                                     <div class="alert alert-danger mt-2">
                                                         {{ $message }}
@@ -1049,15 +1092,14 @@
                                                 @enderror
                                             </div>
                                             <div>
-                                                <select name="assignees[]" id="assignees"
-                                                    class="form-control" hidden>
-                                                    <option value="{{ auth()->user()->id }}" selected
-                                                        disabled>
+                                                <select name="assignees[]" id="assignees" class="form-control"
+                                                    hidden>
+                                                    <option value="{{ auth()->user()->id }}" selected disabled>
                                                         {{ auth()->user()->username }}
                                                     </option>
                                                 </select>
                                             </div>
-                                            
+
                                             <button type="submit" class="btn btn-primary">Create Task</button>
                                         </form>
                                     </div>
@@ -1360,6 +1402,17 @@
                         }
                     }
                 });
+            </script>
+            <script>
+                function focusInput(itemId) {
+                    document.getElementById('name-' + itemId).focus();
+                }
+            </script>
+            <script>
+                function updateHiddenInput(value, itemId) {
+                    // Mengupdate nilai dari input hidden dengan nilai yang diubah
+                    document.getElementById('hiddenName-' + itemId).value = value;
+                }
             </script>
 
 

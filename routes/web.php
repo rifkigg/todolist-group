@@ -123,6 +123,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/boards', [BoardController::class, 'index'])->name('boards.index');
     Route::post('/taskboards/create', [TaskController::class, 'storeToBoard'])->name('taskboards.store');
     Route::get('/boards/create', [BoardController::class, 'create'])->name('boards.create');
+    Route::put('/boards/update{id}', [BoardController::class, 'update'])->name('boards.update');
     Route::post('/boards/add', [BoardController::class, 'store'])->name('boards.store');
     Route::delete('/boards/{id}', [BoardController::class, 'destroy'])->name('boards.destroy');
 

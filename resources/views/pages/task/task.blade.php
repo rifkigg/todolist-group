@@ -224,7 +224,7 @@
                                                         <!-- Ikon view -->
                                                         <button type="button" class="btn" data-bs-toggle="modal"
                                                             data-bs-target="#view-{{ $item->id }}">
-                                                            <i class="icon-action fa-solid fa-eye"></i>
+                                                            <i class="fa-solid fa-pen-to-square"></i>
                                                         </button>
                                                         <!-- Form untuk delete -->
                                                         <form action="{{ route('task.destroy', $item->id) }}"
@@ -265,10 +265,11 @@
 
                                                         <div class="modal-header">
                                                             <h5 class="modal-title w-100" id="createModalLabel">
-                                                                <input type="text" class="form-control border-0"
+                                                                <input type="text"
+                                                                    class="name form-control border-0"
                                                                     id="name-{{ $item->id }}" name="name"
                                                                     value="{{ $item->name }}"
-                                                                    onchange="updateHiddenInput(this.value)">
+                                                                    onchange="updateHiddenInput(this.value, '{{ $item->id }}')">
                                                             </h5>
                                                             <button type="button" class="btn-close"
                                                                 data-bs-dismiss="modal" aria-label="Close"></button>
@@ -516,10 +517,7 @@
                                                                         id="formUpdate-{{ $item->id }}">
                                                                         @csrf
                                                                         @method('PUT')
-                                                                        <input type="text"
-                                                                            class="form-control border-0"
-                                                                            id="hiddenName" name="name"
-                                                                            value="{{ $item->name }}" hidden>
+                                                                        <input type="hidden" id="hiddenName-{{ $item->id }}" name="name" value="{{ $item->name }}">
 
                                                                         <label for="board_id" class="form-label">Task
                                                                             Board</label>
@@ -659,7 +657,8 @@
 
                                                                         <button id="editButton-{{ $item->id }}"
                                                                             type="button"
-                                                                            onclick="focusInput('{{ $item->id }}')" class="btn btn-success">
+                                                                            onclick="focusInput('{{ $item->id }}')"
+                                                                            class="btn btn-success">
                                                                             Edit Task Name
                                                                         </button>
                                                                     </form>
@@ -1488,10 +1487,11 @@
             });
         </script>
         <script>
-            function updateHiddenInput(value) {
-                // Mengupdate nilai dari input hidden dengan nilai yang diubah
-                document.getElementById('hiddenName').value = value;
-            }
+                function updateHiddenInput(value, itemId) {
+                    // Mengupdate nilai dari input hidden dengan nilai yang diubah
+                    document.getElementById('hiddenName-' + itemId).value = value;
+                }
+        </script>
         </script>
         <script>
             function toggleLineThrough(id) {
