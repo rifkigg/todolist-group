@@ -45,9 +45,11 @@ class TaskController extends Controller
             // Role lain hanya dapat melihat task yang ditugaskan kepada mereka dan yang mereka buat
             $taskQuery = Task::with('project', 'board', 'status', 'priority', 'label', 'users', 'attachments', 'activities', 'checklist', 'description')
                 ->where(function ($query) use ($request) {
-                    $query->whereHas('users', function ($subQuery) use ($request) {
-                        $subQuery->where('users.id', $request->user()->id);
-                    })->orWhere('created_by', $request->user()->username); // Menambahkan kondisi untuk created_by
+                    $query
+                        ->whereHas('users', function ($subQuery) use ($request) {
+                            $subQuery->where('users.id', $request->user()->id);
+                        })
+                        ->orWhere('created_by', $request->user()->username); // Menambahkan kondisi untuk created_by
                 })
                 ->latest();
         }
@@ -200,20 +202,22 @@ class TaskController extends Controller
 
     public function storeToBoard(Request $request): RedirectResponse
     {
-        $request->validate([
-            'name' => 'required',
-            'project_id' => 'required',
-            'board_id' => 'required',
-            'created_by' => 'required',
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'project_id' => 'required|integer',
+            'board_id' => 'required|integer',
+            'priority_id' => 'required|integer',
+            'due_date' => 'required|date',
+            'assignees' => 'array',
+            'assignees.*' => 'integer',
         ]);
+        $validatedData['created_by'] = auth()->user()->username;
 
-        task::create([
-            'name' => $request->name,
-            'project_id' => $request->project_id,
-            'board_id' => $request->board_id,
-            'created_by' => $request->created_by,
-        ]);
-
+        $task = Task::create($validatedData);
+        // Simpan relasi ke task_user
+        if (!empty($request->assignees)) {
+            $task->users()->attach($request->assignees);
+        }
         return redirect()
             ->back()
             ->with(['success' => 'Data Berhasil Disimpan!']);
@@ -272,7 +276,7 @@ class TaskController extends Controller
     {
         $taskName = $request->input('task_name');
         $task = Task::where('name', $taskName)->first();
-        
+
         // Pause all other tasks and save their time
         $playingTasks = app(TaskController::class)->getTasksByUser(auth()->id());
         // app(TaskController::class)->getTasksByUser(auth()->id());
@@ -286,7 +290,7 @@ class TaskController extends Controller
             $playingTask->timer_status = 'Paused';
             $playingTask->save();
         }
-        
+
         $task->timer_status = 'Playing';
         $task->save();
 
