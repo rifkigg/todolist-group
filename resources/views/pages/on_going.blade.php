@@ -103,7 +103,7 @@
                                                 <th>Username</th>
                                                 <th>Task</th>
                                                 <th>Status</th>
-                                                <th>Time</th>
+                                                <th>Duration</th>
                                                 <th>Task Created</th>
                                             </tr>
                                         </thead>
