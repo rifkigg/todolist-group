@@ -129,7 +129,7 @@
                                                             {{ \Carbon\Carbon::parse($activeTask['time'])->format('H:i:s') }}
                                                         @elseif ($activeTask['time'] == '0')
                                                             <p>00:00:00</p>
-                                                        @else
+                                                        @else   
                                                         @endif
                                                     </td>
                                                     <td>{{ \Carbon\Carbon::parse($activeTask['created_at'])->timezone('Asia/Jakarta')->format('d m Y H:i:s') }}</td>

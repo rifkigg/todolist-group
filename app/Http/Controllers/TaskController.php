@@ -24,7 +24,7 @@ class TaskController extends Controller
 {
     public function index(Request $request)
     {
-        if (now()->hour === 17) { //jam 5 sore menurut UTC jika di jakarta itu jam 12 malam
+        if (now('Asia/Jakarta')->hour === 0 && now('Asia/Jakarta')->minute === 0) { //jam 5 sore menurut UTC jika di jakarta itu jam 12 malam
             // Tambahkan refresh halaman satu kali sebelum logout
             echo "<script>if (!sessionStorage.getItem('reloaded')) { sessionStorage.setItem('reloaded', 'true'); location.reload(); }</script>";
             Auth::guard('web')->logout();
