@@ -132,7 +132,7 @@
                                                         @else
                                                         @endif
                                                     </td>
-                                                    <td>{{ \Carbon\Carbon::parse($activeTask['created_at'])->format('d F Y') }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($activeTask['created_at'])->timezone('Asia/Jakarta')->format('d m Y H:i:s') }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
