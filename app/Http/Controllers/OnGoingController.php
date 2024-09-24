@@ -5,11 +5,20 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Models\History;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OnGoingController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        if (now()->hour === 17) { //jam 5 sore menurut UTC jika di jakarta itu jam 12 malam
+            // Tambahkan refresh halaman satu kali sebelum logout
+            echo "<script>if (!sessionStorage.getItem('reloaded')) { sessionStorage.setItem('reloaded', 'true'); location.reload(); }</script>";
+            Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return redirect('/');
+        }
         $users = User::all();
 
         // Ambil tugas yang sedang dimainkan atau yang terakhir diambil oleh setiap pengguna

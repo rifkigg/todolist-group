@@ -2,18 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use Illuminate\View\View;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\ProjectCategories;
-use Illuminate\View\View;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Str;
 
 
 class ProjectCategoriesController extends Controller
 {
-    public function index():View
+    public function index(Request $request):View
     {
+        if (now()->hour === 17) { //jam 5 sore menurut UTC jika di jakarta itu jam 12 malam
+            // Tambahkan refresh halaman satu kali sebelum logout
+            echo "<script>if (!sessionStorage.getItem('reloaded')) { sessionStorage.setItem('reloaded', 'true'); location.reload(); }</script>";
+            Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return redirect('/');
+        }
         $categories = ProjectCategories::all();
         return view('pages.project.categoriesProject', compact('categories'));
     }

@@ -2,26 +2,35 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\Board;
+use App\Models\History;
 use App\Models\Project;
 use App\Models\TaskLabel;
-use App\Models\task_priority;
 use Illuminate\View\View;
 use App\Models\TaskStatus;
 use Illuminate\Http\Request;
 use App\Models\ProjectStatus;
+use App\Models\task_priority;
 use App\Models\ProjectCategories;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
-use Carbon\Carbon;
-use App\Models\History;
 
 class BoardController extends Controller
 {
     public function index(Request $request): View
     {
+        if (now()->hour === 17) { //jam 5 sore menurut UTC jika di jakarta itu jam 12 malam
+            // Tambahkan refresh halaman satu kali sebelum logout
+            echo "<script>if (!sessionStorage.getItem('reloaded')) { sessionStorage.setItem('reloaded', 'true'); location.reload(); }</script>";
+            Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return redirect('/');
+        }
         $projectId = $request->input('project_id');
 
         // Jika ada project_id yang dipilih, filter boards berdasarkan project_id tersebut

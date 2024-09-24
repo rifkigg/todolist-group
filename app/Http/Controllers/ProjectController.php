@@ -2,21 +2,30 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\task;
 use App\Models\User;
+use App\Models\board;
 use App\Models\Project;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Models\ProjectStatus;
 use App\Models\ProjectCategories;
 use App\Http\Controllers\Controller;
-use App\Models\board;
-use App\Models\task;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 
 class ProjectController extends Controller
 {
     public function index(Request $request)
     {
+        if (now()->hour === 17) { //jam 5 sore menurut UTC jika di jakarta itu jam 12 malam
+            // Tambahkan refresh halaman satu kali sebelum logout
+            echo "<script>if (!sessionStorage.getItem('reloaded')) { sessionStorage.setItem('reloaded', 'true'); location.reload(); }</script>";
+            Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return redirect('/');
+        }
         //get all products
         $project = Project::with('users', 'category', 'status')->latest()->get();
 

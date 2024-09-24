@@ -12,11 +12,20 @@ use App\Models\History;
 use App\Models\task_priority;
 use App\Models\TaskLabel;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class DashboardController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
+        if (now()->hour === 17) { //jam 5 sore menurut UTC jika di jakarta itu jam 12 malam
+            // Tambahkan refresh halaman satu kali sebelum logout
+            echo "<script>if (!sessionStorage.getItem('reloaded')) { sessionStorage.setItem('reloaded', 'true'); location.reload(); }</script>";
+            Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return redirect('/');
+        }
         // Mengambil data dari berbagai model
 
         $project = Project::all();

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\task;
 use App\Models\User;
 use App\Models\board;
-use App\Models\project;
 use App\Models\History;
+use App\Models\project;
 use App\Models\TaskLabel;
 use App\Models\Attachment;
 use App\Models\TaskStatus;
@@ -15,14 +16,22 @@ use Illuminate\Http\Request;
 use App\Models\task_priority;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Storage;
-use Carbon\Carbon;
 
 class TaskController extends Controller
 {
     public function index(Request $request)
     {
+        if (now()->hour === 17) { //jam 5 sore menurut UTC jika di jakarta itu jam 12 malam
+            // Tambahkan refresh halaman satu kali sebelum logout
+            echo "<script>if (!sessionStorage.getItem('reloaded')) { sessionStorage.setItem('reloaded', 'true'); location.reload(); }</script>";
+            Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
+            return redirect('/');
+        }
         $board = Board::all();
         $status = TaskStatus::all();
         $priority = task_priority::all();

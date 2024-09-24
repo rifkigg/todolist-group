@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Controllers\TaskController;
 use App\Http\Requests\Auth\LoginRequest;
+use Illuminate\Support\Facades\Log;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -38,14 +39,6 @@ class AuthenticatedSessionController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
-        // Cek apakah waktu saat ini adalah jam 12 malam
-        if (now()->hour === 0) {
-            Auth::guard('web')->logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-            return redirect('/')->with('alert', 'Anda telah logout otomatis pada jam 12 malam.');
-        }
-
         // Ambil task berdasarkan user yang sedang login
         $tasks = app(TaskController::class)->getTasksByUser(auth()->id());
 

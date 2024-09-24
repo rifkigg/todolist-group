@@ -119,9 +119,12 @@
                                         <h5 style="margin: 0; font-weight: bold" class="text-dark">
                                             {{ $board->board_name }}
                                         </h5>
-                                        <button class="btn btn-success btn-sm" data-bs-toggle="modal"
-                                            data-bs-target="#edit-{{ $board->id }}" type="button"><i
-                                                class="icon-action fa-solid fa-pencil"></i></button>
+                                        @if (request('project_id'))
+                                            <!-- Cek apakah proyek telah dipilih -->
+                                            <button class="btn btn-success btn-sm" data-bs-toggle="modal"
+                                                data-bs-target="#edit-{{ $board->id }}" type="button"><i
+                                                    class="icon-action fa-solid fa-pencil"></i></button>
+                                        @endif
                                     </div>
 
                                     <div class="modal fade" id="edit-{{ $board->id }}" tabindex="-1"
@@ -1413,6 +1416,10 @@
                     // Mengupdate nilai dari input hidden dengan nilai yang diubah
                     document.getElementById('hiddenName-' + itemId).value = value;
                 }
+            </script>
+            <script>
+                const currentTime = new Date();
+                console.log('Current hour: ' + currentTime.getHours() + ', Current minute: ' + currentTime.getMinutes());
             </script>
 
 
