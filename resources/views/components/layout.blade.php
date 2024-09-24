@@ -34,7 +34,9 @@
                 columnDefs: [{
                     targets: "_all", // Menerapkan ke semua kolom
                     defaultContent: " " // Menampilkan "-" jika tidak ada data
-                }]
+                }],
+                "pageLength": 50,
+                "lengthMenu": [ [10, 25, 50, 100], [10, 25, 50, 100] ]
             });
         });
     </script>

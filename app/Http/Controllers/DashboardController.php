@@ -46,7 +46,8 @@ class DashboardController extends Controller
         $tasks = app(DashboardController::class)->getTasksByUser(auth()->id())
         ->sortBy(function ($task) {
             return Carbon::parse($task->due_date);
-        });
+        })
+        ;
         // $tasks = app(DashboardController::class)->getTasksByUser(auth()->id());
         $projects = app(ProjectController::class)->getProjectByUser(auth()->id());
         $total_tasknya = $tasks->count();
