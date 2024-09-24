@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\task;
-use App\Models\User;    
+use App\Models\User;
 use App\Models\board;
 use App\Models\project;
 use App\Models\TaskStatus;
@@ -18,9 +18,15 @@ class DashboardController extends Controller
 {
     public function index(Request $request)
     {
-        if (now()->hour === 17) { //jam 5 sore menurut UTC jika di jakarta itu jam 12 malam
+        if (now()->hour === 17) {
+            //jam 5 sore menurut UTC jika di jakarta itu jam 12 malam
             // Tambahkan refresh halaman satu kali sebelum logout
-            echo "<script>if (!sessionStorage.getItem('reloaded')) { sessionStorage.setItem('reloaded', 'true'); location.reload(); }</script>";
+            echo "<script>
+                if (!sessionStorage.getItem('reloaded')) {
+                    sessionStorage.setItem('reloaded', 'true');
+                    location.reload();
+                }
+            </script>";
             Auth::guard('web')->logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
@@ -35,8 +41,13 @@ class DashboardController extends Controller
         $label = TaskLabel::all();
         $users = User::all();
 
+        
         // Ambil tasks yang ditugaskan ke user yang sedang login
-        $tasks = app(DashboardController::class)->getTasksByUser(auth()->id());
+        $tasks = app(DashboardController::class)->getTasksByUser(auth()->id())
+        ->sortBy(function ($task) {
+            return Carbon::parse($task->due_date);
+        });
+        // $tasks = app(DashboardController::class)->getTasksByUser(auth()->id());
         $projects = app(ProjectController::class)->getProjectByUser(auth()->id());
         $total_tasknya = $tasks->count();
         $total_selesai = $tasks->where('timer_status', 'Finished')->count();
@@ -62,7 +73,6 @@ class DashboardController extends Controller
             }
         }
 
-        
         // Hitung waktu dari 00:00:00 dan tambahkan totalTime
         $startOfDay = Carbon::today()->startOfDay();
         $endOfDay = Carbon::today()->endOfDay();
@@ -83,7 +93,7 @@ class DashboardController extends Controller
         $total_project = $projects->count();
         $total_task = $tasks->count();
         // Mengirim data ke view
-        return view('pages.dashboard', compact('total_belum_selesai','total_project', 'total_task', 'tasks', 'total_tasknya', 'total_selesai', 'format_persenan', 'board', 'project', 'status', 'priority', 'label', 'users', 'totalTime', 'remainingTime', 'tasksWithTime'));
+        return view('pages.dashboard', compact('total_belum_selesai', 'total_project', 'total_task', 'tasks', 'total_tasknya', 'total_selesai', 'format_persenan', 'board', 'project', 'status', 'priority', 'label', 'users', 'totalTime', 'remainingTime', 'tasksWithTime'));
     }
 
     public function getTasksByUser($userId)
@@ -94,22 +104,4 @@ class DashboardController extends Controller
 
         return $tasks;
     }
-    // public function indexTime(Request $request, $userId)
-    // {
-    //     // Mengambil semua task yang dimiliki oleh user
-    //     $tasks = Task::whereHas('users', function ($query) use ($userId) {
-    //         $query->where('user_id', $userId);
-    //     })->get();
-
-    //     $totalTime = 0; // Inisialisasi total waktu
-
-    //     if ($tasks->isNotEmpty()) {
-    //         // Iterasi setiap task untuk menghitung total waktu
-    //         foreach ($tasks as $task) {
-    //             $totalTime += History::calculateTotalTime($task->name); // Gunakan nama task untuk menghitung total waktu
-    //         }
-    //     }
-
-    //     return view('pages.dashboard', compact('totalTime', 'tasks')); // Kirimkan juga daftar tasks ke view
-    // }
 }

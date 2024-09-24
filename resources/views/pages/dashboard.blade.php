@@ -216,7 +216,8 @@
                                                     @endphp
                                                     <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}</p>
                                                 </td>
-                                                <td>{{ $task->due_date }}</td>
+                                                {{-- <td>{{ $task->due_date }}</td> --}}
+                                                <td>{{ \Carbon\Carbon::parse($task->due_date)->format('d/m/Y') }}</td>
                                                 <td>
                                                     <div class="d-flex gap-2 h-100 align-items-center">
                                                         @php
