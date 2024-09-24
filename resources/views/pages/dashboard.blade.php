@@ -216,7 +216,7 @@
                                                     @endphp
                                                     <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}</p>
                                                 </td>
-                                                <td>{{ $task->due_date }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($task->due_date)->format('d/m/Y') }}</td>
                                                 <td>
                                                     <div class="d-flex gap-2 h-100 align-items-center">
                                                         @php
@@ -590,7 +590,7 @@
                                                                         </div>
                                                                         <label for="due_date" class="form-label">Due
                                                                             Date</label>
-                                                                        <input type="date" name="due_date"
+                                                                        <input type="datetime-local" name="due_date"
                                                                             id="due_date" class="form-control mb-3"
                                                                             value="{{ old('due_date', $task->due_date) }}"
                                                                             disabled>

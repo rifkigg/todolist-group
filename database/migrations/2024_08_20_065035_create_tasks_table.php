@@ -20,7 +20,7 @@ return new class extends Migration
             $table->unsignedBigInteger('task_label_id')->nullable();
             $table->string('name');
             $table->string('time_count')->nullable();
-            $table->date('due_date')->nullable();
+            $table->datetime('due_date')->nullable();
             $table->string('timer_status')->nullable()->default('Paused');
             $table->timestamps();
 
