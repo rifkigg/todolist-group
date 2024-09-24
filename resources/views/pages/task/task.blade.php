@@ -202,7 +202,7 @@
                                             <td>{{ $item->project->name ?? ' ' }}</td>
                                             <td>{{ $item->status->name ?? ' ' }}</td>
                                             <td>{{ $item->priority->name ?? ' ' }}</td>
-                                            <td>{{ $item->due_date ?? ' ' }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($item->due_date)->format('d/m/Y') }}</td>
                                             <td>{{ $item->created_by ?? ' ' }}</td>
                                             <td>{{ $item->created_at }}</td>
                                             <td>
