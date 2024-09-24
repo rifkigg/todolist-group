@@ -184,8 +184,10 @@
                                     <tr>
                                         <th scope="col">No</th>
                                         <th scope="col">Task Name</th>
+                                        <th scope="col">Project Name</th>
                                         <th scope="col">Status</th>
                                         <th scope="col">Total Time</th>
+                                        <th scope="col">Due Date</th>
                                         <th scope="col">Action</th>
                                     </tr>
                                 </thead>
@@ -195,6 +197,7 @@
                                             <tr>
                                                 <th scope="row">{{ $loop->iteration }}</th>
                                                 <td>{{ $task->name }}</td>
+                                                <td>{{ $task->project->name }}</td>
                                                 <td>
                                                     @if ($task->timer_status == 'Paused')
                                                         <p class="badge bg-secondary">Paused</p>
@@ -213,6 +216,7 @@
                                                     @endphp
                                                     <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}</p>
                                                 </td>
+                                                <td>{{ $task->due_date }}</td>
                                                 <td>
                                                     <div class="d-flex gap-2 h-100 align-items-center">
                                                         @php

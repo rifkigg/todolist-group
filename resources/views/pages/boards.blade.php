@@ -1034,10 +1034,6 @@
                                                     @endforeach
                                                 </select>
                                             </div>
-                                            <div id="selected-assignees">
-                                                <p>Selected Assignees:</p>
-                                                <ul class="d-flex flex-wrap gap-2 list-unstyled"></ul>
-                                            </div>
                                             <script>
                                                 document.addEventListener('DOMContentLoaded', function() {
                                                     const selectElement = document.getElementById('assignees');

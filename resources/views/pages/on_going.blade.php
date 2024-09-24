@@ -103,7 +103,7 @@
                                                 <th>Username</th>
                                                 <th>Task</th>
                                                 <th>Status</th>
-                                                <th>Time</th>
+                                                <th>Duration</th>
                                                 <th>Task Created</th>
                                             </tr>
                                         </thead>
@@ -132,7 +132,7 @@
                                                         @else
                                                         @endif
                                                     </td>
-                                                    <td>{{ \Carbon\Carbon::parse($activeTask['created_at'])->format('d m Y') }}</td>
+                                                    <td>{{ \Carbon\Carbon::parse($activeTask['created_at'])->timezone('Asia/Jakarta')->format('d m Y H:i:s') }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
