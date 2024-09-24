@@ -637,7 +637,7 @@
                                                                         </div>
                                                                         <label for="due_date" class="form-label">Due
                                                                             Date</label>
-                                                                        <input type="date" name="due_date"
+                                                                        <input type="datetime-local" name="due_date"
                                                                             id="due_date" class="form-control mb-3"
                                                                             value="{{ old('due_date', $item->due_date) }}">
 
@@ -1044,7 +1044,7 @@
                                                                         </div>
                                                                         <label for="due_date" class="form-label">Due
                                                                             Date</label>
-                                                                        <input type="date" name="due_date"
+                                                                        <input type="datetime-local" name="due_date"
                                                                             id="due_date" class="form-control mb-3"
                                                                             value="{{ old('due_date', $item->due_date) }}"
                                                                             disabled>
@@ -1173,7 +1173,7 @@
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="due_date" class="form-label">Due Date</label>
-                                                            <input type="date" name="due_date" id="due_date"
+                                                            <input type="datetime-local" name="due_date" id="due_date"
                                                                 class="form-control">
                                                         </div>
                                                         <div class="mb-3">
