@@ -197,7 +197,9 @@
                                             <tr>
                                                 <th scope="row">{{ $loop->iteration }}</th>
                                                 <td>{{ $task->name }}</td>
-                                                <td>{{ $task->project->name }}</td>
+                                                <td>
+                                                    <a href="{{ route('projects.tasks', $task->project->id) }}" class="fw-bold">{{ $task->project->name }}</a> <!-- Tambahkan link untuk redirect ke TaskInProject -->
+                                                </td>
                                                 <td>
                                                     @if ($task->timer_status == 'Paused')
                                                         <p class="badge bg-secondary">Paused</p>

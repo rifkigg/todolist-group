@@ -20,6 +20,7 @@ use App\Http\Controllers\TaskChecklistController;
 use App\Http\Controllers\TaskPrioritiesController;
 use App\Http\Controllers\TaskDescriptionController;
 use App\Http\Controllers\ProjectCategoriesController;
+use App\Http\Controllers\TaskInProjectController;
 use App\Http\Controllers\UserController;
 use App\Models\TaskChecklist;
 
@@ -141,6 +142,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/history', [TaskController::class, 'indexTime'])->name('history.index');
 
     Route::get('/ongoing', [OnGoingController::class, 'index'])->name('ongoing.index');
+
+    Route::get('/projects/{id}/tasks', [TaskInProjectController::class, 'show'])->name('projects.tasks'); // Tambahkan route untuk menampilkan task dalam project
 });
 
 require __DIR__ . '/auth.php';
