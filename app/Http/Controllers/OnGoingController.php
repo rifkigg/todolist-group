@@ -24,6 +24,7 @@ class OnGoingController extends Controller
                         'task' => $task->name,
                         'status' => $task->timer_status,
                         'time' => History::calculateTotalTime($task->name), // Hitung waktu total
+                        'created_at' => $task->created_at,
                     ];
                 }
             } else {
@@ -35,6 +36,7 @@ class OnGoingController extends Controller
                         'task' => $lastTask->name,
                         'status' => $lastTask->timer_status,
                         'time' => History::calculateTotalTime($lastTask->name), // Hitung waktu total
+                        'created_at' => $lastTask->created_at,
                     ];
                 } else {
                     // Jika tidak ada tugas, tampilkan nama pengguna saja dengan null untuk task, status, dan time
@@ -43,6 +45,7 @@ class OnGoingController extends Controller
                         'task' => null,
                         'status' => null,
                         'time' => null,
+                        'created_at' => null,
                     ];
                 }
             }

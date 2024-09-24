@@ -104,6 +104,7 @@
                                                 <th>Task</th>
                                                 <th>Status</th>
                                                 <th>Time</th>
+                                                <th>Task Created</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -131,6 +132,7 @@
                                                         @else
                                                         @endif
                                                     </td>
+                                                    <td>{{ \Carbon\Carbon::parse($activeTask['created_at'])->format('d F Y') }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>
