@@ -116,7 +116,7 @@
                                     </div>
                                     <div class="date mb-3">
                                         <label for="live_date">Project Live Date: </label>
-                                        <input type="date" id="live_date"
+                                        <input type="datetime-local" id="live_date"
                                             class="form-control @error('live_date') is-invalid @enderror"
                                             name="live_date" value="{{ old('live_date') }}"
                                             placeholder="Masukkan Judul Product">

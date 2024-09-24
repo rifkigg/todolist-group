@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->unsignedBigInteger('category_id');
             $table->unsignedBigInteger('status_id');
-            $table->date('live_date');
+            $table->datetime('live_date');
             $table->text('project_detail');
             $table->timestamps();
 
