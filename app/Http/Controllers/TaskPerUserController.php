@@ -54,6 +54,6 @@ class TaskPerUserController extends Controller
             }
         }
 
-        return view('pages.task_per_user', compact('activeTasks'));
+        return view('pages.task_per_user', compact('activeTasks', 'user'));
     }
 }

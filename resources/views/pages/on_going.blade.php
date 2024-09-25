@@ -110,7 +110,7 @@
                                         <tbody>
                                             @foreach ($activeTasks as $activeTask)
                                                 <tr>
-                                                    <td><a href="{{ route('tasks.perUser.show', ['id' => $activeTask['user_id']]) }}">{{ $activeTask['user'] }}</a></td> <!-- Ubah username menjadi link -->
+                                                    <td><a href="{{ route('tasks.perUser.show', ['id' => $activeTask['user_id']]) }}" class="fw-bold">{{ $activeTask['user'] }}</a></td> <!-- Ubah username menjadi link -->
                                                     <td>{{ $activeTask['task'] }}</td>
                                                     <td>
                                                         @if (!$activeTask['status'] == null)

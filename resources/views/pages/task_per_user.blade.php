@@ -90,17 +90,18 @@
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
 
-
+                    <button onclick="history.back()" class="btn btn-primary w-auto mb-3"><i
+                        class="fa-solid fa-left-long"></i> Back</button>
                     <div class="card shadow">
-                        <div class="card-header">
-                            <h6 class="m-0 font-weight-bold text-primary">Nama User</h6>
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h6 class="m-0 font-weight-bold text-primary">Task {{ $user->username }}</h6>
+                            <p class="m-0">Date : {{ \Carbon\Carbon::now()->format('d F Y') }}</p>
                         </div>
                         <div class="card-body">
                             @if (count($activeTasks) > 0)
                                 <table id="example" class="table table-striped">
                                     <thead>
                                         <tr>
-                                            <th>Username</th>
                                             <th>Task</th>
                                             <th>Status</th>
                                             <th>Duration</th>
@@ -110,7 +111,6 @@
                                     <tbody>
                                         @foreach ($activeTasks as $activeTask)
                                             <tr>
-                                                <td>{{ $activeTask['user'] }}</td>
                                                 <td>{{ $activeTask['task'] }}</td>
                                                 <td>
                                                     @if (!$activeTask['status'] == null)
