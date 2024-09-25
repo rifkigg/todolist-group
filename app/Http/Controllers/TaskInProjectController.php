@@ -33,20 +33,20 @@ class TaskInProjectController extends Controller
             $tasks = app(DashboardController::class)->getTasksByUser(auth()->id());
         }
 
-                // Hitung waktu dari 00:00:00 dan tambahkan totalTime
-                $startOfDay = Carbon::today()->startOfDay();
-                $endOfDay = Carbon::today()->endOfDay();
-                $totalTime = 0; // Inisialisasi totalTime
-        
-                $tasksWithTime = $tasks->map(function ($taskItem) use (&$totalTime, $startOfDay, $endOfDay) {
-                    $totalTime = History::calculateTotalTime($taskItem->name);
-                    $remainingTime = max(0, $endOfDay->diffInSeconds($startOfDay) - $totalTime); // Pastikan tidak negatif
-                    $taskItem->totalTime = $totalTime;
-                    $taskItem->remainingTime = $remainingTime; // Waktu tersisa dalam detik
-                    $taskItem->isPlaying = $taskItem->timer_status == 'Playing';
-                    $taskItem->isPaused = $taskItem->timer_status == 'Paused';
-                    return $taskItem;
-                });
+        // Hitung waktu dari 00:00:00 dan tambahkan totalTime
+        $startOfDay = Carbon::today()->startOfDay();
+        $endOfDay = Carbon::today()->endOfDay();
+        $totalTime = 0; // Inisialisasi totalTime
+
+        $tasksWithTime = $tasks->map(function ($taskItem) use (&$totalTime, $startOfDay, $endOfDay) {
+            $totalTime = History::calculateTotalTime($taskItem->name);
+            $remainingTime = max(0, $endOfDay->diffInSeconds($startOfDay) - $totalTime); // Pastikan tidak negatif
+            $taskItem->totalTime = $totalTime;
+            $taskItem->remainingTime = $remainingTime; // Waktu tersisa dalam detik
+            $taskItem->isPlaying = $taskItem->timer_status == 'Playing';
+            $taskItem->isPaused = $taskItem->timer_status == 'Paused';
+            return $taskItem;
+        });
 
         $projects = project::find($id);
 

@@ -12,6 +12,10 @@ class History extends Model
 
     protected $fillable = ['task_name', 'start', 'paused', 'finish'];
 
+    public function task()
+    {
+        return $this->belongsTo(Task::class, 'task_name', 'name'); // Asumsi 'task_name' di History merujuk ke 'name' di Task
+    }
 
     public static function calculateTotalTime($taskName)
     {

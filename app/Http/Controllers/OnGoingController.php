@@ -11,7 +11,7 @@ class OnGoingController extends Controller
 {
     public function index(Request $request)
     {
-        if (now('Asia/Jakarta')->hour === 0 && now('Asia/Jakarta')->minute === 0) { //jam 5 sore menurut UTC jika di jakarta itu jam 12 malam
+        if (now('Asia/Jakarta')->hour === 0 && now('Asia/Jakarta')->minute === 0) { 
             // Tambahkan refresh halaman satu kali sebelum logout
             echo "<script>if (!sessionStorage.getItem('reloaded')) { sessionStorage.setItem('reloaded', 'true'); location.reload(); }</script>";
             Auth::guard('web')->logout();
@@ -31,6 +31,7 @@ class OnGoingController extends Controller
                     $activeTasks[] = [
                         'user' => $user->username,
                         'task' => $task->name,
+                        'user_id' => $user->id, // Tambahkan user_id
                         'status' => $task->timer_status,
                         'time' => History::calculateTotalTime($task->name), // Hitung waktu total
                         'created_at' => $task->created_at,
@@ -43,6 +44,7 @@ class OnGoingController extends Controller
                     $activeTasks[] = [
                         'user' => $user->username,
                         'task' => $lastTask->name,
+                        'user_id' => $user->id, // Tambahkan user_id
                         'status' => $lastTask->timer_status,
                         'time' => History::calculateTotalTime($lastTask->name), // Hitung waktu total
                         'created_at' => $lastTask->created_at,
@@ -51,6 +53,7 @@ class OnGoingController extends Controller
                     // Jika tidak ada tugas, tampilkan nama pengguna saja dengan null untuk task, status, dan time
                     $activeTasks[] = [
                         'user' => $user->username,
+                        'user_id' => $user->id, // Tambahkan user_id
                         'task' => null,
                         'status' => null,
                         'time' => null,
@@ -59,6 +62,7 @@ class OnGoingController extends Controller
                 }
             }
         }
+        // dd($activeTasks);
 
         return view('pages.on_going', compact('users', 'activeTasks'));
     }

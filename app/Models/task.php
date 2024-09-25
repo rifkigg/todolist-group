@@ -60,4 +60,9 @@ class task extends Model
     {
         return $this->hasMany(TaskDescription::class);
     }
+
+    public function histories()
+    {
+        return $this->hasMany(History::class, 'task_name', 'name'); // Asumsi 'task_name' di History merujuk ke 'name' di Task
+    }
 }
