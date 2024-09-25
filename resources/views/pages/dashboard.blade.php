@@ -560,7 +560,7 @@
                                                                         </select>
 
                                                                         <!-- Tempat untuk menampilkan hasil pilihan -->
-                                                                        <div id="selected-assignees">
+                                                                        {{-- <div id="selected-assignees">
                                                                             <p>Selected Assignees:</p>
                                                                             <ul
                                                                                 class="d-flex flex-wrap gap-2 list-unstyled">
@@ -571,7 +571,7 @@
                                                                                     </li>
                                                                                 @endforeach
                                                                             </ul>
-                                                                        </div>
+                                                                        </div> --}}
 
 
                                                                         <div class="task-row"

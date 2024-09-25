@@ -9,16 +9,12 @@ use App\Models\board;
 use App\Models\History;
 use App\Models\project;
 use App\Models\TaskLabel;
-use App\Models\Attachment;
 use App\Models\TaskStatus;
-use App\Models\TaskActivity;
 use Illuminate\Http\Request;
 use App\Models\task_priority;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Storage;
 
 class TaskController extends Controller
 {

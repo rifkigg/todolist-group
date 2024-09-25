@@ -86,7 +86,7 @@
                 <div class="container text-dark">
                     <!-- Content Row -->
                     <button onclick="history.back()" class="btn btn-primary w-auto mb-3"><i
-                            class="fa-solid fa-left-long"></i> Back to Project</button>
+                            class="fa-solid fa-left-long"></i> Back</button>
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">Task Dari Project {{ $projects->name }}</h6>

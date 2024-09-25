@@ -205,7 +205,9 @@
                                 <tbody>
                                     @forelse ($projects as $item)
                                         <tr>
-                                            <td>{{ $item->name }}</td>
+                                            <td>
+                                                <a href="{{ route('projects.tasks', $item->id) }}" class="fw-bold">{{ $item->name }}</a> <!-- Tambahkan link untuk redirect ke TaskInProject -->
+                                            </td>
                                             <td>{{ $item->category->name }}</td>
                                             <td>{{ $item->status->name }}</td>
                                             <td>{{ $item->live_date }}</td>
