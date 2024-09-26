@@ -201,56 +201,46 @@
                                             <td>{{ $item->name }}</td>
                                             <td>{{ $item->project->name ?? ' ' }}</td>
                                             <td>{{ $item->status->name ?? ' ' }}</td>
-                                            <td title="{{ $item->priority->name ?? ' ' }}" style="">{{ $item->priority->icon ?? ' ' }}</td>
+                                            <td title="{{ $item->priority->name ?? ' ' }}" style="">{{ $item->priority->icon ?? ' ' }}</td>v
                                             <td>{{ \Carbon\Carbon::parse($item->due_date)->format('d/m/Y H:i:s') }}</td>
                                             <td>{{ $item->created_by ?? ' ' }}</td>
                                             <td>{{ \Carbon\Carbon::parse($item->created_at)->setTimezone('Asia/Jakarta')->format('d/m/Y H:i:s') }}</td>
                                             <td>
-                                                <div class="d-flex align-items-center">
-                                                    @if (auth()->user()->role == 'admin' ||
-                                                            auth()->user()->role == 'manajer' ||
-                                                            auth()->user()->username == $item->created_by)
-                                                        <!-- Form untuk duplikasi -->
-                                                        <form id="duplicate-form-{{ $item->id }}"
-                                                            action="{{ route('task.duplicate', $item->id) }}"
-                                                            method="POST" style="display: none;">
-                                                            @csrf
-                                                        </form>
-                                                        <!-- Ikon copy dengan event click -->
-                                                        <a href="#" class="btn"
-                                                            onclick="event.preventDefault(); document.getElementById('duplicate-form-{{ $item->id }}').submit();">
-                                                            <i class="icon-action fa-solid fa-copy"></i>
-                                                        </a>
-                                                        <!-- Ikon view -->
-                                                        <button type="button" class="btn" data-bs-toggle="modal"
-                                                            data-bs-target="#view-{{ $item->id }}">
-                                                            <i class="fa-solid fa-pen-to-square"></i>
-                                                        </button>
-                                                        <!-- Form untuk delete -->
-                                                        <form action="{{ route('task.destroy', $item->id) }}"
-                                                            method="POST"
-                                                            onsubmit="return confirm('Are you sure you want to delete this item?');"
-                                                            class="d-inline">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn">
-                                                                <i class="icon-action fa-solid fa-trash-can"></i>
-                                                            </button>
-                                                        </form>
-                                                    @else
-                                                        @if (auth()->user()->id == $item->created_by)
-                                                            <button type="button" class="btn"
-                                                                data-bs-toggle="modal"
-                                                                data-bs-target="#view-{{ $item->id }}">
-                                                                <i class="icon-action fa-solid fa-eye"></i>
-                                                            </button>
+                                                <div class="dropdown">
+                                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        ...
+                                                    </button>
+                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer' || auth()->user()->username == $item->created_by)
+                                                            <li>
+                                                                <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('duplicate-form-{{ $item->id }}').submit();">
+                                                                    <i class="icon-action fa-solid fa-copy"></i> Duplicate
+                                                                </a>
+                                                            </li>
+                                                            <form id="duplicate-form-{{ $item->id }}" action="{{ route('task.duplicate', $item->id) }}" method="POST" class="d-none">
+                                                                @csrf
+                                                            </form>
+                                                            <li>
+                                                                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-{{ $item->id }}">
+                                                                    <i class="fa-solid fa-pen-to-square"></i> Edit
+                                                                </button>
+                                                            </li>
+                                                            <li>
+                                                                <form action="{{ route('task.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button type="submit" class="dropdown-item">
+                                                                        <i class="icon-action fa-solid fa-trash-can"></i> Delete
+                                                                    </button>
+                                                                </form>
+                                                            </li>
                                                         @else
+                                                            <li>
+                                                                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-{{ $item->id }}">
+                                                                    <i class="icon-action fa-solid fa-eye"></i> View
+                                                                </button>
+                                                            </li>
                                                         @endif
-                                                        <button type="button" class="btn" data-bs-toggle="modal"
-                                                            data-bs-target="#view-{{ $item->id }}">
-                                                            <i class="icon-action fa-solid fa-eye"></i>
-                                                        </button>
-                                                    @endif
                                                 </div>
                                             </td>
                                         </tr>
