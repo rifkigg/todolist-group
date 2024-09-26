@@ -132,7 +132,7 @@
                                                         @else   
                                                         @endif
                                                     </td>
-                                                    <td>{{ \Carbon\Carbon::parse($activeTask['created_at'])->format('d/m/Y H:i:s') }}</td>
+                                                    <td>{{ $activeTask['created_at'] }}</td>
                                                 </tr>
                                             @endforeach
                                         </tbody>

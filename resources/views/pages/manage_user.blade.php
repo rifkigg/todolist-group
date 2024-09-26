@@ -122,7 +122,7 @@
                                                         <i class="icon-action fa-solid fa-pencil"></i>
                                                     </button>
                                                     <form action="{{ route('manage_user.destroy', $user->id) }}"
-                                                        method="POST" enctype="multipart/form-data">
+                                                        method="POST" enctype="multipart/form-data" onsubmit="return confirm('Apakah Anda yakin ingin menghapus pengguna ini?');">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="btn">
