@@ -182,7 +182,6 @@
                             <table id="example" class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th scope="col">No</th>
                                         <th scope="col">Task Name</th>
                                         <th scope="col">Project Name</th>
                                         <th scope="col">Status</th>
@@ -195,7 +194,6 @@
                                     @forelse ($tasksWithTime as $task)
                                     @if ($task->count() > 0)
                                             <tr>
-                                                <th scope="row">{{ $loop->iteration }}</th>
                                                 <td>{{ $task->name }}</td>
                                                 <td>
                                                     <a href="{{ route('projects.tasks', $task->project->id) }}" class="fw-bold">{{ $task->project->name }}</a> <!-- Tambahkan link untuk redirect ke TaskInProject -->
@@ -218,7 +216,7 @@
                                                     @endphp
                                                     <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}</p>
                                                 </td>
-                                                <td>{{ \Carbon\Carbon::parse($task->due_date)->format('d m Y H:i:s') }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($task->due_date)->format('d/m/Y H:i:s') }}</td>
                                                 <td>
                                                     <div class="d-flex gap-2 h-100 align-items-center">
                                                         @php
