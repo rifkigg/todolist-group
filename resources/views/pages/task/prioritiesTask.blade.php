@@ -116,6 +116,13 @@
                                                 value="📌" onclick="selectIcon('📌')">📌</button>
                                             <button type="button" class="btn btn-outline-primary" name="icon"
                                                 value="⌛" onclick="selectIcon('⌛')">⌛</button>
+                                            <button type="button" class="btn btn-outline-primary" name="icon"
+                                                value="⬆️" onclick="selectIcon('⬆️')">⬆️</button>
+                                            <button type="button" class="btn btn-outline-primary" name="icon"
+                                                value="➡️" onclick="selectIcon('➡️')">➡️</button>
+                                            <button type="button" class="btn btn-outline-primary" name="icon"
+                                                value="⬇️" onclick="selectIcon('⬇️')">⬇️</button>
+                                                
                                         </div>
                                         <input type="hidden" id="selectedIcon" name="icon" required>
                                     </div>
@@ -204,6 +211,18 @@
                                                                             class="btn btn-outline-primary"
                                                                             name="icon" value="⌛"
                                                                             onclick="selectIcon('⌛', '{{ $priority->id }}')">⌛</button>
+                                                                        <button type="button"
+                                                                            class="btn btn-outline-primary"
+                                                                            name="icon" value="⬆️"
+                                                                            onclick="selectIcon('⬆️', '{{ $priority->id }}')">⬆️</button>
+                                                                         <button type="button"
+                                                                            class="btn btn-outline-primary"
+                                                                            name="icon" value="➡️"
+                                                                            onclick="selectIcon('➡️', '{{ $priority->id }}')">➡️</button>
+                                                                         <button type="button"
+                                                                            class="btn btn-outline-primary"
+                                                                            name="icon" value="⬇️⬇"
+                                                                            onclick="selectIcon('⬇️', '{{ $priority->id }}')">⬇️</button>
                                                                     </div>
                                                                     <input type="hidden"
                                                                         id="selectedIcon{{ $priority->id }}"

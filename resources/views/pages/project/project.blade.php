@@ -210,8 +210,7 @@
                                             </td>
                                             <td>{{ $item->category->name }}</td>
                                             <td>{{ $item->status->name }}</td>
-                                            <td>{{ $item->live_date }}</td>
-                                            <td>
+                                            <td>{{ \Carbon\Carbon::parse($item->due_date)->format('d/m/Y H:i:s') }}</td>                                            <td>
                                                 @if ($item->progress == 100)
                                                     <h5><span class="badge bg-success">{{ $item->progress }} %</span>
                                                     </h5>
@@ -223,7 +222,7 @@
                                                     </h5>
                                                 @endif
                                             </td>
-                                            <td>{{ $item->created_at }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d/m/Y H:i:s') }}</td>
                                             <td class="d-flex">
                                                 @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
                                                     <!-- Form untuk duplikasi -->

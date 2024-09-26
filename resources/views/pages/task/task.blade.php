@@ -201,10 +201,10 @@
                                             <td>{{ $item->name }}</td>
                                             <td>{{ $item->project->name ?? ' ' }}</td>
                                             <td>{{ $item->status->name ?? ' ' }}</td>
-                                            <td title="{{ $item->priority->name ?? ' ' }}" style="">{{ $item->priority->icon ?? ' ' }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($item->due_date)->format('d m Y H:i:s') }}</td>
+                                            <td title="{{ $item->priority->name ?? ' ' }}" style="">{{ $item->priority->icon ?? ' ' }}</td>v
+                                            <td>{{ \Carbon\Carbon::parse($item->due_date)->format('d/m/Y H:i:s') }}</td>
                                             <td>{{ $item->created_by ?? ' ' }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($item->created_at)->setTimezone('Asia/Jakarta')->format('Y-m-d H:i:s') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($item->created_at)->setTimezone('Asia/Jakarta')->format('d/m/Y H:i:s') }}</td>
                                             <td>
                                                 <div class="d-flex align-items-center">
                                                     @if (auth()->user()->role == 'admin' ||
