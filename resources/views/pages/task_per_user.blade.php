@@ -138,7 +138,7 @@
                                     </tbody>
                                 </table>
                             @else
-                                <p>Tidak ada tugas yang sedang dimainkan.</p>
+                                <p>Tidak ada task yang sedang dikerjakan hari ini.</p>
                             @endif
                         </div>
                     </div>
