@@ -13,15 +13,15 @@ class TaskPerUserController extends Controller
     public function show(Request $request, $id)
     {
         $user = User::find($id);
-        // dd(now()->format( 'H:i:s' ), now()->toDateString());
-        // dd();
         // Cek apakah ada entri di tabel History untuk waktu sekarang
         $currentHistories = History::whereDate('created_at', now()->toDateString())
             ->get(); // Ambil semua history yang sesuai
-        // dd($currentHistories);
-        if ($currentHistories->isEmpty()) {
-            return view('pages.task_per_user', ['activeTasks' => []]); // Jika tidak ada, kembalikan view kosong
-        }
+
+            if ($currentHistories->isEmpty()) {
+                $user = User::find($id);
+                return view('pages.task_per_user', compact('user', 'activeTasks')); // Jika tidak ada, kembalikan view kosong
+                $activeTasks = []; // Inisialisasi activeTasks
+            }
 
         $activeTasks = [];
         $latestHistories = []; // Array untuk menyimpan history terbaru berdasarkan task name
@@ -30,6 +30,7 @@ class TaskPerUserController extends Controller
         foreach ($currentHistories as $history) {
             $taskName = $history->task_name; // Ambil nama task
             $task = $history->task; // Asumsi ada relasi ke model Task
+            $user = User::findorFail($id); // Ambil user terkait
 
             // Cek apakah sudah ada entri untuk task ini
             if (!isset($latestHistories[$taskName]) || $latestHistories[$taskName]->created_at < $history->created_at) {
@@ -40,10 +41,11 @@ class TaskPerUserController extends Controller
         // Loop untuk menambahkan ke activeTasks
         foreach ($latestHistories as $history) {
             $task = $history->task; // Ambil task terkait
-            $user = User::find($id); // Ambil user terkait
+            $user = User::findorFail($id); // Ambil user terkait
+            // dd($user);
 
             // Cek apakah task terkait dengan user ini
-            if ($task->users->contains($user->id)) { // Pastikan relasi users sudah ada
+            if ($task && $task->users->contains($user->id)) {
                 $activeTasks[] = [
                     'user' => $user->username,
                     'task' => $task->name,
@@ -53,6 +55,8 @@ class TaskPerUserController extends Controller
                 ];
             }
         }
+
+        // dd($user);
 
         return view('pages.task_per_user', compact('activeTasks', 'user'));
     }
