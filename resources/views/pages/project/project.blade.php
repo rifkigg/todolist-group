@@ -210,7 +210,8 @@
                                             </td>
                                             <td>{{ $item->category->name }}</td>
                                             <td>{{ $item->status->name }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($item->due_date)->format('d/m/Y H:i:s') }}</td>                                            <td>
+                                            <td>{{ \Carbon\Carbon::parse($item->due_date)->format('d/m/Y H:i:s') }}</td>
+                                            <td>
                                                 @if ($item->progress == 100)
                                                     <h5><span class="badge bg-success">{{ $item->progress }} %</span>
                                                     </h5>

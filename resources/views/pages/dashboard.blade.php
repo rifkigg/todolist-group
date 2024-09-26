@@ -185,6 +185,7 @@
                                         <th scope="col">Task Name</th>
                                         <th scope="col">Project Name</th>
                                         <th scope="col">Status</th>
+                                        <th scope="col">Task Priorities</th>
                                         <th scope="col">Total Time</th>
                                         <th scope="col">Due Date</th>
                                         <th scope="col">Action</th>
@@ -207,7 +208,8 @@
                                                         <p class="badge bg-success">Finished</p>
                                                     @endif
                                                 </td>
-                                                <td>
+                                                <td title="{{ $task->priority->name ?? ' ' }}" style="">{{ $task->priority->icon ?? ' ' }}</td>
+                                                <td>    
                                                     @php
                                                         $totalSeconds = $task->totalTime; // Total waktu dalam detik
                                                         $hours = floor($totalSeconds / 3600); // Hitung jam
