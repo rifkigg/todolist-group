@@ -193,11 +193,13 @@
                                 </thead>
                                 <tbody>
                                     @forelse ($tasksWithTime as $task)
-                                    @if ($task->count() > 0)
+                                        @if ($task->count() > 0)
                                             <tr>
                                                 <td>{{ $task->name }}</td>
                                                 <td>
-                                                    <a href="{{ route('projects.tasks', $task->project->id) }}" class="fw-bold">{{ $task->project->name }}</a> <!-- Tambahkan link untuk redirect ke TaskInProject -->
+                                                    <a href="{{ route('projects.tasks', $task->project->id) }}"
+                                                        class="fw-bold">{{ $task->project->name }}</a>
+                                                    <!-- Tambahkan link untuk redirect ke TaskInProject -->
                                                 </td>
                                                 <td>
                                                     @if ($task->timer_status == 'Paused')
@@ -208,8 +210,9 @@
                                                         <p class="badge bg-success">Finished</p>
                                                     @endif
                                                 </td>
-                                                <td title="{{ $task->priority->name ?? ' ' }}" style="">{{ $task->priority->icon ?? ' ' }}</td>
-                                                <td>    
+                                                <td title="{{ $task->priority->name ?? ' ' }}" style="">
+                                                    {{ $task->priority->icon ?? ' ' }}</td>
+                                                <td>
                                                     @php
                                                         $totalSeconds = $task->totalTime; // Total waktu dalam detik
                                                         $hours = floor($totalSeconds / 3600); // Hitung jam
@@ -218,52 +221,77 @@
                                                     @endphp
                                                     <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}</p>
                                                 </td>
-                                                <td>{{ \Carbon\Carbon::parse($task->due_date)->format('d/m/Y H:i:s') }}</td>
+                                                <td>{{ \Carbon\Carbon::parse($task->due_date)->format('d/m/Y H:i:s') }}
+                                                </td>
                                                 <td>
-                                                    <div class="d-flex gap-2 h-100 align-items-center">
-                                                        @php
-                                                            $isPlaying = $task->isPlaying;
-                                                            $isFinished = $task->status == 'finished';
-                                                        @endphp
-
-                                                        <form action="{{ route('history.start') }}" method="POST"
-                                                            onsubmit="return handleStart('{{ $task->id }}', {{ $isPlaying ? 'true' : 'false' }});"
-                                                            class="task-row">
-                                                            @csrf
-                                                            <input type="text" value="{{ $task->name }}" hidden
-                                                                name="task_name">
-                                                            <button type="submit" class="btn btn-primary"
-                                                                {{ $isPlaying ? 'disabled' : '' }}>
-                                                                <i class="fa-solid fa-play"></i>
-                                                            </button>
-                                                        </form>
-
-                                                        <form action="{{ route('history.pause') }}" method="POST"
-                                                            {{ $isFinished ? 'style=display:none' : '' }}
-                                                            class="task-row">
-                                                            @csrf
-                                                            <input type="text" value="{{ $task->name }}" hidden
-                                                                name="task_name">
-                                                            <button type="submit" class="btn btn-warning"
-                                                                {{ $task->isPaused ? 'disabled' : '' }}>
-                                                                <i class="fa-solid fa-pause"></i>
-                                                            </button>
-                                                        </form>
-
-                                                        <form action="{{ route('history.finish') }}" method="POST"
-                                                            class="task-row">
-                                                            @csrf
-                                                            <input type="text" value="{{ $task->name }}" hidden
-                                                                name="task_name">
-                                                            <button type="submit" class="btn btn-success">
-                                                                <i class="fa-solid fa-stop"></i>
-                                                            </button>
-                                                        </form>
-                                                        <button class="btn btn-info" data-bs-toggle="modal"
-                                                            data-bs-target="#view-{{ $task->id }}">
-                                                            <i class="icon-action fa-solid fa-eye"></i>
+                                                    <div class="dropdown">
+                                                        <button class="btn" type="button" id="dropdownMenuButton"
+                                                            data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <i class="fa-solid fa-ellipsis fa-2xl"></i>
                                                         </button>
+                                                        <ul class="dropdown-menu"
+                                                            aria-labelledby="dropdownMenuButton">
+                                                                @php
+                                                                    $isPlaying = $task->isPlaying;
+                                                                    $isFinished = $task->status == 'finished';
+                                                                @endphp
+                                                                <li>
+                                                                    <form action="{{ route('history.start') }}"
+                                                                        method="POST"
+                                                                        onsubmit="return handleStart('{{ $task->id }}', {{ $isPlaying ? 'true' : 'false' }});"
+                                                                        class="task-row dropdown-item">
+                                                                        @csrf
+                                                                        <input type="text"
+                                                                            value="{{ $task->name }}" hidden
+                                                                            name="task_name">
+                                                                        <button type="submit" class="btn dropdown-item"
+                                                                            {{ $isPlaying ? 'disabled' : '' }}>
+                                                                            <i class="fa-solid fa-play"></i> Play
+                                                                        </button>
+                                                                    </form>
+                                                                </li>
+                                                                <li>
+
+
+                                                                    <form action="{{ route('history.pause') }}"
+                                                                        method="POST"
+                                                                        {{ $isFinished ? 'style=display:none' : '' }}
+                                                                        class="task-row dropdown-item">
+                                                                        @csrf
+                                                                        <input type="text"
+                                                                            value="{{ $task->name }}" hidden
+                                                                            name="task_name">
+                                                                        <button type="submit" class="btn dropdown-item"
+                                                                            {{ $task->isPaused ? 'disabled' : '' }}>
+                                                                            <i class="fa-solid fa-pause"></i> Pause
+                                                                        </button>
+                                                                    </form>
+                                                                </li>
+                                                                <li>
+                                                                    <form action="{{ route('history.finish') }}"
+                                                                        method="POST" class="task-row dropdown-item">
+                                                                        @csrf
+                                                                        <input type="text"
+                                                                            value="{{ $task->name }}" hidden
+                                                                            name="task_name">
+                                                                        <button type="submit"
+                                                                            class="btn dropdown-item">
+                                                                            <i class="fa-solid fa-stop"></i> Stop
+                                                                        </button>
+                                                                    </form>
+                                                                </li>
+                                                                <li>
+                                                                    <div class="dropdown-item">
+                                                                        <button class="btn dropdown-item"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#view-{{ $task->id }}">
+                                                                        <i class="icon-action fa-solid fa-eye"></i> Show
+                                                                    </button>
+                                                                    </div>
+                                                                </li>
+                                                        </ul>
                                                     </div>
+
                                                 </td>
 
                                             </tr>
@@ -643,16 +671,15 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        
-                                            @else
-                                            @endif
-                                        @empty
-                                            <tr>
-                                                <td colspan="2" class="text-center">No tasks assigned to you.</td>
-                                            </tr>
-                                        @endforelse
-                                
-                                    </tbody>
+                                        @else
+                                        @endif
+                                    @empty
+                                        <tr>
+                                            <td colspan="2" class="text-center">No tasks assigned to you.</td>
+                                        </tr>
+                                    @endforelse
+
+                                </tbody>
                             </table>
                             <!-- Menampilkan Total Waktu Pengerjaan -->
                         </div>

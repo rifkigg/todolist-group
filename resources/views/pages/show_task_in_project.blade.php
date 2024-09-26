@@ -128,52 +128,77 @@
                                             <td>{{ \Carbon\Carbon::parse($item->created_at)->setTimezone('Asia/Jakarta')->format('d/m/Y H:i:s') }}
                                             </td>
                                             <td>
-                                                <div class="d-flex align-items-center">
-                                                    @if (auth()->user()->role == 'admin' ||
-                                                            auth()->user()->role == 'manajer' ||
-                                                            auth()->user()->username == $item->created_by)
-                                                        <!-- Form untuk duplikasi -->
-                                                        <form id="duplicate-form-{{ $item->id }}"
-                                                            action="{{ route('task.duplicate', $item->id) }}"
-                                                            method="POST" style="display: none;">
-                                                            @csrf
-                                                        </form>
-                                                        <!-- Ikon copy dengan event click -->
-                                                        <a href="#" class="btn"
-                                                            onclick="event.preventDefault(); document.getElementById('duplicate-form-{{ $item->id }}').submit();">
-                                                            <i class="icon-action fa-solid fa-copy"></i>
-                                                        </a>
-                                                        <!-- Ikon view -->
-                                                        <button type="button" class="btn" data-bs-toggle="modal"
-                                                            data-bs-target="#view-{{ $item->id }}">
-                                                            <i class="fa-solid fa-pen-to-square"></i>
-                                                        </button>
-                                                        <!-- Form untuk delete -->
-                                                        <form action="{{ route('task.destroy', $item->id) }}"
-                                                            method="POST"
-                                                            onsubmit="return confirm('Are you sure you want to delete this task?');"
-                                                            class="d-inline">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn">
-                                                                <i class="icon-action fa-solid fa-trash-can"></i>
-                                                            </button>
-                                                        </form>
-                                                    @else
-                                                        @if (auth()->user()->id == $item->created_by)
-                                                            <button type="button" class="btn"
-                                                                data-bs-toggle="modal"
+                                                <div class="dropdown">
+                                                    <button class="btn" type="button" id="dropdownMenuButton"
+                                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="fa-solid fa-ellipsis fa-2xl"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu"
+                                                        aria-labelledby="dropdownMenuButton">
+
+                                                            @if (auth()->user()->role == 'admin' ||
+                                                                    auth()->user()->role == 'manajer' ||
+                                                                    auth()->user()->username == $item->created_by)
+                                                                <!-- Form untuk duplikasi -->
+                                                                <form id="duplicate-form-{{ $item->id }}"
+                                                                    action="{{ route('task.duplicate', $item->id) }}"
+                                                                    method="POST" style="display: none;">
+                                                                    @csrf
+                                                                </form>
+                                                                <li>
+
+                                                                    <!-- Ikon copy dengan event click -->
+                                                                    <a href="#" class="btn dropdown-item"
+                                                                    onclick="event.preventDefault(); document.getElementById('duplicate-form-{{ $item->id }}').submit();">
+                                                                    <i class="icon-action fa-solid fa-copy"></i> Duplicate Task
+                                                                </a>
+                                                            </li>
+                                                            <li>
+
+                                                                <!-- Ikon view -->
+                                                                <button type="button" class="btn dropdown-item" data-bs-toggle="modal"
                                                                 data-bs-target="#view-{{ $item->id }}">
-                                                                <i class="icon-action fa-solid fa-eye"></i>
-                                                            </button>
-                                                        @else
-                                                        @endif
-                                                        <button type="button" class="btn" data-bs-toggle="modal"
-                                                            data-bs-target="#view-{{ $item->id }}">
-                                                            <i class="icon-action fa-solid fa-eye"></i>
-                                                        </button>
-                                                    @endif
+                                                                <i class="fa-solid fa-pen-to-square"></i> Edit Task
+                                                                </button>
+                                                            </li>
+                                                            <li>
+
+                                                                <a href="#" class="btn dropdown-item" onclick="event.preventDefault(); alert('Are you sure you want to delete this task?'); document.getElementById('delete-form-{{ $item->id }}').submit();">
+                                                                    <i class="icon-action fa-solid fa-trash-can"></i> Delete Task
+                                                                </a>
+                                                            </li>
+                                                                <!-- Form untuk delete -->
+                                                                <form action="{{ route('task.destroy', $item->id) }}"
+                                                                    method="POST"
+                                                                    id="delete-form-{{ $item->id }}"
+                                                                    onsubmit="return confirm('Are you sure you want to delete this task?');"
+                                                                    class="d-inline">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                </form>
+                                                            @else
+                                                                @if (auth()->user()->id == $item->created_by)
+                                                                <li>
+
+                                                                    <button type="button" class="btn dropdown-item"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#view-{{ $item->id }}">
+                                                                    <i class="icon-action fa-solid fa-eye"></i> Show Task
+                                                                </button>
+                                                            </li>
+                                                                @else
+                                                                @endif
+                                                                <li>
+
+                                                                    <button type="button" class="btn dropdown-item" data-bs-toggle="modal"
+                                                                    data-bs-target="#view-{{ $item->id }}">
+                                                                    <i class="icon-action fa-solid fa-eye"></i> Show Task
+                                                                </button>
+                                                            </li>
+                                                                @endif
+                                                    </ul>
                                                 </div>
+
                                             </td>
                                         </tr>
                                         @if (auth()->user()->role == 'admin' ||

@@ -132,7 +132,7 @@
                                                         @else   
                                                         @endif
                                                     </td>
-                                                    <td>{{ $activeTask['created_at'] }}</td>
+                                                    <td>{{ $activeTask['created_at'] }} </td>
                                                 </tr>
                                             @endforeach
                                         </tbody>

@@ -11,15 +11,15 @@
                         <span>Dashboard</span></a>
                 </li>
                 @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('ongoing.index') }}" aria-bs-expanded="true"
-                        aria-bs-controls="collapseTwo">
-                        <i class="fa-solid fa-hourglass-half"></i>
-                        <span>On Going</span>
-                    </a>
-                </li>
-            @else
-            @endif
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('ongoing.index') }}" aria-bs-expanded="true"
+                            aria-bs-controls="collapseTwo">
+                            <i class="fa-solid fa-hourglass-half"></i>
+                            <span>On Going</span>
+                        </a>
+                    </li>
+                @else
+                @endif
             </x-slot>
             <li class="nav-item">
                 <a class="nav-link active" href="/boards">
@@ -206,11 +206,14 @@
                                     @forelse ($projects as $item)
                                         <tr>
                                             <td>
-                                                <a href="{{ route('projects.tasks', $item->id) }}" class="fw-bold">{{ $item->name }}</a> <!-- Tambahkan link untuk redirect ke TaskInProject -->
+                                                <a href="{{ route('projects.tasks', $item->id) }}"
+                                                    class="fw-bold">{{ $item->name }}</a>
+                                                <!-- Tambahkan link untuk redirect ke TaskInProject -->
                                             </td>
                                             <td>{{ $item->category->name }}</td>
                                             <td>{{ $item->status->name }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($item->due_date)->format('d/m/Y H:i:s') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($item->due_date)->format('d/m/Y H:i:s') }}
+                                            </td>
                                             <td>
                                                 @if ($item->progress == 100)
                                                     <h5><span class="badge bg-success">{{ $item->progress }} %</span>
@@ -223,50 +226,85 @@
                                                     </h5>
                                                 @endif
                                             </td>
-                                            <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d/m/Y H:i:s') }}</td>
-                                            <td class="d-flex">
-                                                @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
-                                                    <!-- Form untuk duplikasi -->
-                                                    <form id="duplicate-form-{{ $item->id }}"
-                                                        action="{{ route('project.duplicate', $item->id) }}"
-                                                        method="POST" style="display: none;">
-                                                        @csrf
-                                                    </form>
-                                                    <!-- Ikon copy dengan event click -->
-                                                    <a href="#" class="btn"
-                                                        onclick="event.preventDefault(); document.getElementById('duplicate-form-{{ $item->id }}').submit();">
-                                                        <i class="icon-action fa-solid fa-copy"></i>
-                                                    </a>
+                                            <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d/m/Y H:i:s') }}
+                                            </td>
+                                            <td>
+                                                <div class="dropdown">
+                                                    <button class="btn" type="button" id="dropdownMenuButton"
+                                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="fa-solid fa-ellipsis fa-2xl"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
-                                                    <!-- Ikon view -->
-                                                    <a href="{{ route('project.show', $item->id) }}" class="btn">
-                                                        <i class="icon-action fa-solid fa-eye"></i>
-                                                    </a>
+                                                        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                                                            <!-- Form untuk duplikasi -->
+                                                            <form id="duplicate-form-{{ $item->id }}"
+                                                                action="{{ route('project.duplicate', $item->id) }}"
+                                                                method="POST" style="display: none;">
+                                                                @csrf
+                                                            </form>
+                                                            <li>
+                                                                <!-- Ikon copy dengan event click -->
+                                                                <a href="#" class="btn dropdown-item"
+                                                                    onclick="event.preventDefault(); document.getElementById('duplicate-form-{{ $item->id }}').submit();">
+                                                                    <i class="icon-action fa-solid fa-copy"></i>
+                                                                    Duplicate
+                                                                </a>
+                                                            </li>
+                                                            <li>
 
-                                                    <!-- Ikon edit -->
-                                                    <a href="{{ route('project.edit', $item->id) }}" class="btn">
-                                                        <i class="icon-action fa-solid fa-pencil"></i>
-                                                    </a>
+                                                                <!-- Ikon view -->
+                                                                <a href="{{ route('project.show', $item->id) }}"
+                                                                    class="btn dropdown-item">
+                                                                    <i class="icon-action fa-solid fa-eye"></i> Show
+                                                                    Project
+                                                                </a>
+                                                            </li>
+                                                            <li>
 
-                                                    <!-- Form untuk delete -->
-                                                    <form action="{{ route('project.destroy', $item->id) }}"
-                                                        method="POST"
-                                                        onsubmit="return confirm('Are you sure you want to delete this item?');"
-                                                        class="d-inline">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn">
-                                                            <i class="icon-action fa-solid fa-trash-can"></i>
-                                                        </button>
-                                                    </form>
-                                                @else
-                                                    <!-- Ikon view -->
-                                                    <a href="{{ route('project.show', $item->id) }}" class="btn">
-                                                        <i class="icon-action fa-solid fa-eye"></i>
-                                                    </a>
-                                                @endif
+                                                                <!-- Ikon edit -->
+                                                                <a href="{{ route('project.edit', $item->id) }}"
+                                                                    class="btn dropdown-item">
+                                                                    <i class="icon-action fa-solid fa-pencil"></i> Edit
+                                                                    Project
+                                                                </a>
+                                                            </li>
+                                                            
+                                                                <!-- Form untuk delete -->
+                                                                <li>
+                                                                    <a href="#" class="btn dropdown-item" onclick="event.preventDefault(); alert('Are you sure you want to delete this item?'); document.getElementById('delete-form-{{ $item->id }}').submit();">
+                                                                        <i
+                                                                            class="icon-action fa-solid fa-trash-can"></i>
+                                                                        Delete Project
+                                                                    </a>
+                                                                </li>
+                                                                <form
+                                                                    action="{{ route('project.destroy', $item->id) }}"
+                                                                    method="POST"
+                                                                    id="delete-form-{{ $item->id }}"
+                                                                    onsubmit="return confirm('Are you sure you want to delete this item?');"
+                                                                    class="d-inline dropdown-item">
+                                                                    @csrf
+                                                                    @method('DELETE')
+
+                                                                </form>
+                                                        @else
+                                                            <li>
+
+                                                                <!-- Ikon view -->
+                                                                <a href="{{ route('project.show', $item->id) }}"
+                                                                    class="btn dropdown-item">
+                                                                    <i class="icon-action fa-solid fa-eye"></i> Show
+                                                                    Project
+                                                                </a>
+                                                            </li>
+                                                        @endif
+
+                                                    </ul>
+                                                </div>
 
                                             </td>
+
                                         </tr>
                                     @empty
                                         <tr>

@@ -201,14 +201,14 @@
                                             <td>{{ $item->name }}</td>
                                             <td>{{ $item->project->name ?? ' ' }}</td>
                                             <td>{{ $item->status->name ?? ' ' }}</td>
-                                            <td title="{{ $item->priority->name ?? ' ' }}" style="">{{ $item->priority->icon ?? ' ' }}</td>v
+                                            <td title="{{ $item->priority->name ?? ' ' }}" style="cursor: default">{{ $item->priority->icon ?? ' ' }}</td>
                                             <td>{{ \Carbon\Carbon::parse($item->due_date)->format('d/m/Y H:i:s') }}</td>
                                             <td>{{ $item->created_by ?? ' ' }}</td>
                                             <td>{{ \Carbon\Carbon::parse($item->created_at)->setTimezone('Asia/Jakarta')->format('d/m/Y H:i:s') }}</td>
                                             <td>
                                                 <div class="dropdown">
-                                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                                        ...
+                                                    <button class="btn" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                        <i class="fa-solid fa-ellipsis fa-2xl"></i>
                                                     </button>
                                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                         @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer' || auth()->user()->username == $item->created_by)

@@ -106,23 +106,34 @@
                                     <label for="icon">Icon</label>
                                     <div class="icon-selection">
                                         <div class="icon-options">
-                                            <button type="button" class="btn btn-outline-primary" name="icon"
+                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
                                                 value="📈" onclick="selectIcon('📈')">📈</button>
-                                            <button type="button" class="btn btn-outline-primary" name="icon"
+                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
                                                 value="📅" onclick="selectIcon('📅')">📅</button>
-                                            <button type="button" class="btn btn-outline-primary" name="icon"
+                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
                                                 value="🔒" onclick="selectIcon('🔒')">🔒</button>
-                                            <button type="button" class="btn btn-outline-primary" name="icon"
+                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
                                                 value="📌" onclick="selectIcon('📌')">📌</button>
-                                            <button type="button" class="btn btn-outline-primary" name="icon"
+                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
                                                 value="⌛" onclick="selectIcon('⌛')">⌛</button>
-                                            <button type="button" class="btn btn-outline-primary" name="icon"
+                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
                                                 value="⬆️" onclick="selectIcon('⬆️')">⬆️</button>
-                                            <button type="button" class="btn btn-outline-primary" name="icon"
+                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
                                                 value="➡️" onclick="selectIcon('➡️')">➡️</button>
-                                            <button type="button" class="btn btn-outline-primary" name="icon"
+                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
                                                 value="⬇️" onclick="selectIcon('⬇️')">⬇️</button>
-                                                
+                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
+                                                value="❌" onclick="selectIcon('❌')">❌</button>
+                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
+                                                value="✅" onclick="selectIcon('✅')">✅</button>
+                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
+                                                value="📉" onclick="selectIcon('📉')">📉</button>
+                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
+                                                value="⚙️" onclick="selectIcon('⚙️')">⚙️</button>
+                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
+                                                value="🐞" onclick="selectIcon('🐞')">🐞</button>
+                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
+                                                value="⚠️" onclick="selectIcon('⚠️')">⚠️</button>
                                         </div>
                                         <input type="hidden" id="selectedIcon" name="icon" required>
                                     </div>
@@ -192,37 +203,61 @@
                                                                 <div class="icon-selection">
                                                                     <div class="icon-options">
                                                                         <button type="button"
-                                                                            class="btn btn-outline-primary"
+                                                                            class="btn btn-outline-primary mb-1"
                                                                             name="icon" value="📈"
                                                                             onclick="selectIcon('📈', '{{ $priority->id }}')">📈</button>
                                                                         <button type="button"
-                                                                            class="btn btn-outline-primary"
+                                                                            class="btn btn-outline-primary mb-1"
                                                                             name="icon" value="📅"
                                                                             onclick="selectIcon('📅', '{{ $priority->id }}')">📅</button>
                                                                         <button type="button"
-                                                                            class="btn btn-outline-primary"
+                                                                            class="btn btn-outline-primary mb-1"
                                                                             name="icon" value="🔒"
                                                                             onclick="selectIcon('🔒', '{{ $priority->id }}')">🔒</button>
                                                                         <button type="button"
-                                                                            class="btn btn-outline-primary"
+                                                                            class="btn btn-outline-primary mb-1"
                                                                             name="icon" value="📌"
                                                                             onclick="selectIcon('📌', '{{ $priority->id }}')">📌</button>
                                                                         <button type="button"
-                                                                            class="btn btn-outline-primary"
+                                                                            class="btn btn-outline-primary mb-1"
                                                                             name="icon" value="⌛"
                                                                             onclick="selectIcon('⌛', '{{ $priority->id }}')">⌛</button>
                                                                         <button type="button"
-                                                                            class="btn btn-outline-primary"
+                                                                            class="btn btn-outline-primary mb-1"
                                                                             name="icon" value="⬆️"
                                                                             onclick="selectIcon('⬆️', '{{ $priority->id }}')">⬆️</button>
                                                                          <button type="button"
-                                                                            class="btn btn-outline-primary"
+                                                                            class="btn btn-outline-primary mb-1"
                                                                             name="icon" value="➡️"
                                                                             onclick="selectIcon('➡️', '{{ $priority->id }}')">➡️</button>
                                                                          <button type="button"
-                                                                            class="btn btn-outline-primary"
-                                                                            name="icon" value="⬇️⬇"
+                                                                            class="btn btn-outline-primary mb-1"
+                                                                            name="icon" value="⬇️"
                                                                             onclick="selectIcon('⬇️', '{{ $priority->id }}')">⬇️</button>
+                                                                         <button type="button"
+                                                                            class="btn btn-outline-primary mb-1"
+                                                                            name="icon" value="❌"
+                                                                            onclick="selectIcon('❌', '{{ $priority->id }}')">❌</button>
+                                                                         <button type="button"
+                                                                            class="btn btn-outline-primary mb-1"
+                                                                            name="icon" value="✅"
+                                                                            onclick="selectIcon('✅', '{{ $priority->id }}')">✅</button>
+                                                                         <button type="button"
+                                                                            class="btn btn-outline-primary mb-1"
+                                                                            name="icon" value="📉"
+                                                                            onclick="selectIcon('📉', '{{ $priority->id }}')">📉</button>
+                                                                         <button type="button"
+                                                                            class="btn btn-outline-primary mb-1"
+                                                                            name="icon" value="⚙️"
+                                                                            onclick="selectIcon('⚙️', '{{ $priority->id }}')">⚙️</button>
+                                                                         <button type="button"
+                                                                            class="btn btn-outline-primary mb-1"
+                                                                            name="icon" value="🐞"
+                                                                            onclick="selectIcon('🐞', '{{ $priority->id }}')">🐞</button>
+                                                                         <button type="button"
+                                                                            class="btn btn-outline-primary mb-1"
+                                                                            name="icon" value="⚠️"
+                                                                            onclick="selectIcon('⚠️', '{{ $priority->id }}')">⚠️</button>
                                                                     </div>
                                                                     <input type="hidden"
                                                                         id="selectedIcon{{ $priority->id }}"
