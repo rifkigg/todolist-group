@@ -201,20 +201,8 @@
                                             <td>{{ $item->name }}</td>
                                             <td>{{ $item->project->name ?? ' ' }}</td>
                                             <td>{{ $item->status->name ?? ' ' }}</td>
-<<<<<<< HEAD
-                                            <td>
-                                                <!-- Ubah bagian ini untuk menampilkan ikon berdasarkan prioritas -->
-                                                @if ($item->priority)
-                                                    <i class="fa-solid fa-star" title="{{ $item->priority->name }}"></i> <!-- Ganti dengan ikon yang sesuai -->
-                                                @else
-                                                    <span>No Priority</span>
-                                                @endif
-                                            </td>
-                                            <td>{{ \Carbon\Carbon::parse($item->due_date)->format('d m Y H:i:s') }}</td>
-=======
-                                            <td>{{ $item->priority->name ?? ' ' }}</td>
+                                            <td title="{{ $item->priority->name ?? ' ' }}" style="">{{ $item->priority->icon ?? ' ' }}</td>v
                                             <td>{{ \Carbon\Carbon::parse($item->due_date)->format('d/m/Y H:i:s') }}</td>
->>>>>>> 0dc0bdb6cc8042a19bed2f0adb1f6e832cdf7a0b
                                             <td>{{ $item->created_by ?? ' ' }}</td>
                                             <td>{{ \Carbon\Carbon::parse($item->created_at)->setTimezone('Asia/Jakarta')->format('d/m/Y H:i:s') }}</td>
                                             <td>
