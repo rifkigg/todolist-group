@@ -99,6 +99,7 @@
                                         <th>Project Name</th>
                                         <th>Task Status</th>
                                         <th>Task Priority</th>
+                                        <th>Pogress Status</th>
                                         <th>Due Date</th>
                                         <th>Created By</th>
                                         <th>Created At</th>
@@ -112,6 +113,15 @@
                                             <td>{{ $item->project->name }}</td>
                                             <td>{{ $item->status->name ?? ' ' }}</td>
                                             <td title="{{ $item->priority->name ?? ' ' }}" style="">{{ $item->priority->icon ?? ' ' }}</td>
+                                            <td>
+                                                @if ($item->timer_status == 'Paused')
+                                                    <p class="badge bg-secondary">Paused</p>
+                                                @elseif ($item->timer_status == 'Playing')
+                                                    <p class="badge bg-warning">Playing</p>
+                                                @else
+                                                    <p class="badge bg-success">Finished</p>
+                                                @endif
+                                            </td>
                                             <td>{{ \Carbon\Carbon::parse($item->due_date)->format('d/m/Y H:i:s') }}
                                             </td>
                                             <td>{{ $item->created_by ?? ' ' }}</td>
