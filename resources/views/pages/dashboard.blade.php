@@ -182,7 +182,6 @@
                             <table id="example" class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th scope="col">No</th>
                                         <th scope="col">Task Name</th>
                                         <th scope="col">Project Name</th>
                                         <th scope="col">Status</th>
@@ -195,7 +194,6 @@
                                     @forelse ($tasksWithTime as $task)
                                     @if ($task->count() > 0)
                                             <tr>
-                                                <th scope="row">{{ $loop->iteration }}</th>
                                                 <td>{{ $task->name }}</td>
                                                 <td>
                                                     <a href="{{ route('projects.tasks', $task->project->id) }}" class="fw-bold">{{ $task->project->name }}</a> <!-- Tambahkan link untuk redirect ke TaskInProject -->
