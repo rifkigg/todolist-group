@@ -19,6 +19,7 @@ class TaskPerUserController extends Controller
 
             if ($currentHistories->isEmpty()) {
                 $user = User::find($id);
+                $activeTasks = []; // Inisialisasi activeTasks
                 return view('pages.task_per_user', compact('user', 'activeTasks')); // Jika tidak ada, kembalikan view kosong
                 $activeTasks = []; // Inisialisasi activeTasks
             }
