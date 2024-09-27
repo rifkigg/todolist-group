@@ -130,7 +130,7 @@
                                                         @elseif ($activeTask['time'] == '0')
                                                             <p>00:00:00</p>
                                                         @else   
-                                                        @endif
+                                                        @endif  
                                                     </td>
                                                     <td>{{ $activeTask['created_at'] }} </td>
                                                 </tr>
