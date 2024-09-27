@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class task extends Model
+class Task extends Model
 {
     use HasFactory;
 
@@ -23,7 +23,7 @@ class task extends Model
 
     public function priority()
     {
-        return $this->belongsTo(task_priority::class);
+        return $this->belongsTo(TaskPriority::class);
     }
 
     public function label()

@@ -8,7 +8,7 @@ use App\Models\project;
 use App\Models\TaskLabel;
 use App\Models\TaskStatus;
 use Illuminate\Http\Request;
-use App\Models\task_priority;
+use App\Models\TaskPriority;
 use Illuminate\Support\Carbon;
 use App\Models\History;
 use App\Models\Task; // Tambahkan import model Task
@@ -20,7 +20,7 @@ class TaskInProjectController extends Controller
     {
         $board = Board::all();
         $status = TaskStatus::all();
-        $priority = task_priority::all();
+        $priority = TaskPriority::all();
         $label = TaskLabel::all();
         $users = User::all();
         $project = Project::all();
@@ -48,7 +48,7 @@ class TaskInProjectController extends Controller
             return $taskItem;
         });
 
-        $projects = project::find($id);
+        $projects = Project::find($id);
 
         return view('pages.show_task_in_project', compact('tasks', 'projects', 'board', 'status', 'priority', 'label', 'users', 'project', 'tasksWithTime'));
     }

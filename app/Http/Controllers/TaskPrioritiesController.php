@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\View\View;
 use Illuminate\Http\Request;
-use App\Models\task_priority;
+use App\Models\TaskPriority;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
@@ -22,7 +22,7 @@ class TaskPrioritiesController extends Controller
             $request->session()->regenerateToken();
             return redirect('/');
         }
-        $priorities = task_priority::all();
+        $priorities = TaskPriority::all();
         return view('pages.task.prioritiesTask', compact('priorities'));
     }
 
@@ -34,7 +34,7 @@ class TaskPrioritiesController extends Controller
             'icon' => 'required'
         ]);
 
-        task_priority::create([
+        TaskPriority::create([
             'name' => $request->name,
             'icon' => $request->icon
         ]);
@@ -44,7 +44,7 @@ class TaskPrioritiesController extends Controller
 
     public function destroy($id) 
     {
-        $priority = task_priority::findOrFail($id);
+        $priority = TaskPriority::findOrFail($id);
         
         $priority->delete();
     
@@ -58,7 +58,7 @@ class TaskPrioritiesController extends Controller
             'icon' => 'required'
         ]);
 
-        $priority = task_priority::findOrFail($id);
+        $priority = TaskPriority::findOrFail($id);
 
         $priority->update([
             'name' => $request->name,

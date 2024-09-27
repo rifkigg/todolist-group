@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\task;
+use App\Models\Task;
 use App\Models\User;
-use App\Models\board;
+use App\Models\Board;
 use App\Models\Project;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
@@ -33,8 +33,8 @@ class ProjectController extends Controller
 
         $total_project = Project::count();
         $total_user = User::count();
-        $total_task = task::count();
-        $total_board = board::count();
+        $total_task = Task::count();
+        $total_board = Board::count();
 
         $selectedUserId = $request->input('assignee_id');
         $userRole = $request->user()->role;

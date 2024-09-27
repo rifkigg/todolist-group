@@ -12,9 +12,7 @@ use App\Models\TaskLabel;
 use Illuminate\View\View;
 use App\Models\TaskStatus;
 use Illuminate\Http\Request;
-use App\Models\ProjectStatus;
-use App\Models\task_priority;
-use App\Models\ProjectCategories;
+use App\Models\TaskPriority;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
@@ -43,7 +41,7 @@ class BoardController extends Controller
         $projects = Project::all();
         $tasks = Task::all();
         $status = TaskStatus::all();
-        $priority = task_priority::all();
+        $priority = TaskPriority::all();
         $label = TaskLabel::all();
         $users = User::all();
 

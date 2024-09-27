@@ -3,15 +3,15 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
-use App\Models\task;
+use App\Models\Task;
 use App\Models\User;
-use App\Models\board;
+use App\Models\Board;
 use App\Models\History;
-use App\Models\project;
+use App\Models\Project;
 use App\Models\TaskLabel;
 use App\Models\TaskStatus;
 use Illuminate\Http\Request;
-use App\Models\task_priority;
+use App\Models\TaskPriority;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\RedirectResponse;
@@ -30,7 +30,7 @@ class TaskController extends Controller
         }
         $board = Board::all();
         $status = TaskStatus::all();
-        $priority = task_priority::all();
+        $priority = TaskPriority::all();
         $label = TaskLabel::all();
         $users = User::all();
 
@@ -112,7 +112,7 @@ class TaskController extends Controller
         $project = Project::all();
         $board = Board::all();
         $status = TaskStatus::all();
-        $priority = task_priority::all();
+        $priority = TaskPriority::all();
         $label = TaskLabel::all();
         $users = User::all();
 
@@ -260,14 +260,14 @@ class TaskController extends Controller
 
     public function destroy($id): RedirectResponse
     {
-        $task = task::find($id);
+        $task = Task::find($id);
         $task->delete();
         return redirect()->route('task.index');
     }
 
     public function duplicate($id)
     {
-        $task = task::findOrFail($id);
+        $task = Task::findOrFail($id);
 
         $newTask = $task->replicate();
         $newTask->name = $task->name . ' (Copy)';

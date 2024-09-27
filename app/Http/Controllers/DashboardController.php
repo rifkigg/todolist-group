@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\task;
+use App\Models\Task;
 use App\Models\User;
-use App\Models\board;
-use App\Models\project;
+use App\Models\Board;
+use App\Models\Project;
 use App\Models\TaskStatus;
 use App\Models\History;
-use App\Models\task_priority;
+use App\Models\TaskPriority;
 use App\Models\TaskLabel;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -36,7 +36,7 @@ class DashboardController extends Controller
         $project = Project::all();
         $board = Board::all();
         $status = TaskStatus::all();
-        $priority = task_priority::all();
+        $priority = TaskPriority::all();
         $label = TaskLabel::all();
         $users = User::all();
 
