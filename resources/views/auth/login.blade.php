@@ -6,17 +6,22 @@
         <form method="POST" action="{{ route('login') }}" class="card shadow">
             @csrf
             <div class="card-body">
-                <a href="/" class="text-2xl d-flex justify-content-center fs-2 fw-bold text-decoration-none text-dark">
+                <a href="/"
+                    class="text-2xl d-flex justify-content-center fs-2 fw-bold text-decoration-none text-dark">
                     Login Form
                 </a>
 
-                <!-- Email Address -->
+                <!-- Email Address or Username -->
                 <div>
-                    <x-input-label for="email" :value="__('Email')" />
-                    <x-text-input id="email" class="block mt-1 w-full" type="email" name="email" :value="old('email')"
-                        required autofocus autocomplete="username" />
-                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
+                    <label for="login" class="form-label">Username or Email</label>
+                    <input id="login" type="text" name="login"
+                        class="form-control @error('login') is-invalid @enderror" value="{{ old('login') }}" required
+                        autofocus>
+                    @error('login')
+                        <span class="invalid-feedback">{{ $message }}</span>
+                    @enderror
                 </div>
+
 
                 <!-- Password -->
                 <div class="mt-4">
