@@ -81,7 +81,7 @@
             <div id="content">
                 <x-navbar-topbar></x-navbar-topbar>
                 <!-- Begin Page Content -->
-                <div class="container text-dark">
+                <div class="container-fluid text-dark">
                     <!-- Content Row -->
                     @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
                         <div class="row">

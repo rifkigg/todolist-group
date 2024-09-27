@@ -83,7 +83,7 @@
                 <x-navbar-topbar></x-navbar-topbar>
 
                 <!-- Begin Page Content -->
-                <div class="container text-dark">
+                <div class="container-fluid text-dark">
                     <!-- Content Row -->
                     <button onclick="history.back()" class="btn btn-primary w-auto mb-3"><i
                             class="fa-solid fa-left-long"></i> Back</button>
