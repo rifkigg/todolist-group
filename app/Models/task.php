@@ -23,7 +23,7 @@ class Task extends Model
 
     public function priority()
     {
-        return $this->belongsTo(TaskPriority::class);
+        return $this->belongsTo(TaskPriority::class); 
     }
 
     public function label()

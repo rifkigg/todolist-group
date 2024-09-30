@@ -184,7 +184,6 @@ class TaskController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
             'project_id' => 'required|integer',
-            'board_id' => 'required|integer',
             'priority_id' => 'required|integer',
             'due_date' => 'required|date',
             'assignees' => 'array',

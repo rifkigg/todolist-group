@@ -136,7 +136,7 @@
                                             <option disabled>Pilih Category:</option>
                                             @foreach ($categories as $items)
                                                 <option value="{{ $items->id }}"
-                                                    {{ old('category_id', $project->category_id) }}>
+                                                    {{ old('category_id', $project->category_id) == $items->id ? 'selected' : '' }}>
                                                     {{ $items->name }}
                                                 </option>
                                             @endforeach
@@ -158,7 +158,7 @@
                                     <option disabled>Pilih Status:</option>
                                     @foreach ($status as $items)
                                         <option value="{{ $items->id }}"
-                                            {{ old('status_id', $project->status_id) }}>{{ $items->name }}
+                                            {{ old('status_id', $project->status_id) == $items->id ? 'selected' : '' }}>{{ $items->name }}
                                         </option>
                                     @endforeach
                                 </select>
