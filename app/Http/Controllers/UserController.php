@@ -48,15 +48,22 @@ class UserController extends Controller
             'username' => 'required',
             'email' => 'required',
             'role' => 'required',
-            'password' => 'required',
+            'password' => 'nullable', // Ubah menjadi nullable
         ]);
         $user = User::find($id);
-        $user->update([
+        
+        $dataToUpdate = [
             'username' => $request->username,
             'email' => $request->email,
             'role' => $request->role,
-            'password' => Hash::make($request->password),
-        ]);
+        ];
+
+        // Cek jika password diisi
+        if ($request->filled('password')) {
+            $dataToUpdate['password'] = Hash::make($request->password);
+        }
+
+        $user->update($dataToUpdate);
         return redirect()->route('manage_user.index');
     }
 

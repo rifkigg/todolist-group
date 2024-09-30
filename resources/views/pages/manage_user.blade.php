@@ -132,7 +132,7 @@
                                                 </td>
                                             </tr>
                                             <div class="modal fade" id="updateUser_{{ $user->id }}" tabindex="-1"
-                                                aria-labelledby="createModalLabel" aria-hidden="true">
+                                                aria-labelledby="UpdateModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
@@ -180,14 +180,13 @@
                                                                         Choose Role</label>
                                                                     <select id="role" name="role"
                                                                         class="form-control"
-                                                                        value="{{ old('role', $user->role) }}"
                                                                         required>
                                                                         <option value="" selected disabled>Choose
                                                                             Role:</option>
-                                                                        <option value="admin">Admin</option>
-                                                                        <option value="developer">Developer</option>
-                                                                        <option value="manajer">Manajer</option>
-                                                                        <option value="editor">Editor</option>
+                                                                        <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
+                                                                        <option value="developer" {{ old('role', $user->role) == 'developer' ? 'selected' : '' }}>Developer</option>
+                                                                        <option value="manajer" {{ old('role', $user->role) == 'manajer' ? 'selected' : '' }}>Manajer</option>
+                                                                        <option value="editor" {{ old('role', $user->role) == 'editor' ? 'selected' : '' }}>Editor</option>
                                                                     </select>
                                                                 </div>
                                                                 <div class="mb-3">
@@ -260,10 +259,10 @@
                                                             required>
                                                             <option value="" selected disabled>Choose Role:
                                                             </option>
-                                                            <option value="admin">Admin</option>
-                                                            <option value="developer">Developer</option>
-                                                            <option value="manajer">Manajer</option>
-                                                            <option value="editor">Editor</option>
+                                                            <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
+                                                            <option value="developer" {{ old('role') == 'developer' ? 'selected' : '' }}>Developer</option>
+                                                            <option value="manajer" {{ old('role') == 'manajer' ? 'selected' : '' }}>Manajer</option>
+                                                            <option value="editor" {{ old('role') == 'editor' ? 'selected' : '' }}>Editor</option>
                                                         </select>
                                                     </div>
                                                     <div class="mb-3">

@@ -513,6 +513,7 @@
                                                                             Board</label>
                                                                         <select name="board_id" id="board_id"
                                                                             class="form-select mb-3">
+                                                                            <option value="" selected>Choose Board</option>
                                                                             @foreach ($board as $items)
                                                                                 <option value="{{ $items->id }}"
                                                                                     {{ old('board_id', $item->board_id) == $items->id ? 'selected' : '' }}>
@@ -525,6 +526,7 @@
                                                                             Status</label>
                                                                         <select name="status_id" id="status_id"
                                                                             class="form-select mb-3">
+                                                                            <option value="" selected>Choose Status</option>
                                                                             @foreach ($status as $items)
                                                                                 <option value="{{ $items->id }}"
                                                                                     {{ old('status_id', $item->status_id) == $items->id ? 'selected' : '' }}>
@@ -538,6 +540,7 @@
                                                                             Priority</label>
                                                                         <select name="priority_id" id="priority_id"
                                                                             class="form-select mb-3">
+                                                                            <option value="" selected>Choose Priority</option>
                                                                             @foreach ($priority as $items)
                                                                                 <option value="{{ $items->id }}"
                                                                                     {{ old('priority_id', $item->priority_id) == $items->id ? 'selected' : '' }}>
@@ -552,6 +555,7 @@
                                                                         <select name="task_label_id"
                                                                             id="task_label_id"
                                                                             class="form-select mb-3">
+                                                                            <option value="" selected>Choose Label</option>
                                                                             @foreach ($label as $items)
                                                                                 <option value="{{ $items->id }}"
                                                                                     {{ old('task_label_id', $item->task_label_id) == $items->id ? 'selected' : '' }}>
@@ -565,6 +569,7 @@
                                                                             Project</label>
                                                                         <select name="project_id" id="project_id"
                                                                             class="form-select mb-3">
+                                                                            <option value="" selected>Choose Project</option>
                                                                             @foreach ($project as $items)
                                                                                 <option value="{{ $items->id }}"
                                                                                     {{ old('project_id', $item->project_id) == $items->id ? 'selected' : '' }}>
@@ -578,7 +583,7 @@
                                                                             class="form-label">Assignees</label>
                                                                         <select name="assignees[]" id="assignees"
                                                                             class="form-select mb-3">
-
+                                                                            <option value="" selected>Choose Assignees</option>
                                                                             @foreach ($users as $user)
                                                                                 <option value="{{ $user->id }}"
                                                                                     {{ in_array($user->id, old('assignees', $item->users->pluck('id')->toArray())) ? 'selected' : '' }}>
@@ -922,6 +927,7 @@
                                                                             Board</label>
                                                                         <select name="board_id" id="board_id"
                                                                             class="form-select mb-3" disabled>
+                                                                            <option value="" selected>Choose Board</option>
                                                                             @foreach ($board as $items)
                                                                                 <option value="{{ $items->id }}"
                                                                                     {{ old('board_id', $item->board_id) == $items->id ? 'selected' : '' }}>
@@ -934,6 +940,7 @@
                                                                             Status</label>
                                                                         <select name="status_id" id="status_id"
                                                                             class="form-select mb-3" disabled>
+                                                                            <option value="" selected>Choose Status</option>
                                                                             @foreach ($status as $items)
                                                                                 <option value="{{ $items->id }}"
                                                                                     {{ old('status_id', $item->status_id) == $items->id ? 'selected' : '' }}>
@@ -947,6 +954,7 @@
                                                                             Priority</label>
                                                                         <select name="priority_id" id="priority_id"
                                                                             class="form-select mb-3" disabled>
+                                                                            <option value="" selected>Choose Priority</option>
                                                                             @foreach ($priority as $items)
                                                                                 <option value="{{ $items->id }}"
                                                                                     {{ old('priority_id', $item->priority_id) == $items->id ? 'selected' : '' }}>
@@ -961,6 +969,7 @@
                                                                         <select name="task_label_id"
                                                                             id="task_label_id"
                                                                             class="form-select mb-3" disabled>
+                                                                            <option value="" selected>Choose Label</option>
                                                                             @foreach ($label as $items)
                                                                                 <option value="{{ $items->id }}"
                                                                                     {{ old('task_label_id', $item->task_label_id) == $items->id ? 'selected' : '' }}>
@@ -974,6 +983,7 @@
                                                                             Project</label>
                                                                         <select name="project_id" id="project_id"
                                                                             class="form-select mb-3" disabled>
+                                                                            <option value="" selected>Choose Project</option>
                                                                             @foreach ($project as $items)
                                                                                 <option value="{{ $items->id }}"
                                                                                     {{ old('project_id', $item->project_id) == $items->id ? 'selected' : '' }}>
@@ -987,6 +997,7 @@
                                                                             class="form-label">Assignees</label>
                                                                         <select name="assignees[]" id="assignees"
                                                                             class="form-select mb-3" disabled>
+                                                                            <option value="" selected>Choose Assignees</option>
                                                                             @foreach ($users as $user)
                                                                                 <option value="{{ $user->id }}"
                                                                                     {{ in_array($user->id, old('assignees', $item->users->pluck('id')->toArray())) ? 'selected' : '' }}>

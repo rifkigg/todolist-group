@@ -145,8 +145,6 @@ class ProjectController extends Controller
         //get project by ID
         $project = Project::findOrFail($id);
 
-        $cleanText = strip_tags($request->input('project_detail'));
-
         //update project without image
         $project->update([
             'name' => $request->name,

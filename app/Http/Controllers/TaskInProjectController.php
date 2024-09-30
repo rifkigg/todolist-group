@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Board;
-use App\Models\project;
+use App\Models\Project;
 use App\Models\TaskLabel;
 use App\Models\TaskStatus;
 use Illuminate\Http\Request;

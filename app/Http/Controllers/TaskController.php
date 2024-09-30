@@ -233,7 +233,6 @@ class TaskController extends Controller
         $request->validate([
             'name' => 'required',
             'project_id' => 'required',
-            'board_id' => 'required',
         ]);
 
         // Get task by ID
