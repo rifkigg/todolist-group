@@ -187,6 +187,7 @@
                                         <th scope="col">Status</th>
                                         <th scope="col">Task Priorities</th>
                                         <th scope="col">Total Time</th>
+                                        {{-- <th scope="col">Elapsed Time</th> --}}
                                         <th scope="col">Due Date</th>
                                         <th scope="col">Action</th>
                                     </tr>
@@ -221,6 +222,15 @@
                                                     @endphp
                                                     <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}</p>
                                                 </td>
+                                                {{-- <td>
+                                                    @php
+                                                        $elapsedSeconds = $task->elapsed_time; // Waktu yang telah berlalu dalam detik
+                                                        $elapsedHours = floor($elapsedSeconds / 3600);
+                                                        $elapsedMinutes = floor(($elapsedSeconds % 3600) / 60);
+                                                        $elapsedSeconds = $elapsedSeconds % 60;
+                                                    @endphp
+                                                    <p>{{ sprintf('%02d:%02d:%02d', $elapsedHours, $elapsedMinutes, $elapsedSeconds) }}</p>
+                                                </td> --}}
                                                 <td>{{ \Carbon\Carbon::parse($task->due_date)->format('d/m/Y H:i:s') }}
                                                 </td>
                                                 <td>
@@ -246,7 +256,7 @@
                                                                             name="task_name">
                                                                         <button type="submit" class="btn dropdown-item"
                                                                             {{ $isPlaying ? 'disabled' : '' }}>
-                                                                            <i class="fa-solid fa-play"></i> Play
+                                                                            <i class="fa-solid fa-play"></i> Start
                                                                         </button>
                                                                     </form>
                                                                 </li>

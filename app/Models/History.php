@@ -20,12 +20,13 @@ class History extends Model
     public static function calculateTotalTime($taskName)
     {
         $totalTime = 0; // Inisialisasi total waktu sebagai angka 0
-    
+        $elapsedTime = 0; // Inisialisasi elapsed_time
+
         // Ambil semua record dari tabel History berdasarkan task name
         $histories = self::where('task_name', $taskName)->orderBy('created_at')->get();
-    
+
         $startTime = null; // Menyimpan waktu mulai sementara
-    
+
         foreach ($histories as $history) {
             // Tambahkan logika untuk memeriksa nilai start dan paused
             if (empty($history->start)) {
@@ -44,16 +45,22 @@ class History extends Model
                 if ($pauseTime->greaterThan($startTime)) {
                     $selisih = $startTime->diffInSeconds($pauseTime); // Selisih dalam detik
                     $totalTime += $selisih; // Tambahkan selisih ke total
-                    // dd("waktu mulai" ,$startTime, "waktu stop",$pauseTime , "selisih",$selisih, "total",$totalTime);
-                } else {
-                    // Jika selisih negatif, bisa diabaikan atau di-set ke 0
                 }
                 $startTime = null; // Reset waktu mulai setelah dihitung
             }
         }
-    
-        // Kembalikan total waktu sebagai angka (dalam detik)
-        return $totalTime;
+
+        // Hitung elapsed_time jika tugas sedang berjalan
+        if ($startTime) {
+            $elapsedTime = $startTime->diffInSeconds(Carbon::now()); // Menghitung waktu yang telah berlalu
+            // $elapsedTime = $elapsedTimeBefore + $totalTime; // Menambahkan selisih ke elapsed_time
+        }
+
+        // Kembalikan total waktu dan elapsed_time sebagai array
+        return [
+            'totalTime' => $totalTime,
+            'elapsedTime' => $elapsedTime,
+        ];
     }
     
 }
