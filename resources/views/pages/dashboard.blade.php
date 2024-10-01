@@ -222,6 +222,7 @@
                                                         <p class="badge bg-success">Finished</p>
                                                     @endif
                                                 </td>
+                                                <!-- 😂😂😂😂😂😂😂😂😂😂 -->
                                                 <td title="{{ $task->priority->name ?? ' ' }}" style="">
                                                     <img src="{{ asset($task->priority->icon) }}" alt="{{ $task->priority->name ?? ' ' }}" class="icon-size" />
                                                 </td>
