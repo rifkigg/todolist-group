@@ -85,12 +85,16 @@ class TaskController extends Controller
 
         $tasksWithTime = $task->map(function ($taskItem) {
             // Mengganti $tasks dengan $task
-            $totalTime = History::calculateTotalTime($taskItem->name);
+            $timeData = History::calculateTotalTime($taskItem->name); // Ambil totalTime dan elapsedTime
+            $totalTime = $timeData['totalTime'];
+            $elapsedTime = $timeData['elapsedTime'];
             $startOfDay = Carbon::today()->startOfDay();
             $endOfDay = Carbon::today()->endOfDay();
             $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
-            $taskItem->totalTime = $totalTime;
+
             $taskItem->remainingTime = $remainingTime; // Waktu tersisa dalam detik
+            $taskItem->elapsed_time = $elapsedTime; // Waktu yang telah berlalu dalam detik
+            $taskItem->totalTime = $totalTime + $elapsedTime; // Total waktu dalam detik
             $taskItem->isPlaying = $taskItem->timer_status == 'Playing';
             $taskItem->isPaused = $taskItem->timer_status == 'Paused';
             return $taskItem;

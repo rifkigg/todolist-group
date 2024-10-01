@@ -125,12 +125,12 @@
                                                     @endif
                                                 </td>
                                                 <td>
-                                                    @if (!$activeTask['time'] == null)
-                                                        {{ \Carbon\Carbon::parse($activeTask['time'])->format('H:i:s') }}
-                                                    @elseif ($activeTask['time'] == '0')
-                                                        <p>00:00:00</p>
-                                                    @else   
-                                                    @endif
+                                                    @if($activeTask['total_time'])
+                                                    {{ \Carbon\Carbon::createFromTimestamp($activeTask['total_time']['totalTime'])->format('H:i:s') }}<br> <!-- Format totalTime menjadi hh:mm:ss -->
+                                                    
+                                                @else
+                                                    
+                                                @endif 
                                                 </td>
                                                 <td>{{ \Carbon\Carbon::parse($activeTask['created_at'])->timezone('Asia/Jakarta')->format('d/m/Y H:i:s') }}</td>
                                             </tr>

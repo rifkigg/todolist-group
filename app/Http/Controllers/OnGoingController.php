@@ -33,7 +33,10 @@ class OnGoingController extends Controller
                         'task' => $task->name,
                         'user_id' => $user->id, // Tambahkan user_id
                         'status' => $task->timer_status,
-                        'time' => History::calculateTotalTime($task->name), // Hitung waktu total
+                        'total_time' => [
+                            'totalTime' => History::calculateTotalTime($task->name)['totalTime'] +  History::calculateTotalTime($task->name)['elapsedTime'], // Ganti 'total_time' menjadi 'totalTime'
+                            'elapsedTime' => History::calculateTotalTime($task->name)['elapsedTime'],
+                        ],
                         'created_at' => $task->created_at,
                     ];
                 }
@@ -46,7 +49,10 @@ class OnGoingController extends Controller
                         'task' => $lastTask->name,
                         'user_id' => $user->id, // Tambahkan user_id
                         'status' => $lastTask->timer_status,
-                        'time' => History::calculateTotalTime($lastTask->name), // Hitung waktu total
+                        'total_time' => [
+                            'totalTime' => History::calculateTotalTime($lastTask->name)['totalTime'] + History::calculateTotalTime($lastTask->name)['elapsedTime'], // Ganti 'total_time' menjadi 'totalTime'
+                            'elapsedTime' => History::calculateTotalTime($lastTask->name)['elapsedTime'],
+                        ],
                         'created_at' => $lastTask->created_at,
                     ];
                 } else {
@@ -56,7 +62,7 @@ class OnGoingController extends Controller
                         'user_id' => $user->id, // Tambahkan user_id
                         'task' => null,
                         'status' => null,
-                        'time' => null,
+                        'total_time' => null, // Ganti 'total_time' menjadi null
                         'created_at' => null,
                     ];
                 }

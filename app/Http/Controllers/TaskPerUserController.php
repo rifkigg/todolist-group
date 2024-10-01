@@ -49,7 +49,10 @@ class TaskPerUserController extends Controller
                     'user' => $user->username,
                     'task' => $task->name,
                     'status' => $task->timer_status,
-                    'time' => History::calculateTotalTime($task->name), // Hitung waktu total
+                    'total_time' => [
+                        'totalTime' => History::calculateTotalTime($task->name)['totalTime'] +  History::calculateTotalTime($task->name)['elapsedTime'], // Ganti 'total_time' menjadi 'totalTime'
+                        'elapsedTime' => History::calculateTotalTime($task->name)['elapsedTime'],
+                    ],
                     'created_at' => $task->created_at,
                 ];
             }

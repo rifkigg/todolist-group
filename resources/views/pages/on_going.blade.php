@@ -124,13 +124,21 @@
                                                         @else
                                                         @endif
                                                     </td>
-                                                    <td>
-                                                        @if (!$activeTask['time'] == null)
-                                                            {{ \Carbon\Carbon::parse($activeTask['time'])->format('H:i:s') }}
-                                                        @elseif ($activeTask['time'] == '0')
+                                                    {{-- <td>
+                                                        @if (!$activeTask['total_time'] == null)
+                                                            {{ \Carbon\Carbon::parse($activeTask['total_time']['totaltime'])->format('H:i:s') }}
+                                                        @elseif ($activeTask['total_time']['totaltime'] == '0')
                                                             <p>00:00:00</p>
                                                         @else   
                                                         @endif  
+                                                    </td> --}}
+                                                    <td>
+                                                        @if($activeTask['total_time'])
+                                                            {{ \Carbon\Carbon::createFromTimestamp($activeTask['total_time']['totalTime'])->format('H:i:s') }}<br> <!-- Format totalTime menjadi hh:mm:ss -->
+                                                            
+                                                        @else
+                                                            
+                                                        @endif
                                                     </td>
                                                     <td>{{ $activeTask['created_at'] }} </td>
                                                 </tr>
