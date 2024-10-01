@@ -67,13 +67,25 @@
                     </div>
                 </li>
                 @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
-                    <li class="nav-item active">
-                        <a class="nav-link active" href="{{ route('manage_user.index') }}" aria-bs-expanded="true"
-                            aria-bs-controls="collapseTwo">
-                            <i class="fa-solid fa-users-gear"></i>
-                            <span>Manage User</span>
-                        </a>
-                    </li>
+                <li class="nav-item active">
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                        data-bs-target="#collapseManageUser" aria-bs-expanded="true"
+                        aria-bs-controls="collapseManageUser">
+                        <i class="fa-solid fa-users-gear"></i>
+                        <span>Manage User</span>
+                    </a>
+                    <div id="collapseManageUser" class="collapse" aria-labelledby="collapseManageUser"
+                        data-bs-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                                <a class="collapse-item active" href="{{ route('manage_user.index') }}">Manage User</a>
+                                <a class="collapse-item" href="{{ route('roles.index') }}">Add Role</a>
+                            @else
+                            @endif
+                        </div>
+                    </div>
+                </li>
+                
                 @else
                 @endif
             </x-navbar>
@@ -183,10 +195,9 @@
                                                                         required>
                                                                         <option value="" selected disabled>Choose
                                                                             Role:</option>
-                                                                        <option value="admin" {{ old('role', $user->role) == 'admin' ? 'selected' : '' }}>Admin</option>
-                                                                        <option value="developer" {{ old('role', $user->role) == 'developer' ? 'selected' : '' }}>Developer</option>
-                                                                        <option value="manajer" {{ old('role', $user->role) == 'manajer' ? 'selected' : '' }}>Manajer</option>
-                                                                        <option value="editor" {{ old('role', $user->role) == 'editor' ? 'selected' : '' }}>Editor</option>
+                                                                            @foreach ($roles as $role) {{-- Menggunakan $roles untuk menampilkan semua role --}}
+                                                                            <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                                                        @endforeach
                                                                     </select>
                                                                 </div>
                                                                 <div class="mb-3">
@@ -255,14 +266,11 @@
                                                     <div class="mb-3">
                                                         <label for="field_name" class="form-label">
                                                             Choose Role</label>
-                                                        <select id="role" name="role" class="form-control"
-                                                            required>
-                                                            <option value="" selected disabled>Choose Role:
-                                                            </option>
-                                                            <option value="admin" {{ old('role') == 'admin' ? 'selected' : '' }}>Admin</option>
-                                                            <option value="developer" {{ old('role') == 'developer' ? 'selected' : '' }}>Developer</option>
-                                                            <option value="manajer" {{ old('role') == 'manajer' ? 'selected' : '' }}>Manajer</option>
-                                                            <option value="editor" {{ old('role') == 'editor' ? 'selected' : '' }}>Editor</option>
+                                                        <select id="role" name="role" class="form-control" required>
+                                                            <option value="" selected disabled>Choose Role:</option>
+                                                            @foreach ($roles as $role) {{-- Menggunakan $roles untuk menampilkan semua role --}}
+                                                                <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                                            @endforeach
                                                         </select>
                                                     </div>
                                                     <div class="mb-3">

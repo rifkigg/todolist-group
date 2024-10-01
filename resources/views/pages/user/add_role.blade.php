@@ -11,15 +11,15 @@
                         <span>Dashboard</span></a>
                 </li>
                 @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('ongoing.index') }}" aria-bs-expanded="true"
-                        aria-bs-controls="collapseTwo">
-                        <i class="fa-solid fa-hourglass-half"></i>
-                        <span>On Going</span>
-                    </a>
-                </li>
-            @else
-            @endif
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('ongoing.index') }}" aria-bs-expanded="true"
+                            aria-bs-controls="collapseTwo">
+                            <i class="fa-solid fa-hourglass-half"></i>
+                            <span>On Going</span>
+                        </a>
+                    </li>
+                @else
+                @endif
             </x-slot>
             <li class="nav-item">
                 <a class="nav-link active" href="/boards">
@@ -28,31 +28,33 @@
                 </a>
             </li>
 
+
             @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
-                <li class="nav-item active">
-                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                        data-bs-target="#collapseThree" aria-bs-expanded="true" aria-bs-controls="collapseThree">
+                <li class="nav-item ">
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                        aria-bs-expanded="true" aria-bs-controls="collapseTwo">
                         <i class="fa-solid fa-list-check"></i>
                         <span>Project</span>
                     </a>
-                    <div id="collapseThree" class="collapse" aria-labelledby="headingThree"
+                    <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
                         data-bs-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
                             <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
-                            <a class="collapse-item active" href="{{ route('projectcategories.index') }}">Categories</a>
+                            <a class="collapse-item " href="{{ route('projectcategories.index') }}">Categories</a>
                             <a class="collapse-item" href="{{ route('project_status.index') }}">Project Status</a>
                         </div>
                     </div>
                 </li>
             @endif
             <li class="nav-item ">
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseThree"
                     aria-bs-expanded="true" aria-bs-controls="collapseTwo">
                     <i class="fas fa-clipboard-list"></i>
                     <span>Task</span>
                 </a>
-                <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionSidebar">
+                <div id="collapseThree" class="collapse" aria-labelledby="headingTwo"
+                    data-bs-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
                             <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
@@ -66,27 +68,29 @@
                 </div>
             </li>
             @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
-            <li class="nav-item ">
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                    data-bs-target="#collapseManageUser" aria-bs-expanded="true"
-                    aria-bs-controls="collapseManageUser">
-                    <i class="fa-solid fa-users-gear"></i>
-                    <span>Manage User</span>
-                </a>
-                <div id="collapseManageUser" class="collapse" aria-labelledby="collapseManageUser"
-                    data-bs-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
-                            <a class="collapse-item" href="{{ route('manage_user.index') }}">Manage User</a>
-                            <a class="collapse-item" href="{{ route('roles.index') }}">Add Role</a>
-                        @else
-                        @endif
+                <li class="nav-item active">
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                        data-bs-target="#collapseManageUser" aria-bs-expanded="true"
+                        aria-bs-controls="collapseManageUser">
+                        <i class="fa-solid fa-users-gear"></i>
+                        <span>Manage User</span>
+                    </a>
+                    <div id="collapseManageUser" class="collapse" aria-labelledby="collapseManageUser"
+                        data-bs-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                                <a class="collapse-item" href="{{ route('manage_user.index') }}">Manage User</a>
+                                <a class="collapse-item active" href="{{ route('roles.index') }}">Add Role</a>
+                            @else
+                            @endif
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
             @else
             @endif
         </x-navbar>
+
+        <!-- End of Sidebar -->
 
         <!-- Content Wrapper -->
         <div id="content-wrapper" class="d-flex flex-column">
@@ -100,101 +104,104 @@
                 <div class="container-fluid">
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Add New Categories</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Create Role</h6>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('projectcategories.store') }}" method="POST"
-                                enctype="multipart/form-data">
-                                <!-- Input Form -->
-                                @csrf
-                                <div class="form-group">
-                                    <label for="name">Name</label>
-                                    <input type="text" class="form-control" id="name" name="name"
-                                        onkeyup="generateSlug('name', 'slug')" required placeholder="Enter Name">
-                                </div>
-                                <div class="form-group">
-                                    <label for="slug" hidden>Slug</label>
-                                    <input type="text" class="form-control" id="slug" name="slug" readonly
-                                        required hidden>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Add New</button>
-                            </form>
-
-                            <!-- Tabel untuk Menampilkan Daftar -->
-                            <table id="example" class="table table-striped mt-4">
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#createModal">Create Role</button>
+                            <table id="example" class="table table-striped" id="dataTable" width="100%"
+                                cellspacing="0">
                                 <thead>
                                     <tr>
-                                        <th>Name</th>
-                                        {{-- <th hidden>Slug</th> --}}
+                                        <th>Role</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($categories as $category)
+                                    @foreach ($roles as $item)
                                         <tr>
-                                            <td>{{ $category->name }}</td>
-                                            {{-- <td hidden>{{ $category->slug }}</td> --}}
                                             <td>
+                                                {{ $item->name }}
+                                            </td>
+                                            <td class='d-flex'>
                                                 <button type="button" class="btn" data-bs-toggle="modal"
-                                                    data-bs-target="#editModal{{ $category->id }}">
+                                                    data-bs-target="#editModal{{ $item->id }}">
                                                     <i class="icon-action fa-solid fa-pencil"></i>
                                                 </button>
-                                                <form action="{{ route('projectcategories.destroy', $category->id) }}"
-                                                    method="POST" style="display:inline;">
+
+                                                <form action="{{ route('roles.destroy', $item->id) }}"
+                                                    method="POST">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn"
+                                                    <button type="submit" class="btn "
                                                         onclick="return confirm('Are you sure you want to delete this item?');">
                                                         <i class="icon-action fa-solid fa-trash-can"></i></button>
                                                 </form>
                                             </td>
                                         </tr>
-                                        <div class="modal fade" id="editModal{{ $category->id }}" tabindex="-1"
-                                            aria-labelledby="editModalLabel{{ $category->id }}" aria-hidden="true">
+                                        <div class="modal fade" id="editModal{{ $item->id }}" tabindex="-1"
+                                            aria-roleledby="editModalrole{{ $item->id }}" aria-hidden="true">
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="editModalLabel">Edit Data
-                                                        </h5>
+                                                        <h5 class="modal-title" id="editModalrole">Edit Role</h5>
                                                         <button type="button" class="btn-close"
                                                             data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
                                                     <div class="modal-body">
-                                                        <form
-                                                            action="{{ route('projectcategories.update', $category->id) }}"
+                                                        <form action="{{ route('roles.update', $item->id) }}"
                                                             method="POST">
                                                             @csrf
                                                             @method('PUT')
                                                             <div class="mb-3">
-                                                                <label for="field_name_{{ $category->id }}"
-                                                                    class="form-label">Name</label>
+                                                                <label for="name">
+                                                                    Role Name :</label>
                                                                 <input type="text" class="form-control"
-                                                                    id="field_name_{{ $category->id }}"
-                                                                    name="name"
-                                                                    oninput="generateSlug('field_name_{{ $category->id }}', 'field_slug_{{ $category->id }}')"
-                                                                    value="{{ $category->name }}" required>
-                                                                <label for="field_slug_{{ $category->id }}"
-                                                                    class="form-label" hidden>Slug</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="field_slug_{{ $category->id }}"
-                                                                    name="slug" value="{{ $category->slug }}"
-                                                                    readonly hidden>
+                                                                    id="name" name="name"
+                                                                    value="{{ old('name', $item->name) }}">
                                                             </div>
                                                             <button type="submit"
-                                                                class="btn btn-success">Perbarui</button>
+                                                                class="btn btn-primary w-100">Update</button>
                                                         </form>
                                                     </div>
-
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal fade" id="createModal" tabindex="-1"
+                                            aria-roleledby="createModalrole" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="editModalrole">Create Role</h5>
+                                                        <button type="button" class="btn-close"
+                                                            data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="{{ route('roles.store') }}" method="POST"
+                                                            enctype="multipart/form-data">
+                                                            @csrf
+                                                            <div class="form-group">
+                                                                <role for="statusName">Name</role>
+                                                                <input type="text" class="form-control"
+                                                                    id="name" name="name"
+                                                                    value="{{ old('name') }}"
+                                                                    placeholder="Enter role name" required>
+                                                            </div>
+                                                            <button type="submit"
+                                                                class="btn btn-primary w-100">Update</button>
+                                                        </form>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     @endforeach
                                 </tbody>
                             </table>
-
                         </div>
                     </div>
                 </div>
+
+
                 <!-- End of Main Content -->
 
             </div>
@@ -209,13 +216,13 @@
         </a>
 
         <!-- Logout Modal-->
-        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-roleledby="exampleModalLabel"
             aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <button class="close" type="button" data-dismiss="modal" aria-role="Close">
                             <span aria-hidden="true">×</span>
                         </button>
                     </div>
@@ -227,12 +234,4 @@
                 </div>
             </div>
         </div>
-        <script>
-            function generateSlug(nameFieldId, slugFieldId) {
-                let name = document.getElementById(nameFieldId).value;
-                console.log('name: ', name);
-                let slug = name.toLowerCase().replace(/ /g, '-').replace(/[^\w-]+/g, '');
-                document.getElementById(slugFieldId).value = slug;
-            }
-        </script>
 </x-layout>
