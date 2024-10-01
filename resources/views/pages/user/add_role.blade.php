@@ -11,15 +11,15 @@
                         <span>Dashboard</span></a>
                 </li>
                 @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('ongoing.index') }}" aria-bs-expanded="true"
-                        aria-bs-controls="collapseTwo">
-                        <i class="fa-solid fa-hourglass-half"></i>
-                        <span>On Going</span>
-                    </a>
-                </li>
-            @else
-            @endif
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('ongoing.index') }}" aria-bs-expanded="true"
+                            aria-bs-controls="collapseTwo">
+                            <i class="fa-solid fa-hourglass-half"></i>
+                            <span>On Going</span>
+                        </a>
+                    </li>
+                @else
+                @endif
             </x-slot>
             <li class="nav-item">
                 <a class="nav-link active" href="/boards">
@@ -68,24 +68,24 @@
                 </div>
             </li>
             @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
-            <li class="nav-item active">
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                    data-bs-target="#collapseManageUser" aria-bs-expanded="true"
-                    aria-bs-controls="collapseManageUser">
-                    <i class="fa-solid fa-users-gear"></i>
-                    <span>Manage User</span>
-                </a>
-                <div id="collapseManageUser" class="collapse" aria-labelledby="collapseManageUser"
-                    data-bs-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
-                            <a class="collapse-item" href="{{ route('manage_user.index') }}">Manage User</a>
-                            <a class="collapse-item active" href="{{ route('roles.index') }}">Add Role</a>
-                        @else
-                        @endif
+                <li class="nav-item active">
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                        data-bs-target="#collapseManageUser" aria-bs-expanded="true"
+                        aria-bs-controls="collapseManageUser">
+                        <i class="fa-solid fa-users-gear"></i>
+                        <span>Manage User</span>
+                    </a>
+                    <div id="collapseManageUser" class="collapse" aria-labelledby="collapseManageUser"
+                        data-bs-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                                <a class="collapse-item" href="{{ route('manage_user.index') }}">Manage User</a>
+                                <a class="collapse-item active" href="{{ route('roles.index') }}">Add Role</a>
+                            @else
+                            @endif
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
             @else
             @endif
         </x-navbar>
@@ -104,18 +104,11 @@
                 <div class="container-fluid">
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
-                            <h6 class="m-0 font-weight-bold text-primary">Add New Role</h6>
+                            <h6 class="m-0 font-weight-bold text-primary">Create Role</h6>
                         </div>
                         <div class="card-body">
-                            <form action="{{ route('roles.store') }}" method="POST" enctype="multipart/form-data">
-                                @csrf
-                                <div class="form-group">
-                                    <role for="statusName">Name</role>
-                                    <input type="text" class="form-control" id="name" name="name"
-                                        value="{{ old('name') }}" placeholder="Enter role name" required>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Add New Role</button>
-                            </form>
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#createModal">Create Role</button>
                             <table id="example" class="table table-striped" id="dataTable" width="100%"
                                 cellspacing="0">
                                 <thead>
@@ -136,7 +129,8 @@
                                                     <i class="icon-action fa-solid fa-pencil"></i>
                                                 </button>
 
-                                                <form action="{{ route('roles.destroy', $item->id) }}" method="POST">
+                                                <form action="{{ route('roles.destroy', $item->id) }}"
+                                                    method="POST">
                                                     @csrf
                                                     @method('DELETE')
                                                     <button type="submit" class="btn "
@@ -150,7 +144,7 @@
                                             <div class="modal-dialog">
                                                 <div class="modal-content">
                                                     <div class="modal-header">
-                                                        <h5 class="modal-title" id="editModalrole">Edit Data</h5>
+                                                        <h5 class="modal-title" id="editModalrole">Edit Role</h5>
                                                         <button type="button" class="btn-close"
                                                             data-bs-dismiss="modal" aria-label="Close"></button>
                                                     </div>
@@ -160,14 +154,41 @@
                                                             @csrf
                                                             @method('PUT')
                                                             <div class="mb-3">
-                                                                <label for="field_name" class="form-role">Field
-                                                                    Name</role>
+                                                                <label for="name">
+                                                                    Role Name :</label>
                                                                 <input type="text" class="form-control"
                                                                     id="name" name="name"
                                                                     value="{{ old('name', $item->name) }}">
                                                             </div>
                                                             <button type="submit"
-                                                                class="btn btn-success">Update</button>
+                                                                class="btn btn-primary w-100">Update</button>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="modal fade" id="createModal" tabindex="-1"
+                                            aria-roleledby="createModalrole" aria-hidden="true">
+                                            <div class="modal-dialog">
+                                                <div class="modal-content">
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="editModalrole">Create Role</h5>
+                                                        <button type="button" class="btn-close"
+                                                            data-bs-dismiss="modal" aria-label="Close"></button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form action="{{ route('roles.store') }}" method="POST"
+                                                            enctype="multipart/form-data">
+                                                            @csrf
+                                                            <div class="form-group">
+                                                                <role for="statusName">Name</role>
+                                                                <input type="text" class="form-control"
+                                                                    id="name" name="name"
+                                                                    value="{{ old('name') }}"
+                                                                    placeholder="Enter role name" required>
+                                                            </div>
+                                                            <button type="submit"
+                                                                class="btn btn-primary w-100">Update</button>
                                                         </form>
                                                     </div>
                                                 </div>
