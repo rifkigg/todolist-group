@@ -20,8 +20,14 @@ class UserController extends Controller
             return redirect('/');
         }
         $users = User::all();
-        return view('pages.manage_user', compact('users'));
+        return view('pages.user.manage_user', compact('users'));
     }
+    
+    public function create()
+{
+    return view('pages.user.add_role'); // sesuaikan dengan nama view yang kamu gunakan
+}
+
 
     public function store(Request $request)
     {

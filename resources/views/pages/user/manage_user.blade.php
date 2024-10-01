@@ -65,15 +65,41 @@
                             @endif
                         </div>
                     </div>
+                </li>  <li class="nav-item ">
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                        data-bs-target="#collapseThree" aria-bs-expanded="true" aria-bs-controls="collapseTwo">
+                        <i class="fas fa-clipboard-list "></i>
+                        <span>Task</span>
+                    </a>
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingTwo"
+                        data-bs-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                                <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
+                                <a class="collapse-item" href="{{ route('task_status.index') }}">Task Status</a>
+                                <a class="collapse-item " href="{{ route('priorities.index') }}">Task Priorities</a>
+                                <a class="collapse-item" href="{{ route('labels.index') }}">Task Labels/Tags</a>
+                            @else
+                                <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
+                            @endif
+                        </div>
+                    </div>
                 </li>
                 @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
-                    <li class="nav-item active">
-                        <a class="nav-link active" href="{{ route('manage_user.index') }}" aria-bs-expanded="true"
-                            aria-bs-controls="collapseTwo">
-                            <i class="fa-solid fa-users-gear"></i>
-                            <span>Manage User</span>
-                        </a>
-                    </li>
+                <li class="nav-item active">
+                    <a class="nav-link active" href="{{ route('manage_user.index') }}" aria-bs-expanded="true"
+                        aria-bs-controls="collapseManageUser">
+                        <i class="fa-solid fa-users-gear"></i>
+                        <span>Manage User</span>
+                    </a>
+                    <div id="collapseManageUser" class="collapse show" aria-labelledby="headingManageUser"
+                        data-bs-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item" href="{{ route('roles.create') }}">Add Role</a>
+                        </div>
+                    </div>
+                </li>
+                
                 @else
                 @endif
             </x-navbar>

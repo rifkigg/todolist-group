@@ -23,6 +23,7 @@ use App\Http\Controllers\ProjectCategoriesController;
 use App\Http\Controllers\TaskInProjectController;
 use App\Http\Controllers\TaskPerUserController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\RoleController;
 use App\Models\TaskChecklist;
 
 Route::middleware(['auth', 'verified'])->group(function () {
@@ -146,6 +147,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
     Route::get('/projects/{id}/tasks', [TaskInProjectController::class, 'show'])->name('projects.tasks'); // Tambahkan route untuk menampilkan task dalam project
     Route::get('/tasks/users/{id}', [TaskPerUserController::class, 'show'])->name('tasks.perUser.show');
+
+    Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
+    Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
+    Route::get('/roles/{id}/edit', [RoleController::class, 'edit'])->name('roles.edit');
+    Route::put('/roles/{id}', [RoleController::class, 'update'])->name('roles.update');
+    Route::delete('/roles/{id}', [RoleController::class, 'destroy'])->name('roles.destroy');
+    Route::get('/roles/create', [RoleController::class, 'create'])->name('roles.create');
 });
 
 require __DIR__ . '/auth.php';
