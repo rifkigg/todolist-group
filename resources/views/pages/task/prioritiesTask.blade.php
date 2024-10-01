@@ -106,34 +106,19 @@
                                     <label for="icon">Icon</label>
                                     <div class="icon-selection">
                                         <div class="icon-options">
-                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
-                                                value="📈" onclick="selectIcon('📈')">📈</button>
-                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
-                                                value="📅" onclick="selectIcon('📅')">📅</button>
-                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
-                                                value="🔒" onclick="selectIcon('🔒')">🔒</button>
-                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
-                                                value="📌" onclick="selectIcon('📌')">📌</button>
-                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
-                                                value="⌛" onclick="selectIcon('⌛')">⌛</button>
-                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
-                                                value="⬆️" onclick="selectIcon('⬆️')">⬆️</button>
-                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
-                                                value="➡️" onclick="selectIcon('➡️')">➡️</button>
-                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
-                                                value="⬇️" onclick="selectIcon('⬇️')">⬇️</button>
-                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
-                                                value="❌" onclick="selectIcon('❌')">❌</button>
-                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
-                                                value="✅" onclick="selectIcon('✅')">✅</button>
-                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
-                                                value="📉" onclick="selectIcon('📉')">📉</button>
-                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
-                                                value="⚙️" onclick="selectIcon('⚙️')">⚙️</button>
-                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
-                                                value="🐞" onclick="selectIcon('🐞')">🐞</button>
-                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon"
-                                                value="⚠️" onclick="selectIcon('⚠️')">⚠️</button>
+                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon" value="{{ asset('assets/img/lowmeter.png') }}" onclick="selectIcon('{{ asset('assets/img/lowmeter.png') }}')">
+                                                <img src="{{ asset('assets/img/lowmeter.png') }}" alt="Low Meter Icon" class="icon-size" />
+                                            </button>
+                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon" value="{{ asset('assets/img/normalmeter.png') }}" onclick="selectIcon('{{ asset('assets/img/normalmeter.png') }}')">
+                                                <img src="{{ asset('assets/img/normalmeter.png') }}" alt="Profile Icon 1" class="icon-size" />
+                                            </button>
+                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon" value="{{ asset('assets/img/mediummeter.png') }}" onclick="selectIcon('{{ asset('assets/img/mediummeter.png') }}')">
+                                                <img src="{{ asset('assets/img/mediummeter.png') }}" alt="Profile Icon 2" class="icon-size" />
+                                            </button>
+                                            <button type="button" class="btn btn-outline-primary mb-1" name="icon" value="{{ asset('assets/img/highmeter.png') }}" onclick="selectIcon('{{ asset('assets/img/highmeter.png') }}')">
+                                                <img src="{{ asset('assets/img/highmeter.png') }}" alt="Profile Icon 2" class="icon-size" />
+                                            </button>
+                                            <!-- Add more buttons with images as needed -->
                                         </div>
                                         <input type="hidden" id="selectedIcon" name="icon" required>
                                     </div>
@@ -161,7 +146,11 @@
                                     @foreach ($priorities as $priority)
                                         <tr>
                                             <td>{{ $priority->name }}</td>
-                                            <td>{{ $priority->icon }}</td>
+                                            <td>
+                                                <span class="icon-display">
+                                                    <img src="{{ $priority->icon }}" alt="{{ $priority->icon }} Icon" class="icon-size" />
+                                                </span>
+                                            </td>
                                             <td>
                                                 <button type="button" class="btn" data-bs-toggle="modal"
                                                     data-bs-target="#editModal{{ $priority->id }}">
@@ -204,60 +193,29 @@
                                                                     <div class="icon-options">
                                                                         <button type="button"
                                                                             class="btn btn-outline-primary mb-1"
-                                                                            name="icon" value="📈"
-                                                                            onclick="selectIcon('📈', '{{ $priority->id }}')">📈</button>
+                                                                            name="icon" value="{{ asset('assets/img/lowmeter.png') }}"
+                                                                            onclick="selectIcon('{{ asset('assets/img/lowmeter.png') }}', '{{ $priority->id }}')">
+                                                                            <img src="{{ asset('assets/img/lowmeter.png') }}" alt="Low Meter Icon" class="icon-size" />
+                                                                        </button>
                                                                         <button type="button"
                                                                             class="btn btn-outline-primary mb-1"
-                                                                            name="icon" value="📅"
-                                                                            onclick="selectIcon('📅', '{{ $priority->id }}')">📅</button>
+                                                                            name="icon" value="{{ asset('assets/img/normalmeter.png') }}"
+                                                                            onclick="selectIcon('{{ asset('assets/img/normalmeter.png') }}', '{{ $priority->id }}')">
+                                                                            <img src="{{ asset('assets/img/normalmeter.png') }}" alt="Normal Meter Icon" class="icon-size" />
+                                                                        </button>
                                                                         <button type="button"
                                                                             class="btn btn-outline-primary mb-1"
-                                                                            name="icon" value="🔒"
-                                                                            onclick="selectIcon('🔒', '{{ $priority->id }}')">🔒</button>
+                                                                            name="icon" value="{{ asset('assets/img/mediummeter.png') }}"
+                                                                            onclick="selectIcon('{{ asset('assets/img/mediummeter.png') }}', '{{ $priority->id }}')">
+                                                                            <img src="{{ asset('assets/img/mediummeter.png') }}" alt="Medium Meter Icon" class="icon-size" />
+                                                                        </button>
                                                                         <button type="button"
                                                                             class="btn btn-outline-primary mb-1"
-                                                                            name="icon" value="📌"
-                                                                            onclick="selectIcon('📌', '{{ $priority->id }}')">📌</button>
-                                                                        <button type="button"
-                                                                            class="btn btn-outline-primary mb-1"
-                                                                            name="icon" value="⌛"
-                                                                            onclick="selectIcon('⌛', '{{ $priority->id }}')">⌛</button>
-                                                                        <button type="button"
-                                                                            class="btn btn-outline-primary mb-1"
-                                                                            name="icon" value="⬆️"
-                                                                            onclick="selectIcon('⬆️', '{{ $priority->id }}')">⬆️</button>
-                                                                         <button type="button"
-                                                                            class="btn btn-outline-primary mb-1"
-                                                                            name="icon" value="➡️"
-                                                                            onclick="selectIcon('➡️', '{{ $priority->id }}')">➡️</button>
-                                                                         <button type="button"
-                                                                            class="btn btn-outline-primary mb-1"
-                                                                            name="icon" value="⬇️"
-                                                                            onclick="selectIcon('⬇️', '{{ $priority->id }}')">⬇️</button>
-                                                                         <button type="button"
-                                                                            class="btn btn-outline-primary mb-1"
-                                                                            name="icon" value="❌"
-                                                                            onclick="selectIcon('❌', '{{ $priority->id }}')">❌</button>
-                                                                         <button type="button"
-                                                                            class="btn btn-outline-primary mb-1"
-                                                                            name="icon" value="✅"
-                                                                            onclick="selectIcon('✅', '{{ $priority->id }}')">✅</button>
-                                                                         <button type="button"
-                                                                            class="btn btn-outline-primary mb-1"
-                                                                            name="icon" value="📉"
-                                                                            onclick="selectIcon('📉', '{{ $priority->id }}')">📉</button>
-                                                                         <button type="button"
-                                                                            class="btn btn-outline-primary mb-1"
-                                                                            name="icon" value="⚙️"
-                                                                            onclick="selectIcon('⚙️', '{{ $priority->id }}')">⚙️</button>
-                                                                         <button type="button"
-                                                                            class="btn btn-outline-primary mb-1"
-                                                                            name="icon" value="🐞"
-                                                                            onclick="selectIcon('🐞', '{{ $priority->id }}')">🐞</button>
-                                                                         <button type="button"
-                                                                            class="btn btn-outline-primary mb-1"
-                                                                            name="icon" value="⚠️"
-                                                                            onclick="selectIcon('⚠️', '{{ $priority->id }}')">⚠️</button>
+                                                                            name="icon" value="{{ asset('assets/img/highmeter.png') }}"
+                                                                            onclick="selectIcon('{{ asset('assets/img/highmeter.png') }}', '{{ $priority->id }}')">
+                                                                            <img src="{{ asset('assets/img/highmeter.png') }}" alt="High Meter Icon" class="icon-size" />
+                                                                        </button>
+                                                                        <!-- Add more buttons with images as needed -->
                                                                     </div>
                                                                     <input type="hidden"
                                                                         id="selectedIcon{{ $priority->id }}"

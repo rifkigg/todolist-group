@@ -5,3 +5,8 @@ table td, th {
 .icon-action:hover{
     color: #007bff;
 }
+
+.icon-size {
+    width: 54px; /* Set your desired width */
+    height: 36px; /* Set your desired height */
+}

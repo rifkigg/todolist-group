@@ -201,7 +201,9 @@
                                             <td>{{ $item->name }}</td>
                                             <td>{{ $item->project->name ?? ' ' }}</td>
                                             <td>{{ $item->status->name ?? ' ' }}</td>
-                                            <td title="{{ $item->priority->name ?? ' ' }}" style="cursor: default">{{ $item->priority->icon ?? ' ' }}</td>
+                                            <td title="{{ $item->priority->name ?? ' ' }}" style="">
+                                                    <img src="{{ asset($item->priority->icon) }}" alt="{{ $item->priority->name ?? ' ' }}" class="icon-size" />
+                                                </td>
                                             <td>{{ \Carbon\Carbon::parse($item->due_date)->format('d/m/Y H:i:s') }}</td>
                                             <td>{{ $item->created_by ?? ' ' }}</td>
                                             <td>{{ \Carbon\Carbon::parse($item->created_at)->setTimezone('Asia/Jakarta')->format('d/m/Y H:i:s') }}</td>

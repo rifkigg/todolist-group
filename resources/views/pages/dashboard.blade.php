@@ -212,7 +212,8 @@
                                                     @endif
                                                 </td>
                                                 <td title="{{ $task->priority->name ?? ' ' }}" style="">
-                                                    {{ $task->priority->icon ?? ' ' }}</td>
+                                                    <img src="{{ asset($task->priority->icon) }}" alt="{{ $task->priority->name ?? ' ' }}" class="icon-size" />
+                                                </td>
                                                 <td>
                                                     @php
                                                         $totalSeconds = $task->totalTime; // Total waktu dalam detik
