@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Role; // Tambahkan ini di bagian atas
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -11,23 +12,23 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        if (now('Asia/Jakarta')->hour === 0 && now('Asia/Jakarta')->minute === 0) { 
+        if (now('Asia/Jakarta')->hour === 0 && now('Asia/Jakarta')->minute === 0) {
             // Tambahkan refresh halaman satu kali sebelum logout
-            echo "<script>if (!sessionStorage.getItem('reloaded')) { sessionStorage.setItem('reloaded', 'true'); location.reload(); }</script>";
+            echo "<script>
+                if (!sessionStorage.getItem('reloaded')) {
+                    sessionStorage.setItem('reloaded', 'true');
+                    location.reload();
+                }
+            </script>";
             Auth::guard('web')->logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
             return redirect('/');
         }
-        $users = User::all();
-        return view('pages.user.manage_user', compact('users'));
+        $users = User::with('role')->get();
+        $roles = Role::all(); // Menambahkan pengambilan semua role
+        return view('pages.user.manage_user', compact('users', 'roles')); // Mengirimkan $roles ke view
     }
-    
-    public function create()
-{
-    return view('pages.user.add_role'); // sesuaikan dengan nama view yang kamu gunakan
-}
-
 
     public function store(Request $request)
     {
@@ -57,7 +58,7 @@ class UserController extends Controller
             'password' => 'nullable', // Ubah menjadi nullable
         ]);
         $user = User::find($id);
-        
+
         $dataToUpdate = [
             'username' => $request->username,
             'email' => $request->email,
