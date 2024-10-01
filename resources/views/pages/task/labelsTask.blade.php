@@ -68,13 +68,24 @@
                 </div>
             </li>
             @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
-                <li class="nav-item ">
-                    <a class="nav-link " href="{{ route('manage_user.index') }}" aria-bs-expanded="true"
-                        aria-bs-controls="collapseTwo">
-                        <i class="fa-solid fa-users-gear"></i>
-                        <span>Manage User</span>
-                    </a>
-                </li>
+            <li class="nav-item ">
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                    data-bs-target="#collapseManageUser" aria-bs-expanded="true"
+                    aria-bs-controls="collapseManageUser">
+                    <i class="fa-solid fa-users-gear"></i>
+                    <span>Manage User</span>
+                </a>
+                <div id="collapseManageUser" class="collapse" aria-labelledby="collapseManageUser"
+                    data-bs-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                            <a class="collapse-item" href="{{ route('manage_user.index') }}">Manage User</a>
+                            <a class="collapse-item" href="{{ route('roles.index') }}">Add Role</a>
+                        @else
+                        @endif
+                    </div>
+                </div>
+            </li>
             @else
             @endif
         </x-navbar>

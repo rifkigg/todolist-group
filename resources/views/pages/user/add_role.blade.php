@@ -47,7 +47,7 @@
                     </div>
                 </li>
             @endif
-            <li class="nav-item active">
+            <li class="nav-item ">
                 <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseThree"
                     aria-bs-expanded="true" aria-bs-controls="collapseTwo">
                     <i class="fas fa-clipboard-list"></i>
@@ -69,15 +69,20 @@
             </li>
             @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
             <li class="nav-item active">
-                <a class="nav-link active" href="{{ route('manage_user.index') }}" aria-bs-expanded="true"
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                    data-bs-target="#collapseManageUser" aria-bs-expanded="true"
                     aria-bs-controls="collapseManageUser">
                     <i class="fa-solid fa-users-gear"></i>
                     <span>Manage User</span>
                 </a>
-                <div id="collapseManageUser" class="collapse show" aria-labelledby="headingManageUser"
+                <div id="collapseManageUser" class="collapse" aria-labelledby="collapseManageUser"
                     data-bs-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="{{ route('roles.create') }}">Add Role</a>
+                        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                            <a class="collapse-item" href="{{ route('manage_user.index') }}">Manage User</a>
+                            <a class="collapse-item active" href="{{ route('roles.index') }}">Add Role</a>
+                        @else
+                        @endif
                     </div>
                 </div>
             </li>
@@ -97,7 +102,6 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    <h1 class="h3 mb-4 text-gray-800">Role</h1>
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">Add New Role</h6>
@@ -112,8 +116,6 @@
                                 </div>
                                 <button type="submit" class="btn btn-primary">Add New Role</button>
                             </form>
-                            <hr>
-                            <h6 class="m-0 font-weight-bold text-primary">Current Role</h6>
                             <table id="example" class="table table-striped" id="dataTable" width="100%"
                                 cellspacing="0">
                                 <thead>
@@ -174,8 +176,6 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            <p class="mt-3"><strong>Note:</strong> These roles will appear on tasks, deleting a
-                                label can affect the manage_user</p>
                         </div>
                     </div>
                 </div>

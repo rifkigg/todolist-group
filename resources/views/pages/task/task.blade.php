@@ -65,19 +65,24 @@
                 </div>
             </li>
             @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
-            <li class="nav-item active">
-                <a class="nav-link active" href="{{ route('manage_user.index') }}" aria-bs-expanded="true"
-                    aria-bs-controls="collapseManageUser">
-                    <i class="fa-solid fa-users-gear"></i>
-                    <span>Manage User</span>
-                </a>
-                <div id="collapseManageUser" class="collapse show" aria-labelledby="headingManageUser"
-                    data-bs-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="{{ route('add_role.create') }}">Add Role</a>
+                <li class="nav-item ">
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                        data-bs-target="#collapseManageUser" aria-bs-expanded="true"
+                        aria-bs-controls="collapseManageUser">
+                        <i class="fa-solid fa-users-gear"></i>
+                        <span>Manage User</span>
+                    </a>
+                    <div id="collapseManageUser" class="collapse" aria-labelledby="collapseManageUser"
+                        data-bs-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                                <a class="collapse-item" href="{{ route('manage_user.index') }}">Manage User</a>
+                                <a class="collapse-item" href="{{ route('roles.index') }}">Add Role</a>
+                            @else
+                            @endif
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
             @else
             @endif
         </x-navbar>
@@ -118,7 +123,8 @@
                                             <div class="col mr-2">
                                                 <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                                                     Boards</div>
-                                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ $total_board }}
+                                                <div class="h5 mb-0 font-weight-bold text-gray-800">
+                                                    {{ $total_board }}
                                                 </div>
                                             </div>
                                             <div class="col-auto">
@@ -207,42 +213,60 @@
                                             <td>{{ $item->name }}</td>
                                             <td>{{ $item->project->name ?? ' ' }}</td>
                                             <td>{{ $item->status->name ?? ' ' }}</td>
-                                            <td title="{{ $item->priority->name ?? ' ' }}" style="cursor: default">{{ $item->priority->icon ?? ' ' }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($item->due_date)->format('d/m/Y H:i:s') }}</td>
+                                            <td title="{{ $item->priority->name ?? ' ' }}" style="cursor: default">
+                                                {{ $item->priority->icon ?? ' ' }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($item->due_date)->format('d/m/Y H:i:s') }}
+                                            </td>
                                             <td>{{ $item->created_by ?? ' ' }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($item->created_at)->setTimezone('Asia/Jakarta')->format('d/m/Y H:i:s') }}</td>
+                                            <td>{{ \Carbon\Carbon::parse($item->created_at)->setTimezone('Asia/Jakarta')->format('d/m/Y H:i:s') }}
+                                            </td>
                                             <td>
                                                 <div class="dropdown">
-                                                    <button class="btn" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <button class="btn" type="button" id="dropdownMenuButton"
+                                                        data-bs-toggle="dropdown" aria-expanded="false">
                                                         <i class="fa-solid fa-ellipsis fa-2xl"></i>
                                                     </button>
                                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer' || auth()->user()->username == $item->created_by)
+                                                        @if (auth()->user()->role == 'admin' ||
+                                                                auth()->user()->role == 'manajer' ||
+                                                                auth()->user()->username == $item->created_by)
                                                             <li>
-                                                                <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('duplicate-form-{{ $item->id }}').submit();">
-                                                                    <i class="icon-action fa-solid fa-copy"></i> Duplicate
+                                                                <a class="dropdown-item" href="#"
+                                                                    onclick="event.preventDefault(); document.getElementById('duplicate-form-{{ $item->id }}').submit();">
+                                                                    <i class="icon-action fa-solid fa-copy"></i>
+                                                                    Duplicate
                                                                 </a>
                                                             </li>
-                                                            <form id="duplicate-form-{{ $item->id }}" action="{{ route('task.duplicate', $item->id) }}" method="POST" class="d-none">
+                                                            <form id="duplicate-form-{{ $item->id }}"
+                                                                action="{{ route('task.duplicate', $item->id) }}"
+                                                                method="POST" class="d-none">
                                                                 @csrf
                                                             </form>
                                                             <li>
-                                                                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-{{ $item->id }}">
+                                                                <button type="button" class="dropdown-item"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#view-{{ $item->id }}">
                                                                     <i class="fa-solid fa-pen-to-square"></i> Edit
                                                                 </button>
                                                             </li>
                                                             <li>
-                                                                <form action="{{ route('task.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                                                <form action="{{ route('task.destroy', $item->id) }}"
+                                                                    method="POST" class="d-inline"
+                                                                    onsubmit="return confirm('Are you sure you want to delete this item?');">
                                                                     @csrf
                                                                     @method('DELETE')
                                                                     <button type="submit" class="dropdown-item">
-                                                                        <i class="icon-action fa-solid fa-trash-can"></i> Delete
+                                                                        <i
+                                                                            class="icon-action fa-solid fa-trash-can"></i>
+                                                                        Delete
                                                                     </button>
                                                                 </form>
                                                             </li>
                                                         @else
                                                             <li>
-                                                                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-{{ $item->id }}">
+                                                                <button type="button" class="dropdown-item"
+                                                                    data-bs-toggle="modal"
+                                                                    data-bs-target="#view-{{ $item->id }}">
                                                                     <i class="icon-action fa-solid fa-eye"></i> View
                                                                 </button>
                                                             </li>
@@ -513,13 +537,17 @@
                                                                         id="formUpdate-{{ $item->id }}">
                                                                         @csrf
                                                                         @method('PUT')
-                                                                        <input type="hidden" id="hiddenName-{{ $item->id }}" name="name" value="{{ $item->name }}">
+                                                                        <input type="hidden"
+                                                                            id="hiddenName-{{ $item->id }}"
+                                                                            name="name"
+                                                                            value="{{ $item->name }}">
 
                                                                         <label for="board_id" class="form-label">Task
                                                                             Board</label>
                                                                         <select name="board_id" id="board_id"
                                                                             class="form-select mb-3">
-                                                                            <option value="" selected>Choose Board</option>
+                                                                            <option value="" selected>Choose
+                                                                                Board</option>
                                                                             @foreach ($board as $items)
                                                                                 <option value="{{ $items->id }}"
                                                                                     {{ old('board_id', $item->board_id) == $items->id ? 'selected' : '' }}>
@@ -532,7 +560,8 @@
                                                                             Status</label>
                                                                         <select name="status_id" id="status_id"
                                                                             class="form-select mb-3">
-                                                                            <option value="" selected>Choose Status</option>
+                                                                            <option value="" selected>Choose
+                                                                                Status</option>
                                                                             @foreach ($status as $items)
                                                                                 <option value="{{ $items->id }}"
                                                                                     {{ old('status_id', $item->status_id) == $items->id ? 'selected' : '' }}>
@@ -546,7 +575,8 @@
                                                                             Priority</label>
                                                                         <select name="priority_id" id="priority_id"
                                                                             class="form-select mb-3">
-                                                                            <option value="" selected>Choose Priority</option>
+                                                                            <option value="" selected>Choose
+                                                                                Priority</option>
                                                                             @foreach ($priority as $items)
                                                                                 <option value="{{ $items->id }}"
                                                                                     {{ old('priority_id', $item->priority_id) == $items->id ? 'selected' : '' }}>
@@ -561,7 +591,8 @@
                                                                         <select name="task_label_id"
                                                                             id="task_label_id"
                                                                             class="form-select mb-3">
-                                                                            <option value="" selected>Choose Label</option>
+                                                                            <option value="" selected>Choose
+                                                                                Label</option>
                                                                             @foreach ($label as $items)
                                                                                 <option value="{{ $items->id }}"
                                                                                     {{ old('task_label_id', $item->task_label_id) == $items->id ? 'selected' : '' }}>
@@ -575,7 +606,8 @@
                                                                             Project</label>
                                                                         <select name="project_id" id="project_id"
                                                                             class="form-select mb-3">
-                                                                            <option value="" selected>Choose Project</option>
+                                                                            <option value="" selected>Choose
+                                                                                Project</option>
                                                                             @foreach ($project as $items)
                                                                                 <option value="{{ $items->id }}"
                                                                                     {{ old('project_id', $item->project_id) == $items->id ? 'selected' : '' }}>
@@ -589,7 +621,8 @@
                                                                             class="form-label">Assignees</label>
                                                                         <select name="assignees[]" id="assignees"
                                                                             class="form-select mb-3">
-                                                                            <option value="" selected>Choose Assignees</option>
+                                                                            <option value="" selected>Choose
+                                                                                Assignees</option>
                                                                             @foreach ($users as $user)
                                                                                 <option value="{{ $user->id }}"
                                                                                     {{ in_array($user->id, old('assignees', $item->users->pluck('id')->toArray())) ? 'selected' : '' }}>
@@ -933,7 +966,8 @@
                                                                             Board</label>
                                                                         <select name="board_id" id="board_id"
                                                                             class="form-select mb-3" disabled>
-                                                                            <option value="" selected>Choose Board</option>
+                                                                            <option value="" selected>Choose
+                                                                                Board</option>
                                                                             @foreach ($board as $items)
                                                                                 <option value="{{ $items->id }}"
                                                                                     {{ old('board_id', $item->board_id) == $items->id ? 'selected' : '' }}>
@@ -946,7 +980,8 @@
                                                                             Status</label>
                                                                         <select name="status_id" id="status_id"
                                                                             class="form-select mb-3" disabled>
-                                                                            <option value="" selected>Choose Status</option>
+                                                                            <option value="" selected>Choose
+                                                                                Status</option>
                                                                             @foreach ($status as $items)
                                                                                 <option value="{{ $items->id }}"
                                                                                     {{ old('status_id', $item->status_id) == $items->id ? 'selected' : '' }}>
@@ -960,7 +995,8 @@
                                                                             Priority</label>
                                                                         <select name="priority_id" id="priority_id"
                                                                             class="form-select mb-3" disabled>
-                                                                            <option value="" selected>Choose Priority</option>
+                                                                            <option value="" selected>Choose
+                                                                                Priority</option>
                                                                             @foreach ($priority as $items)
                                                                                 <option value="{{ $items->id }}"
                                                                                     {{ old('priority_id', $item->priority_id) == $items->id ? 'selected' : '' }}>
@@ -975,7 +1011,8 @@
                                                                         <select name="task_label_id"
                                                                             id="task_label_id"
                                                                             class="form-select mb-3" disabled>
-                                                                            <option value="" selected>Choose Label</option>
+                                                                            <option value="" selected>Choose
+                                                                                Label</option>
                                                                             @foreach ($label as $items)
                                                                                 <option value="{{ $items->id }}"
                                                                                     {{ old('task_label_id', $item->task_label_id) == $items->id ? 'selected' : '' }}>
@@ -989,7 +1026,8 @@
                                                                             Project</label>
                                                                         <select name="project_id" id="project_id"
                                                                             class="form-select mb-3" disabled>
-                                                                            <option value="" selected>Choose Project</option>
+                                                                            <option value="" selected>Choose
+                                                                                Project</option>
                                                                             @foreach ($project as $items)
                                                                                 <option value="{{ $items->id }}"
                                                                                     {{ old('project_id', $item->project_id) == $items->id ? 'selected' : '' }}>
@@ -1003,7 +1041,8 @@
                                                                             class="form-label">Assignees</label>
                                                                         <select name="assignees[]" id="assignees"
                                                                             class="form-select mb-3" disabled>
-                                                                            <option value="" selected>Choose Assignees</option>
+                                                                            <option value="" selected>Choose
+                                                                                Assignees</option>
                                                                             @foreach ($users as $user)
                                                                                 <option value="{{ $user->id }}"
                                                                                     {{ in_array($user->id, old('assignees', $item->users->pluck('id')->toArray())) ? 'selected' : '' }}>
@@ -1180,8 +1219,8 @@
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="due_date" class="form-label">Due Date</label>
-                                                            <input type="datetime-local" name="due_date" id="due_date"
-                                                                class="form-control">
+                                                            <input type="datetime-local" name="due_date"
+                                                                id="due_date" class="form-control">
                                                         </div>
                                                         <div class="mb-3">
                                                             <label for="assignees"
@@ -1490,10 +1529,10 @@
             });
         </script>
         <script>
-                function updateHiddenInput(value, itemId) {
-                    // Mengupdate nilai dari input hidden dengan nilai yang diubah
-                    document.getElementById('hiddenName-' + itemId).value = value;
-                }
+            function updateHiddenInput(value, itemId) {
+                // Mengupdate nilai dari input hidden dengan nilai yang diubah
+                document.getElementById('hiddenName-' + itemId).value = value;
+            }
         </script>
         </script>
         <script>
