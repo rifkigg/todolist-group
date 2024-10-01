@@ -38,11 +38,18 @@ class TaskInProjectController extends Controller
         $endOfDay = Carbon::today()->endOfDay();
         $totalTime = 0; // Inisialisasi totalTime
 
-        $tasksWithTime = $tasks->map(function ($taskItem) use (&$totalTime, $startOfDay, $endOfDay) {
-            $totalTime = History::calculateTotalTime($taskItem->name);
-            $remainingTime = max(0, $endOfDay->diffInSeconds($startOfDay) - $totalTime); // Pastikan tidak negatif
-            $taskItem->totalTime = $totalTime;
+        $tasksWithTime = $tasks->map(function ($taskItem) use (&$totalTime) {
+            $timeData = History::calculateTotalTime($taskItem->name); // Ambil totalTime dan elapsedTime
+            $totalTime = $timeData['totalTime'];
+            $elapsedTime = $timeData['elapsedTime'];
+
+            $startOfDay = Carbon::today()->startOfDay();
+            $endOfDay = Carbon::today()->endOfDay();
+            $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
+
             $taskItem->remainingTime = $remainingTime; // Waktu tersisa dalam detik
+            $taskItem->elapsed_time = $elapsedTime; // Waktu yang telah berlalu dalam detik
+            $taskItem->totalTime = $totalTime + $elapsedTime; // Total waktu dalam detik
             $taskItem->isPlaying = $taskItem->timer_status == 'Playing';
             $taskItem->isPaused = $taskItem->timer_status == 'Paused';
             return $taskItem;

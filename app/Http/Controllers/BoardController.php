@@ -67,11 +67,18 @@ class BoardController extends Controller
         $endOfDay = Carbon::today()->endOfDay();
         $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
 
-        $tasksWithTime = $tasks->map(function ($task) use ($startOfDay, $endOfDay) {
-            $totalTime = History::calculateTotalTime($task->name);
+        $tasksWithTime = $tasks->map(function ($task) {
+            $timeData = History::calculateTotalTime($task->name); // Ambil totalTime dan elapsedTime
+            $totalTime = $timeData['totalTime'];
+            $elapsedTime = $timeData['elapsedTime'];
+
+            $startOfDay = Carbon::today()->startOfDay();
+            $endOfDay = Carbon::today()->endOfDay();
             $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
-            $task->totalTime = $totalTime;
-            $task->remainingTime = $remainingTime;
+
+            $task->remainingTime = $remainingTime; // Waktu tersisa dalam detik
+            $task->elapsed_time = $elapsedTime; // Waktu yang telah berlalu dalam detik
+            $task->totalTime = $totalTime + $elapsedTime; // Total waktu dalam detik
             $task->isPlaying = $task->timer_status == 'Playing';
             $task->isPaused = $task->timer_status == 'Paused';
             return $task;
