@@ -83,4 +83,13 @@ class RoleController extends Controller
             ->route('roles.index')
             ->with(['success' => 'Data Berhasil Diubah!']);
     }
+    public function delete($id): RedirectResponse
+{
+    $role = Role::find($id);
+    if ($role) {
+        $role->delete();
+        return redirect()->route('roles.index')->with(['success' => 'Role berhasil dihapus!']);
+    }
+    return redirect()->route('roles.index')->with(['error' => 'Role tidak ditemukan!']);
+}
 }

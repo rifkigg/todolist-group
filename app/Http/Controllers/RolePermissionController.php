@@ -46,19 +46,48 @@ class RolePermissionController extends Controller
     }
     public function edit($id)
     {
-        $role = Role::findOrFail($id); // Temukan role berdasarkan ID
-        $permissions = Permission::all(); // Dapatkan semua permission
-        return view('pages.user.edit_daftar_role', compact('role', 'permissions'));
+        $role = Role::find($id);
+        $allPermissions = Permission::all();
+
+        // Misalkan kita mengelompokkan berdasarkan prefix nama permission
+        $dashboardPermissions = $allPermissions->filter(function ($permission) {
+            return strpos($permission->name, 'Dashboard') !== false; // Contoh: permission yang mengandung 'dashboard'
+        });
+
+        $projectPermissions = $allPermissions->filter(function ($permission) {
+            return strpos($permission->name, 'Project') !== false; // Semua permission lainnya
+        });
+
+        $taskPermissions = $allPermissions->filter(function ($permission) {
+            return strpos($permission->name, 'Task') !== false; // Semua permission lainnya
+        });
+
+        $boardPermissions = $allPermissions->filter(function ($permission) {
+            return strpos($permission->name, 'Board') !== false; // Semua permission lainnya
+        });
+
+        $otherPermissions = $allPermissions->filter(function ($permission) {
+            return !(strpos($permission->name, 'Dashboard') !== false || strpos($permission->name, 'Task') !== false || strpos($permission->name, 'Project') !== false || strpos($permission->name, 'Board') !== false); // Semua permission yang bukan Dashboard, Task, atau Project
+        });
+
+        return view('pages.user.edit_daftar_role', compact('role', 'dashboardPermissions', 'projectPermissions', 'taskPermissions', 'otherPermissions', 'boardPermissions'));
     }
 
     public function update(Request $request, $id)
     {
         $role = Role::findOrFail($id);
 
+        // Ubah nama role jika ada
+        if ($request->has('name')) {
+            $role->name = $request->name;
+            $role->save(); // Simpan perubahan nama role
+        }
+
         // Sinkronisasi permission dengan role
         $role->syncPermissions($request->permissions);
 
-        return redirect()->route('roles.permissions.edit', $role->id)
+        return redirect()
+            ->route('roles.permissions.edit', $role->id)
             ->with('success', 'Permission untuk role berhasil diperbarui');
     }
 }
