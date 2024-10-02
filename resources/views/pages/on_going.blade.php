@@ -4,16 +4,16 @@
             <x-navbar>
                 <x-slot name="dashboard">
                     @if (auth()->user()->role && in_array('viewDashboard', auth()->user()->role->permissions->pluck('name')->toArray()))
-                        <li class="nav-item active">
-                            <a class="nav-link active" href="/dashboard">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/dashboard">
                                 <i class="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Dashboard</span></a>
                         </li>
                     @else
                     @endif
                     @if (auth()->user()->role && in_array('viewOnGoing', auth()->user()->role->permissions->pluck('name')->toArray()))
-                        <li class="nav-item">
-                            <a class="nav-link" href="{{ route('ongoing.index') }}" aria-bs-expanded="true"
+                        <li class="nav-item active">
+                            <a class="nav-link active" href="{{ route('ongoing.index') }}" aria-bs-expanded="true"
                                 aria-bs-controls="collapseTwo">
                                 <i class="fa-solid fa-hourglass-half"></i>
                                 <span>On Going</span>
@@ -25,7 +25,7 @@
                 </x-slot>
                 @if (auth()->user()->role && in_array('viewBoard', auth()->user()->role->permissions->pluck('name')->toArray()))
                     <li class="nav-item">
-                        <a class="nav-link active" href="/boards">
+                        <a class="nav-link" href="/boards">
                             <i class="fa-solid fa-chess-board"></i>
                             <span>Boards</span>
                         </a>

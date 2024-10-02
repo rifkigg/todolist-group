@@ -25,7 +25,7 @@
             </x-slot>
             @if (auth()->user()->role && in_array('viewBoard', auth()->user()->role->permissions->pluck('name')->toArray()))
                 <li class="nav-item">
-                    <a class="nav-link active" href="/boards">
+                    <a class="nav-link" href="/boards">
                         <i class="fa-solid fa-chess-board"></i>
                         <span>Boards</span>
                     </a>
