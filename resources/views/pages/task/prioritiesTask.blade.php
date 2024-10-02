@@ -1,5 +1,5 @@
+@if (auth()->user()->role && in_array('viewTaskPriorities', auth()->user()->role->permissions->pluck('name')->toArray()))
 <x-layout>
-
     <!-- Page Wrapper -->
     <div id="wrapper">
         <x-navbar>
@@ -136,6 +136,7 @@
                             <h6 class="m-0 font-weight-bold text-primary">Add New Priority</h6>
                         </div>
                         <div class="card-body">
+                            @if (auth()->user()->role && in_array('addTaskPriorities', auth()->user()->role->permissions->pluck('name')->toArray()))
                             <form action="{{ route('priorities.store') }}" method="POST"
                                 enctype="multipart/form-data">
                                 @csrf
@@ -182,6 +183,8 @@
                                 </div>
                                 <button type="submit" class="btn btn-primary">Tambah</button>
                             </form>
+                            @else
+                            @endif
                             <script>
                                 function selectIcon(value, id) {
                                     var iconInput = document.getElementById('selectedIcon' + (id ? id : ''));
@@ -213,10 +216,14 @@
                                                 </span>
                                             </td>
                                             <td>
+                                                @if (auth()->user()->role && in_array('editTaskPriorities', auth()->user()->role->permissions->pluck('name')->toArray()))
                                                 <button type="button" class="btn" data-bs-toggle="modal"
                                                     data-bs-target="#editModal{{ $priority->id }}">
                                                     <i class="icon-action fa-solid fa-pencil"></i>
                                                 </button>
+                                                @else
+                                                @endif
+                                                @if (auth()->user()->role && in_array('deleteTaskPriorities', auth()->user()->role->permissions->pluck('name')->toArray()))
                                                 <form action="{{ route('priorities.destroy', $priority->id) }}"
                                                     method="POST" style="display:inline;">
                                                     @csrf
@@ -225,6 +232,8 @@
                                                         onclick="return confirm('Are you sure you want to delete this item?');">
                                                         <i class="icon-action fa-solid fa-trash-can"></i></button>
                                                 </form>
+                                                @else
+                                                @endif
                                             </td>
                                         </tr>
                                         <div class="modal fade" id="editModal{{ $priority->id }}" tabindex="-1"
@@ -327,3 +336,7 @@
 
         </div>
 </x-layout>
+@else
+<p>Mo Ngapain Bang</p>
+<a href="/">Balek sana bang</a>
+@endif

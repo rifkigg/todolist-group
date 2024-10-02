@@ -1,5 +1,5 @@
+@if (auth()->user()->role && in_array('addProject', auth()->user()->role->permissions->pluck('name')->toArray()))
 <x-layout>
-
     <!-- Page Wrapper -->
     <div id="wrapper">
         <x-navbar>
@@ -368,3 +368,7 @@
             });
         </script>
 </x-layout>
+@else
+<p>Mo Ngapain Bang</p>
+<a href="/">Balek sana bang</a>
+@endif
