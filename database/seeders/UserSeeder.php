@@ -77,7 +77,6 @@ class UserSeeder extends Seeder
             ['permission_id' => 10, 'role_id' => 1], // viewTaskPriorities
             ['permission_id' => 11, 'role_id' => 1], // viewTaskLabels
             ['permission_id' => 12, 'role_id' => 1], // viewRole
-            ['permission_id' => 13, 'role_id' => 1], // viewRole
         ]);
     }
 }
