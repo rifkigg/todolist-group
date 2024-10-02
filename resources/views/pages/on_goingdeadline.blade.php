@@ -148,7 +148,15 @@
                                                                 {{ $task->name }}
                                                             </span>
                                                         </td>
-                                                        <td>{{ $task->status->name ?? 'N/A' }}</td> <!-- Display task status -->
+                                                        <td>
+                                                            @if ($task->timer_status == 'Paused')
+                                                                <p class="badge bg-secondary">Paused</p>
+                                                            @elseif ($task->timer_status == 'Playing')
+                                                                <p class="badge bg-warning">Playing</p>
+                                                            @else
+                                                                <p class="badge bg-success">Finished</p>
+                                                            @endif
+                                                        </td>
                                                         <td title="{{ $task->priority->name ?? ' ' }}" style="">
                                                             @if (filter_var($task->priority->icon, FILTER_VALIDATE_URL))
                                                                 <img src="{{ asset($task->priority->icon) }}" alt="{{ $task->priority->name ?? ' ' }}" class="icon-size" />
