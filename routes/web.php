@@ -11,6 +11,7 @@ use App\Http\Controllers\ActivityController;
 use App\Http\Controllers\AttachmentController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\OnGoingController;
+use App\Http\Controllers\OnGoingDeadlineController;
 use App\Http\Controllers\StatusTaskController;
 use App\Http\Controllers\TaskChecklistController;
 use App\Http\Controllers\TaskPrioritiesController;
@@ -143,6 +144,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/history', [TaskController::class, 'indexTime'])->name('history.index');
 
     Route::get('/ongoing', [OnGoingController::class, 'index'])->name('ongoing.index');
+    
+    Route::get('/ongoing/deadline', [OnGoingDeadlineController::class, 'index'])->name('ongoingdeadline.index');
 
     Route::get('/projects/{id}/tasks', [TaskInProjectController::class, 'show'])->name('projects.tasks'); // Tambahkan route untuk menampilkan task dalam project
     Route::get('/tasks/users/{id}', [TaskPerUserController::class, 'show'])->name('tasks.perUser.show');

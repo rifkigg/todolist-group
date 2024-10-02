@@ -1,4 +1,4 @@
-    <x-layout>
+<x-layout>
         <!-- Page Wrapper -->
         <div id="wrapper">
             <x-navbar>
@@ -24,7 +24,7 @@
                                 <div class="bg-white py-2 collapse-inner rounded">
                                     <a class="collapse-item " href="{{ route('ongoing.index') }}">On Going</a>
                                     @if (auth()->user()->role && in_array('addProject', auth()->user()->role->permissions->pluck('name')->toArray()))
-                                        <a class="collapse-item" href="{{ route('ongoingdeadline.index') }}">Deadline</a>
+                                        <a class="collapse-item" href="{{ route('ongoing.index') }}">Deadline</a>
                                     @else
                                     @endif
                                 </div>

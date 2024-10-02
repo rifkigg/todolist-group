@@ -254,7 +254,6 @@
                                                         <p class="badge bg-success">Finished</p>
                                                     @endif
                                                 </td>
-                                                <!-- 😂😂😂😂😂😂😂😂😂😂 -->
                                                 <td title="{{ $task->priority->name ?? ' ' }}" style="">
                                                     @if (filter_var($task->priority->icon, FILTER_VALIDATE_URL))
                                                         <img src="{{ asset($task->priority->icon) }}" alt="{{ $task->priority->name ?? ' ' }}" class="icon-size" />
