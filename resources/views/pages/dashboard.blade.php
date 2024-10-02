@@ -256,7 +256,11 @@
                                                 </td>
                                                 <!-- 😂😂😂😂😂😂😂😂😂😂 -->
                                                 <td title="{{ $task->priority->name ?? ' ' }}" style="">
-                                                    <img src="{{ asset($task->priority->icon) }}" alt="{{ $task->priority->name ?? ' ' }}" class="icon-size" />
+                                                    @if (filter_var($task->priority->icon, FILTER_VALIDATE_URL))
+                                                        <img src="{{ asset($task->priority->icon) }}" alt="{{ $task->priority->name ?? ' ' }}" class="icon-size" />
+                                                    @else
+                                                        <span>{{ $task->priority->icon }}</span>
+                                                    @endif
                                                 </td>
                                                 <td>
                                                     @php
