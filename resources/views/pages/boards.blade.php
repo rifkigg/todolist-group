@@ -1,3 +1,4 @@
+@if (auth()->user()->role && in_array('viewBoard', auth()->user()->role->permissions->pluck('name')->toArray()))
 <x-layout>
     <!-- Page Wrapper -->
     <div id="wrapper">
@@ -161,14 +162,17 @@
                                         <h5 style="margin: 0; font-weight: bold" class="text-dark">
                                             {{ $board->board_name }}
                                         </h5>
+                                        @if (auth()->user()->role && in_array('editBoard', auth()->user()->role->permissions->pluck('name')->toArray()))
                                         @if (request('project_id'))
                                             <!-- Cek apakah proyek telah dipilih -->
                                             <button class="btn btn-success btn-sm" data-bs-toggle="modal"
                                                 data-bs-target="#edit-{{ $board->id }}" type="button"><i
                                                     class="icon-action fa-solid fa-pencil"></i></button>
                                         @endif
+                                        @else
+                                        @endif
                                     </div>
-
+                                    @if (auth()->user()->role && in_array('editBoard', auth()->user()->role->permissions->pluck('name')->toArray()))
                                     <div class="modal fade" id="edit-{{ $board->id }}" tabindex="-1"
                                         aria-labelledby="createModalLabel" aria-hidden="true">
                                         <div class="modal-dialog">
@@ -199,17 +203,22 @@
                                             </div>
                                         </div>
                                     </div>
+                                    @else
+                                    @endif
 
                                     <br>
 
                                     @forelse ($board->tasks as $item)
+                                    @if (auth()->user()->role && in_array('showBoard', auth()->user()->role->permissions->pluck('name')->toArray()))
                                         <a href="#" data-bs-toggle="modal"
                                             data-bs-target="#view-{{ $item->id }}">
                                             <div class="text-white bg-secondary rounded p-2 mb-2    ">
                                                 <p class="mb-0">{{ $item->name }}</p>
                                             </div>
                                         </a>
-                                        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                                    @else
+                                    @endif
+                                    @if (auth()->user()->role && in_array('editTaskInBoard', auth()->user()->role->permissions->pluck('name')->toArray()))
                                             <div class="modal fade" id="view-{{ $item->id }}" tabindex="-1"
                                                 aria-labelledby="createModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-xl">
@@ -665,6 +674,8 @@
                                                 </div>
                                             </div>
                                         @else
+                                        @endif
+                                        @if (auth()->user()->role && in_array('showTaskInBoard', auth()->user()->role->permissions->pluck('name')->toArray()))
                                             <div class="modal fade" id="view-{{ $item->id }}" tabindex="-1"
                                                 aria-labelledby="createModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-xl">
@@ -960,18 +971,23 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                        @else
                                         @endif
                                     @empty
                                         <p>No tasks found for this board.</p>
                                     @endforelse
                                     <div class="gap-2 border-top border-secondary pt-2 mt-3" id="btn-create-task"
                                         style="display: none">
+                                        @if (auth()->user()->role && in_array('addBoard', auth()->user()->role->permissions->pluck('name')->toArray()))
                                         <button type="button"
                                             class="btn btn-primary create-task-btn btn-sm w-100 d-flex align-items-center gap-2"
                                             data-board-id="{{ $board->id }}" data-bs-toggle="modal"
                                             data-bs-target="#createTaskModal">
                                             <i class="fa-solid fa-circle-plus fa-sm"></i> Add task
                                         </button>
+                                        @else
+                                        @endif
+                                        @if (auth()->user()->role && in_array('deleteBoard', auth()->user()->role->permissions->pluck('name')->toArray()))
                                         <form action="{{ route('boards.destroy', $board->id) }}" method="POST"
                                             style="display:inline;">
                                             @csrf
@@ -981,6 +997,8 @@
                                                 <i class="fa-solid fa-trash-can"></i>
                                             </button>
                                         </form>
+                                        @else
+                                        @endif
                                     </div>
                                 </div>
                             @empty
@@ -1462,3 +1480,7 @@
 
 
 </x-layout>
+@else
+<p>Mo Ngapain Bang</p>
+<a href="/">Balek sana bang</a>
+@endif
