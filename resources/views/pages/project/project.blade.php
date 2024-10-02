@@ -5,8 +5,8 @@
         <x-navbar>
             <x-slot name="dashboard">
                 @if (auth()->user()->role && in_array('viewDashboard', auth()->user()->role->permissions->pluck('name')->toArray()))
-                    <li class="nav-item active">
-                        <a class="nav-link active" href="/dashboard">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">
                             <i class="fas fa-fw fa-tachometer-alt"></i>
                             <span>Dashboard</span></a>
                     </li>
@@ -26,7 +26,7 @@
             </x-slot>
             @if (auth()->user()->role && in_array('viewBoard', auth()->user()->role->permissions->pluck('name')->toArray()))
                 <li class="nav-item">
-                    <a class="nav-link active" href="/boards">
+                    <a class="nav-link" href="/boards">
                         <i class="fa-solid fa-chess-board"></i>
                         <span>Boards</span>
                     </a>
@@ -36,7 +36,7 @@
 
 
             @if (auth()->user()->role && in_array('viewProject', auth()->user()->role->permissions->pluck('name')->toArray()))
-                <li class="nav-item ">
+                <li class="nav-item active">
                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
                         aria-bs-expanded="true" aria-bs-controls="collapseTwo">
                         <i class="fa-solid fa-list-check"></i>
@@ -45,7 +45,7 @@
                     <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo"
                         data-bs-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
+                            <a class="collapse-item active" href="{{ route('project.index') }}">Project</a>
                             @if (auth()->user()->role && in_array('addProject', auth()->user()->role->permissions->pluck('name')->toArray()))
                                 <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
                             @else

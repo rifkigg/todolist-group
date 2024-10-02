@@ -4,8 +4,8 @@
         <x-navbar>
             <x-slot name="dashboard">
                 @if (auth()->user()->role && in_array('viewDashboard', auth()->user()->role->permissions->pluck('name')->toArray()))
-                    <li class="nav-item active">
-                        <a class="nav-link active" href="/dashboard">
+                    <li class="nav-item ">
+                        <a class="nav-link " href="/dashboard">
                             <i class="fas fa-fw fa-tachometer-alt"></i>
                             <span>Dashboard</span></a>
                     </li>
@@ -24,7 +24,7 @@
 
             </x-slot>
             @if (auth()->user()->role && in_array('viewBoard', auth()->user()->role->permissions->pluck('name')->toArray()))
-                <li class="nav-item">
+                <li class="nav-item active">
                     <a class="nav-link active" href="/boards">
                         <i class="fa-solid fa-chess-board"></i>
                         <span>Boards</span>

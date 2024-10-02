@@ -5,8 +5,8 @@
         <x-navbar>
             <x-slot name="dashboard">
                 @if (auth()->user()->role && in_array('viewDashboard', auth()->user()->role->permissions->pluck('name')->toArray()))
-                    <li class="nav-item active">
-                        <a class="nav-link active" href="/dashboard">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/dashboard">
                             <i class="fas fa-fw fa-tachometer-alt"></i>
                             <span>Dashboard</span></a>
                     </li>
@@ -26,7 +26,7 @@
             </x-slot>
             @if (auth()->user()->role && in_array('viewBoard', auth()->user()->role->permissions->pluck('name')->toArray()))
                 <li class="nav-item">
-                    <a class="nav-link active" href="/boards">
+                    <a class="nav-link" href="/boards">
                         <i class="fa-solid fa-chess-board"></i>
                         <span>Boards</span>
                     </a>
@@ -96,7 +96,7 @@
             @else
             @endif
             @if (auth()->user()->role && in_array('viewManageUser', auth()->user()->role->permissions->pluck('name')->toArray()))
-                <li class="nav-item ">
+                <li class="nav-item active">
                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
                         data-bs-target="#collapseManageUser" aria-bs-expanded="true"
                         aria-bs-controls="collapseManageUser">
@@ -111,7 +111,7 @@
                             @else
                             @endif
                             @if (auth()->user()->role && in_array('viewRole', auth()->user()->role->permissions->pluck('name')->toArray()))
-                                <a class="collapse-item" href="{{ route('roles.index') }}">Add Role</a>
+                                <a class="collapse-item active" href="{{ route('roles.index') }}">Add Role</a>
                             @else
                             @endif
                         </div>
