@@ -162,6 +162,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/roles/assign-permission', [RolePermissionController::class, 'assignPermission'])->name('roles.assign-permission');
     Route::get('/roles/{id}/permissions', [RolePermissionController::class, 'edit'])->name('roles.permissions.edit');
     Route::post('/roles/{id}/permissions', [RolePermissionController::class, 'update'])->name('roles.permissions.update');
+    Route::delete('/roles/{id}', [RoleController::class, 'delete'])->name('roles.delete');
 
     Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index');
     Route::get('/permissions/create', [PermissionController::class, 'create'])->name('permissions.create');

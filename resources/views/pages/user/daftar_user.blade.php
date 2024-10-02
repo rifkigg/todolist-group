@@ -1,4 +1,4 @@
-@if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+{{-- @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer') --}}
     <x-layout>
         <!-- Page Wrapper -->
         <div id="wrapper">
@@ -114,6 +114,10 @@
                                     <a class="collapse-item" href="{{ route('roles.index') }}">Add Role</a>
                                 @else
                                 @endif
+                                @if (auth()->user()->role && in_array('viewPermission', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                <a class="collapse-item" href="{{ route('permissions.index') }}">Permission</a>
+                            @else
+                            @endif
                             </div>
                         </div>
                     </li>
@@ -200,7 +204,7 @@
                 </div>
             </div>
     </x-layout>
-@else
+{{-- @else
     <p>Mo Ngapain Bang</p>
     <a href="/">Balek sana bang</a>
-@endif
+@endif --}}

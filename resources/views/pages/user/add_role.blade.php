@@ -114,6 +114,10 @@
                                 <a class="collapse-item active" href="{{ route('roles.index') }}">Add Role</a>
                             @else
                             @endif
+                            @if (auth()->user()->role && in_array('viewPermission', auth()->user()->role->permissions->pluck('name')->toArray()))
+                            <a class="collapse-item" href="{{ route('permissions.index') }}">Permission</a>
+                        @else
+                        @endif
                         </div>
                     </div>
                 </li>
@@ -230,23 +234,24 @@
                             </table>
                         </div>
                     </div> --}}
-                    <div class="container">
-                        <h2>Manajemen Role & Permission</h2>
-                    
-                        <div class="row">
-                            <div class="col-md-6">
-                                <h4>Tambah Role Baru</h4>
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Create Role</h6>
+                        </div>
+                        <div class="card-body">
+                        
+                            <div class="">
                                 <form action="{{ route('roles.store') }}" method="POST">
                                     @csrf
                                     <div class="form-group">
-                                        <label for="name">Nama Role</label>
-                                        <input type="text" name="name" class="form-control" required>
+                                        <label for="name">Role Name</label>
+                                        <input type="text" name="name" class="form-control" placeholder="Enter role name" required>
                                     </div>
-                                    <button type="submit" class="btn btn-primary">Tambah Role</button>
+                                        <button type="submit" class="btn btn-primary">Add Role</button>
                                 </form>
                             </div>
                     
-                            <div class="col-md-6">
+                            {{-- <div class="">
                                 <h4>Berikan Permission ke Role</h4>
                                 <form action="{{ route('roles.assign-permission') }}" method="POST">
                                     @csrf
@@ -270,11 +275,9 @@
                     
                                     <button type="submit" class="btn btn-success">Assign Permission</button>
                                 </form>
-                            </div>
-                        </div>
-                    
-                        <div class="row mt-4">
-                            <div class="col-md-6">
+                            </div> --}}
+{{--                     
+                            <div class="">
                                 <h4>Tambah Permission Baru</h4>
                                 <form action="{{ route('permissions.store') }}" method="POST">
                                     @csrf
@@ -284,11 +287,10 @@
                                     </div>
                                     <button type="submit" class="btn btn-primary">Tambah Permission</button>
                                 </form>
-                            </div>
+                            </div> --}}
                     
-                            <div class="col-md-6">
-                                <h4>Daftar Role dan Permissions</h4>
-                                <ul class="list-group">
+                            <div class="">
+                                {{-- <ul class="list-group">
                                     @foreach($roles as $role)
                                         <li class="list-group-item">
                                             <strong>{{ $role->name }}</strong>
@@ -299,8 +301,8 @@
                                             </ul>
                                         </li>
                                     @endforeach
-                                </ul>
-                                <table class="table table-bordered">
+                                </ul> --}}
+                                <table id="example" class="table table-striped">
                                     <thead>
                                         <tr>
                                             <th>Nama Role</th>
@@ -311,17 +313,25 @@
                                         @foreach($roles as $role)
                                             <tr>
                                                 <td>{{ $role->name }}</td>
-                                                <td>
-                                                    <a href="{{ route('roles.permissions.edit', $role->id) }}" class="btn btn-warning">Edit Permissions</a>
+                                                <td class="d-flex gap-3">
+                                                    <a href="{{ route('roles.permissions.edit', $role->id) }}" class="btn btn-warning"> <i class="fa-solid fa-pen-to-square"></i></a>
+                                                    <form action="{{ route('roles.delete', $role->id) }}" method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Apakah Anda yakin ingin menghapus role ini?');">
+                                                            <i class="icon-action fa-solid fa-trash-can"></i>
+                                                        </button>
+                                                    </form>
                                                 </td>
+                                                
                                             </tr>
                                         @endforeach
                                     </tbody>
                                 </table>
                             </div>
+
+                        {{-- <a href="{{ route('users.index') }}" class="btn btn-primary">users</a> --}}
                         </div>
-                        <a href="{{ route('permissions.index') }}" class="btn btn-primary">Permission</a>
-                        <a href="{{ route('users.index') }}" class="btn btn-primary">users</a>
                     </div>
                 </div>
 

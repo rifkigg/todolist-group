@@ -112,6 +112,10 @@
                                 <a class="collapse-item" href="{{ route('roles.index') }}">Add Role</a>
                             @else
                             @endif
+                            @if (auth()->user()->role && in_array('viewPermission', auth()->user()->role->permissions->pluck('name')->toArray()))
+                            <a class="collapse-item" href="{{ route('permissions.index') }}">Permission</a>
+                        @else
+                        @endif
                         </div>
                     </div>
                 </li>

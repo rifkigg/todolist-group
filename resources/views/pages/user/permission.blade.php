@@ -96,7 +96,7 @@
                 @else
                 @endif
                 @if (auth()->user()->role && in_array('viewManageUser', auth()->user()->role->permissions->pluck('name')->toArray()))
-                    <li class="nav-item ">
+                    <li class="nav-item active">
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
                             data-bs-target="#collapseManageUser" aria-bs-expanded="true"
                             aria-bs-controls="collapseManageUser">
@@ -114,6 +114,10 @@
                                     <a class="collapse-item" href="{{ route('roles.index') }}">Add Role</a>
                                 @else
                                 @endif
+                                @if (auth()->user()->role && in_array('viewPermission', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                <a class="collapse-item active" href="{{ route('permissions.index') }}">Permission</a>
+                            @else
+                            @endif
                             </div>
                         </div>
                     </li>
@@ -133,22 +137,48 @@
 
                     <!-- Begin Page Content -->
                     <div class="container-fluid">
-                        <div class="container">
-                            <h2>Daftar Permissions</h2>
-                        
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Daftar Permissions</h6>
+                            </div>
+                            <div class="card-body">
+
+                            
                             @if (session('success'))
                                 <div class="alert alert-success">
                                     {{ session('success') }}
                                 </div>
                             @endif
                         
-                            <a href="{{ route('permissions.create') }}" class="btn btn-primary mb-3">Tambah Permission</a>
-                        
-                            <table class="table table-bordered">
+                            <button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addPermissionModal">Add Permission</button>
+                            
+                            <div class="modal fade" id="addPermissionModal" tabindex="-1" role="dialog" aria-labelledby="addPermissionModalLabel" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="addPermissionModalLabel">Add Permission</h5>
+                                            <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">×</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="{{ route('permissions.store') }}" method="POST">
+                                                @csrf
+                                                <div class="form-group">
+                                                    <label for="name">Permission Name</label>
+                                                    <input type="text" name="name" class="form-control" placeholder="Enter permission name" required>
+                                                </div>
+                                                <button type="submit" class="btn btn-primary w-100">Add Permission</button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <table id="example" class="table table-striped">
                                 <thead>
                                     <tr>
-                                        <th>Nama Permission</th>
-                                        <th>Aksi</th>
+                                        <th>Permission Name</th>
+                                        <th>Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -156,18 +186,20 @@
                                         <tr>
                                             <td>{{ $permission->name }}</td>
                                             <td>
-                                                <a href="{{ route('permissions.edit', $permission->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                                                <a href="{{ route('permissions.edit', $permission->id) }}" class="btn btn-warning btn-sm"> <i class="fa-solid fa-pen-to-square"></i></a>
                         
                                                 <form action="{{ route('permissions.destroy', $permission->id) }}" method="POST" style="display:inline-block;">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Anda yakin ingin menghapus permission ini?')">Hapus</button>
+                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Anda yakin ingin menghapus permission ini?')"><i
+                                                        class="icon-action fa-solid fa-trash-can"></i></button>
                                                 </form>
                                             </td>
                                         </tr>
                                     @endforeach
                                 </tbody>
                             </table>
+                        </div>
                         </div>
                         
                     </div>

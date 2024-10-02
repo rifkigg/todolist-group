@@ -33,6 +33,9 @@
                     <x-input-error :messages="$errors->get('password')" class="mt-2" />
                 </div>
 
+                {{-- forgot password --}}
+                <a href="{{ route('password.request') }}" class="text-sm text-gray-600 hover:text-gray-900">Lupa Password?</a>
+
 
                 <div class="flex items-center justify-end mt-4">
                     <x-primary-button class="w-full">
