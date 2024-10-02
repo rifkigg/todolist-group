@@ -9,11 +9,9 @@
                                 <i class="fas fa-fw fa-tachometer-alt"></i>
                                 <span>Dashboard</span></a>
                         </li>
-                    @else
                     @endif
                     @if (auth()->user()->role && in_array('viewOnGoing', auth()->user()->role->permissions->pluck('name')->toArray()))
                         <li class="nav-item active">
-                            <!-- <a class="nav-link active" href="{{ route('ongoing.index') }}" aria-bs-expanded="true" -->
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOne"
                                 aria-bs-expanded="true" aria-bs-controls="collapseOne">
                                 <i class="fa-solid fa-hourglass-half"></i>
@@ -25,14 +23,11 @@
                                     <a class="collapse-item " href="{{ route('ongoing.index') }}">On Going</a>
                                     @if (auth()->user()->role && in_array('addProject', auth()->user()->role->permissions->pluck('name')->toArray()))
                                         <a class="collapse-item" href="{{ route('ongoing.index') }}">Deadline</a>
-                                    @else
                                     @endif
                                 </div>
                             </div>
                         </li>
-                    @else
                     @endif
-    
                 </x-slot>
                 @if (auth()->user()->role && in_array('viewBoard', auth()->user()->role->permissions->pluck('name')->toArray()))
                     <li class="nav-item">
@@ -41,10 +36,8 @@
                             <span>Boards</span>
                         </a>
                     </li>
-                @else
                 @endif
-    
-    
+
                 @if (auth()->user()->role && in_array('viewProject', auth()->user()->role->permissions->pluck('name')->toArray()))
                     <li class="nav-item ">
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
@@ -58,21 +51,17 @@
                                 <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
                                 @if (auth()->user()->role && in_array('addProject', auth()->user()->role->permissions->pluck('name')->toArray()))
                                     <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
-                                @else
                                 @endif
                                 @if (auth()->user()->role &&
                                         in_array('viewProjectCategories', auth()->user()->role->permissions->pluck('name')->toArray()))
                                     <a class="collapse-item " href="{{ route('projectcategories.index') }}">Categories</a>
-                                @else
                                 @endif
                                 @if (auth()->user()->role && in_array('viewProjectStatus', auth()->user()->role->permissions->pluck('name')->toArray()))
                                     <a class="collapse-item" href="{{ route('project_status.index') }}">Project Status</a>
-                                @else
                                 @endif
                             </div>
                         </div>
                     </li>
-                @else
                 @endif
                 @if (auth()->user()->role && in_array('viewTask', auth()->user()->role->permissions->pluck('name')->toArray()))
                     <li class="nav-item ">
@@ -86,24 +75,19 @@
                             <div class="bg-white py-2 collapse-inner rounded">
                                 @if (auth()->user()->role && in_array('viewTask', auth()->user()->role->permissions->pluck('name')->toArray()))
                                     <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
-                                @else
                                 @endif
                                 @if (auth()->user()->role && in_array('viewTaskStatus', auth()->user()->role->permissions->pluck('name')->toArray()))
                                     <a class="collapse-item" href="{{ route('task_status.index') }}">Task Status</a>
-                                @else
                                 @endif
                                 @if (auth()->user()->role && in_array('viewTaskPriorities', auth()->user()->role->permissions->pluck('name')->toArray()))
                                     <a class="collapse-item " href="{{ route('priorities.index') }}">Task Priorities</a>
-                                @else
                                 @endif
                                 @if (auth()->user()->role && in_array('viewTaskLabels', auth()->user()->role->permissions->pluck('name')->toArray()))
-                                    <a class="collapse-item" href="{{ route('labels.index') }}">Task Labels/Tags</a>
-                                @else
+                                    <a class="collapse-item " href="{{ route('labels.index') }}">Task Labels/Tags</a>
                                 @endif
                             </div>
                         </div>
                     </li>
-                @else
                 @endif
                 @if (auth()->user()->role && in_array('viewManageUser', auth()->user()->role->permissions->pluck('name')->toArray()))
                     <li class="nav-item ">
@@ -118,16 +102,13 @@
                             <div class="bg-white py-2 collapse-inner rounded">
                                 @if (auth()->user()->role && in_array('viewManageUser', auth()->user()->role->permissions->pluck('name')->toArray()))
                                     <a class="collapse-item" href="{{ route('manage_user.index') }}">Manage User</a>
-                                @else
                                 @endif
                                 @if (auth()->user()->role && in_array('viewRole', auth()->user()->role->permissions->pluck('name')->toArray()))
                                     <a class="collapse-item" href="{{ route('roles.index') }}">Add Role</a>
-                                @else
                                 @endif
                             </div>
                         </div>
                     </li>
-                @else
                 @endif
             </x-navbar>
 
@@ -140,75 +121,58 @@
                 <div id="content">
 
                     <x-navbar-topbar></x-navbar-topbar>
-
-                    <!-- Begin Page Content -->
-                    <div class="container-fluid">
-
-
-                        <div class="card shadow">
-                            <div class="card-header">
-                                <h6 class="m-0 font-weight-bold text-primary">On Going</h6>
-                            </div>
-                            <div class="card-body">
-                                @if (count($activeTasks) > 0)
-                                    <table id="example" class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Username</th>
-                                                <th>Task</th>
-                                                <th>Status</th>
-                                                <th>Duration</th>
-                                                <th>Task Created</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($activeTasks as $activeTask)
-                                                <tr>
-                                                    <td><a href="{{ route('tasks.perUser.show', ['id' => $activeTask['user_id']]) }}" class="fw-bold">{{ $activeTask['user'] }}</a></td> <!-- Ubah username menjadi link -->
-                                                    <td>{{ $activeTask['task'] }}</td>
-                                                    <td>
-                                                        @if (!$activeTask['status'] == null)
-                                                            @if ($activeTask['status'] == 'Paused')
-                                                                <p class="badge bg-secondary">Paused</p>
-                                                            @elseif ($activeTask['status'] == 'Playing')
-                                                                <p class="badge bg-warning">Playing</p>
-                                                            @else
-                                                                <p class="badge bg-success">Finished</p>
-                                                            @endif
-                                                        @else
-                                                        @endif
-                                                    </td>
-                                                    {{-- <td>
-                                                        @if (!$activeTask['total_time'] == null)
-                                                            {{ \Carbon\Carbon::parse($activeTask['total_time']['totaltime'])->format('H:i:s') }}
-                                                        @elseif ($activeTask['total_time']['totaltime'] == '0')
-                                                            <p>00:00:00</p>
-                                                        @else   
-                                                        @endif  
-                                                    </td> --}}
-                                                    <td>
-                                                        @if($activeTask['total_time'])
-                                                            {{ \Carbon\Carbon::createFromTimestamp($activeTask['total_time']['totalTime'])->format('H:i:s') }}<br> <!-- Format totalTime menjadi hh:mm:ss -->
-                                                            
-                                                        @else
-                                                            
-                                                        @endif
-                                                    </td>
-                                                    <td>{{ $activeTask['created_at'] }} </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                @else
-                                    <p>Tidak ada tugas yang sedang dimainkan.</p>
-                                @endif
-                            </div>
+                    <div class="container">
+                        <div class="row">
+                            @foreach($tasksByUser as $username => $tasks)
+                                <div class="col-md-6">
+                                    <div class="card mb-4">
+                                        <div class="card-header">
+                                            <h3>{{ $username }}</h3>
+                                        </div>
+                                        <div class="card-body">
+                                            <table class="table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Task</th>
+                                                        <th>Status</th>
+                                                        <th>Priority</th>
+                                                        <th>Due Date</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach($tasks as $task)
+                                                        <tr>
+                                                            <td>{{ $task->name }}</td>
+                                                            <td>
+                                                                @if ($task->timer_status == 'Paused')
+                                                                    <p class="badge bg-secondary">Paused</p>
+                                                                @elseif ($task->timer_status == 'Playing')
+                                                                    <p class="badge bg-warning">Playing</p>
+                                                                @else
+                                                                    <p class="badge bg-success">Finished</p>
+                                                                @endif
+                                                            </td>
+                                                            <td title="{{ $task->priority->name ?? ' ' }}" style="">
+                                                                @if (filter_var($task->priority->icon, FILTER_VALIDATE_URL))
+                                                                    <img src="{{ asset($task->priority->icon) }}" alt="{{ $task->priority->name ?? ' ' }}" class="icon-size" />
+                                                                @else
+                                                                    <span>{{ $task->priority->icon }}</span>
+                                                                @endif
+                                                            </td>
+                                                            <td>{{ $task->due_date }}</td> <!-- Display due date -->
+                                                        </tr>
+                                                    @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
                         </div>
                     </div>
-                    <!-- End of Main Content -->
 
-
-                    <!-- End of Content Wrapper -->
+                    <div class="container">
+                    </div>
 
                 </div>
                 <!-- End of Content Wrapper -->

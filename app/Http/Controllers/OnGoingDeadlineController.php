@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\History;
+use App\Models\Task;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,65 +12,16 @@ class OnGoingDeadlineController extends Controller
 {
     public function index(Request $request)
     {
-        if (now('Asia/Jakarta')->hour === 0 && now('Asia/Jakarta')->minute === 0) { 
-            // Tambahkan refresh halaman satu kali sebelum logout
-            echo "<script>if (!sessionStorage.getItem('reloaded')) { sessionStorage.setItem('reloaded', 'true'); location.reload(); }</script>";
-            Auth::guard('web')->logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-            return redirect('/');
-        }
-        $users = User::all();
+        // Fetch all tasks sorted by due date with eager loading
+        $tasks = Task::with(['status', 'priority', 'users']) // Eager load relationships
+            ->orderBy('due_date', 'asc') // Sort by due_date
+            ->get(); // Fetch all tasks
 
-        // Ambil tugas yang sedang dimainkan atau yang terakhir diambil oleh setiap pengguna
-        $activeTasks = [];
-        foreach ($users as $user) {
-            $tasks = $user->tasks()->where('timer_status', 'Playing')->get(); // Tugas yang sedang dimainkan
-            
-            if ($tasks->isNotEmpty()) {
-                foreach ($tasks as $task) {
-                    $activeTasks[] = [
-                        'user' => $user->username,
-                        'task' => $task->name,
-                        'user_id' => $user->id, // Tambahkan user_id
-                        'status' => $task->timer_status,
-                        'total_time' => [
-                            'totalTime' => History::calculateTotalTime($task->name)['totalTime'] +  History::calculateTotalTime($task->name)['elapsedTime'], // Ganti 'total_time' menjadi 'totalTime'
-                            'elapsedTime' => History::calculateTotalTime($task->name)['elapsedTime'],
-                        ],
-                        'created_at' => $task->created_at,
-                    ];
-                }
-            } else {
-                // Tampilkan tugas terakhir yang diambil, tanpa mempedulikan status
-                $lastTask = $user->tasks()->orderBy('updated_at', 'desc')->first(); // Tugas terakhir yang diambil
-                if ($lastTask) {
-                    $activeTasks[] = [
-                        'user' => $user->username,
-                        'task' => $lastTask->name,
-                        'user_id' => $user->id, // Tambahkan user_id
-                        'status' => $lastTask->timer_status,
-                        'total_time' => [
-                            'totalTime' => History::calculateTotalTime($lastTask->name)['totalTime'] + History::calculateTotalTime($lastTask->name)['elapsedTime'], // Ganti 'total_time' menjadi 'totalTime'
-                            'elapsedTime' => History::calculateTotalTime($lastTask->name)['elapsedTime'],
-                        ],
-                        'created_at' => $lastTask->created_at,
-                    ];
-                } else {
-                    // Jika tidak ada tugas, tampilkan nama pengguna saja dengan null untuk task, status, dan time
-                    $activeTasks[] = [
-                        'user' => $user->username,
-                        'user_id' => $user->id, // Tambahkan user_id
-                        'task' => null,
-                        'status' => null,
-                        'total_time' => null, // Ganti 'total_time' menjadi null
-                        'created_at' => null,
-                    ];
-                }
-            }
-        }
-        // dd($activeTasks);
+        // Group tasks by user
+        $tasksByUser = $tasks->groupBy(function ($task) {
+            return $task->users->pluck('username')->implode(', ');
+        });
 
-        return view('pages.on_going', compact('users', 'activeTasks'));
+        return view('pages.on_goingdeadline', compact('tasksByUser'));
     }
 }
