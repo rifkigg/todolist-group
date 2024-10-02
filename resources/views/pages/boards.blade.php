@@ -209,7 +209,7 @@
                                     <br>
 
                                     @forelse ($board->tasks as $item)
-                                    @if (auth()->user()->role && in_array('showBoard', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                    @if (auth()->user()->role && in_array('showTaskInBoard', auth()->user()->role->permissions->pluck('name')->toArray()))
                                         <a href="#" data-bs-toggle="modal"
                                             data-bs-target="#view-{{ $item->id }}">
                                             <div class="text-white bg-secondary rounded p-2 mb-2    ">
