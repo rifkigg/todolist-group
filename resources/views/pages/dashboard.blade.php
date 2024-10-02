@@ -226,7 +226,7 @@
                                         </div>
                                     </div>
                                 @endif
-
+                                @if (auth()->user()->role->name == 'admin' && in_array('viewAllTask', auth()->user()->role->permissions->pluck('name')->toArray()))
                                 <table id="example" class="table table-striped">
                                     <thead>
                                         <tr>
@@ -259,11 +259,572 @@
                                                             <p class="badge bg-success">Finished</p>
                                                         @endif
                                                     </td>
-                                                    <!-- 😂😂😂😂😂😂😂😂😂😂 -->
                                                     <td title="{{ $task->priority->name ?? ' ' }}" style="">
-                                                        <img src="{{ asset($task->priority->icon) }}"
-                                                            alt="{{ $task->priority->name ?? ' ' }}"
-                                                            class="icon-size" />
+                                                        @if (filter_var($task->priority->icon, FILTER_VALIDATE_URL))
+                                                            <img src="{{ asset($task->priority->icon) }}" alt="{{ $task->priority->name ?? ' ' }}" class="icon-size" />
+                                                        @else
+                                                            <span>{{ $task->priority->icon }}</span>
+                                                        @endif
+                                                    </td>
+                                                    <td>
+                                                        @php
+                                                            $totalSeconds = $task->totalTime; // Total waktu dalam detik
+                                                            $hours = floor($totalSeconds / 3600); // Hitung jam
+                                                            $minutes = floor(($totalSeconds % 3600) / 60); // Hitung menit
+                                                            $seconds = $totalSeconds % 60; // Hitung detik
+                                                        @endphp
+                                                        <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}
+                                                        </p>
+                                                    </td>
+                                                    {{-- <td>
+                                                    @php
+                                                        $elapsedSeconds = $task->elapsed_time; // Waktu yang telah berlalu dalam detik
+                                                        $elapsedHours = floor($elapsedSeconds / 3600);
+                                                        $elapsedMinutes = floor(($elapsedSeconds % 3600) / 60);
+                                                        $elapsedSeconds = $elapsedSeconds % 60;
+                                                    @endphp
+                                                    <p>{{ sprintf('%02d:%02d:%02d', $elapsedHours, $elapsedMinutes, $elapsedSeconds) }}</p>
+                                                </td> --}}
+                                                    <td>{{ \Carbon\Carbon::parse($task->due_date)->format('d/m/Y H:i:s') }}
+                                                    </td>
+                                                    <td>
+                                                        <div class="dropdown">
+                                                            <button class="btn" type="button"
+                                                                id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                                                aria-expanded="false">
+                                                                <i class="fa-solid fa-ellipsis fa-2xl"></i>
+                                                            </button>
+                                                            <ul class="dropdown-menu"
+                                                                aria-labelledby="dropdownMenuButton">
+                                                                @php
+                                                                    $isPlaying = $task->isPlaying;
+                                                                    $isFinished = $task->status == 'finished';
+                                                                @endphp
+                                                                 @if (auth()->user()->role && in_array('startTask', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                                                <li>
+                                                                    <form action="{{ route('history.start') }}"
+                                                                        method="POST"
+                                                                        onsubmit="return handleStart('{{ $task->id }}', {{ $isPlaying ? 'true' : 'false' }});"
+                                                                        class="task-row dropdown-item">
+                                                                        @csrf
+                                                                        <input type="text"
+                                                                            value="{{ $task->name }}" hidden
+                                                                            name="task_name">
+                                                                        <button type="submit"
+                                                                            class="btn dropdown-item"
+                                                                            {{ $isPlaying ? 'disabled' : '' }}>
+                                                                            <i class="fa-solid fa-play"></i> Start
+                                                                        </button>
+                                                                    </form>
+                                                                </li>
+                                                                @else
+                                                                @endif
+                                                                @if (auth()->user()->role && in_array('pauseTask', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                                                <li>
+                                                                    <form action="{{ route('history.pause') }}"
+                                                                        method="POST"
+                                                                        {{ $isFinished ? 'style=display:none' : '' }}
+                                                                        class="task-row dropdown-item">
+                                                                        @csrf
+                                                                        <input type="text"
+                                                                            value="{{ $task->name }}" hidden
+                                                                            name="task_name">
+                                                                        <button type="submit"
+                                                                            class="btn dropdown-item"
+                                                                            {{ $task->isPaused ? 'disabled' : '' }}>
+                                                                            <i class="fa-solid fa-pause"></i> Pause
+                                                                        </button>
+                                                                    </form>
+                                                                </li>
+                                                                @else
+                                                                @endif
+                                                                @if (auth()->user()->role && in_array('stopTask', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                                                <li>
+                                                                    <form action="{{ route('history.finish') }}"
+                                                                        method="POST" class="task-row dropdown-item">
+                                                                        @csrf
+                                                                        <input type="text"
+                                                                            value="{{ $task->name }}" hidden
+                                                                            name="task_name">
+                                                                        <button type="submit"
+                                                                            class="btn dropdown-item">
+                                                                            <i class="fa-solid fa-stop"></i> Stop
+                                                                        </button>
+                                                                    </form>
+                                                                </li>
+                                                                @else
+                                                                @endif
+                                                                @if (auth()->user()->role && in_array('showTaskInDashboard', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                                                <li>
+                                                                    <div class="dropdown-item">
+                                                                        <button class="btn dropdown-item"
+                                                                            data-bs-toggle="modal"
+                                                                            data-bs-target="#view-{{ $task->id }}">
+                                                                            <i class="icon-action fa-solid fa-eye"></i>
+                                                                            Show
+                                                                        </button>
+                                                                    </div>
+                                                                </li>
+                                                                @else
+                                                                @endif
+                                                            </ul>
+                                                        </div>
+
+                                                    </td>
+
+                                                </tr>
+
+                                                <div class="modal fade" id="view-{{ $task->id }}" tabindex="-1"
+                                                    aria-labelledby="createModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-xl">
+                                                        <div class="modal-content">
+
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title w-100" id="createModalLabel">
+                                                                    <input type="text"
+                                                                        class="form-control border-0" id="name"
+                                                                        name="name" value="{{ $task->name }}"
+                                                                        onchange="updateHiddenInput(this.value)"
+                                                                        disabled>
+                                                                </h5>
+                                                                <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal"
+                                                                    aria-label="Close"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div class="d-flex justify-content-around">
+                                                                    <div style="width: 55%">
+                                                                        @if ($task->description && count($task->description) > 0)
+                                                                            @foreach ($task->description as $desc)
+                                                                                <form
+                                                                                    action="{{ route('description.update', $desc->id) }}"
+                                                                                    method="POST"
+                                                                                    enctype="multipart/form-data">
+                                                                                    @csrf
+                                                                                    @method('PUT')
+                                                                                    <label for="description"
+                                                                                        class="form-label">Description</label>
+                                                                                    <input type="text"
+                                                                                        name="task_id"
+                                                                                        value="{{ $task->id }}"
+                                                                                        hidden>
+                                                                                    <textarea class="form-control mb-3" id="textarea1" name="name" readonly>{{ old('name', $desc->name) }}</textarea>
+                                                                                </form>
+                                                                            @endforeach
+                                                                        @else
+                                                                            <form
+                                                                                action="{{ route('description.store', $task->id) }}"
+                                                                                method="post"
+                                                                                enctype="multipart/form-data"
+                                                                                id="formAddDescription">
+                                                                                @csrf
+                                                                                <input type="text" name="task_id"
+                                                                                    value="{{ $task->id }}"
+                                                                                    hidden>
+                                                                                <textarea class="form-control mb-3" id="textarea1" name="name" hidden></textarea>
+                                                                                <div
+                                                                                    class="mb-3 d-flex justify-content-between">
+                                                                                    <p class="m-0">Description</p>
+                                                                                </div>
+                                                                            </form>
+                                                                            <p>No description found.</p>
+                                                                        @endif
+
+                                                                        <div class="d-flex justify-content-between">
+                                                                            <label for="checklist"
+                                                                                class="form-label">Checklist</label>
+                                                                        </div>
+
+                                                                        @if ($task->checklist && count($task->checklist) > 0)
+                                                                            <div class="my-3 bg-secondary-subtle p-2 overflow-auto rounded"
+                                                                                style="max-height: 300px">
+                                                                                <form
+                                                                                    action="{{ route('update.completed') }}"
+                                                                                    method="POST" id="formChecklist">
+                                                                                    @foreach ($task->checklist as $gg)
+                                                                                        @csrf
+                                                                                        <div
+                                                                                            class="d-flex align-items-center justify-content-between p-2 rounded bg-light mb-2">
+                                                                                            <div class="d-flex gap-1">
+                                                                                                <input type="hidden"
+                                                                                                    name="checklist[{{ $gg->id }}]"
+                                                                                                    value="0">
+                                                                                                <input type="checkbox"
+                                                                                                    name="checklist[{{ $gg->id }}]]"
+                                                                                                    value="1"
+                                                                                                    class="m-0"
+                                                                                                    id="checkbox-{{ $gg->id }}"
+                                                                                                    {{ $gg->completed == 1 ? 'checked' : '' }}
+                                                                                                    onchange="toggleLineThrough({{ $gg->id }})">
+                                                                                                <span
+                                                                                                    id="text-{{ $gg->id }}"
+                                                                                                    class="{{ $gg->completed == 1 ? 'text-decoration-line-through' : '' }} ">
+                                                                                                    {{ $gg->name }}
+                                                                                                </span>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    @endforeach
+                                                                                </form>
+                                                                                @foreach ($task->checklist as $check)
+                                                                                    <form
+                                                                                        action="{{ route('checklist.destroy', $check->id) }}"
+                                                                                        method="POST"
+                                                                                        class="d-inline"
+                                                                                        id="deleteChecklist_{{ $check->id }}">
+                                                                                        @csrf
+                                                                                        @method('DELETE')
+                                                                                    </form>
+                                                                                @endforeach
+                                                                                <button type="submit"
+                                                                                    class="btn btn-primary mt-2"
+                                                                                    onclick="event.preventDefault(); document.getElementById('formChecklist').submit();">Save
+                                                                                    All</button>
+                                                                            </div>
+                                                                        @else
+                                                                            <p>No checklist items found.</p>
+                                                                        @endif
+
+
+                                                                        <p for="attachments" class="form-label">
+                                                                            Attachment
+                                                                        </p>
+                                                                        <div class="overflow-auto"
+                                                                            style="max-height: 300px">
+                                                                            @if ($task->attachments && count($task->attachments) > 0)
+                                                                                @foreach ($task->attachments as $img)
+                                                                                    <div
+                                                                                        class="mb-3 d-flex justify-content-between align-items-start gap-2">
+                                                                                        @if (preg_match('/\.(jpg|jpeg|png|gif)$/i', $img->file_name))
+                                                                                            <a
+                                                                                                href="{{ asset('storage/attachments/' . $img->file_name) }}">
+                                                                                                <img src="{{ asset('storage/attachments/' . $img->file_name) }}"
+                                                                                                    alt="{{ $img->file_name }}"
+                                                                                                    width="150">
+                                                                                            </a>
+                                                                                        @else
+                                                                                            <a
+                                                                                                href="{{ asset('storage/attachments/' . $img->file_name) }}">
+                                                                                                <div class="file-icon d-flex flex-column justify-content-center align-items-center text-dark"
+                                                                                                    style="width: 150px ;height: 100px">
+                                                                                                    <i
+                                                                                                        class="fa-solid fa-file fs-1"></i>
+                                                                                                    <p>{{ $img->file_name }}
+                                                                                                    </p>
+                                                                                                </div>
+                                                                                            </a>
+                                                                                        @endif
+                                                                                        <div
+                                                                                            class="d-flex justify-content-end w-100">
+                                                                                            <button type="button"
+                                                                                                onclick="if(confirm('Are you sure you want to delete this attachment?')) { document.getElementById('deleteGambar-{{ $img->id }}').submit(); }"
+                                                                                                class="btn btn-danger btn-sm">
+                                                                                                <i
+                                                                                                    class="fa-solid fa-trash"></i>
+                                                                                            </button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                @endforeach
+                                                                            @else
+                                                                                <p>No attachments found.</p>
+                                                                            @endif
+                                                                        </div>
+
+                                                                        <div
+                                                                            class="d-flex align-items-center justify-content-between mb-3">
+                                                                            <p for="activities" class="form-label">
+                                                                                Activities
+                                                                            </p>
+
+                                                                        </div>
+                                                                        @if ($task->activities && count($task->activities) > 0)
+                                                                            <div class="bg-secondary-subtle rounded p-2 overflow-auto "
+                                                                                style="max-height: 300px">
+                                                                                @foreach ($task->activities as $act)
+                                                                                    <div
+                                                                                        class="p-2 rounded bg-light mb-2">
+                                                                                        <div
+                                                                                            class="d-flex justify-content-between align-items-baseline">
+                                                                                            <p class="m-0 fw-bold">
+                                                                                                {{ $act->username }}
+                                                                                            </p>
+                                                                                            <p class="m-0"
+                                                                                                style="font-size: 0.8rem">
+                                                                                                {{ $act->created_at }}
+                                                                                            </p>
+                                                                                        </div>
+                                                                                        <p class="m-0">
+                                                                                            {{ $act->activity }}
+                                                                                        </p>
+                                                                                    </div>
+                                                                                @endforeach
+                                                                            </div>
+                                                                        @else
+                                                                            <p>No activities found.</p>
+                                                                        @endif
+                                                                        <div class="collapse mt-3"
+                                                                            id="collapseExample">
+                                                                            <form
+                                                                                action="{{ route('activity.store') }}"
+                                                                                method="POST">
+                                                                                @csrf
+                                                                                <input type="hidden" name="task_id"
+                                                                                    value="{{ $task->id }}"
+                                                                                    hidden>
+                                                                                <input type="hidden" name="username"
+                                                                                    value="{{ Auth::user()->username }}"
+                                                                                    hidden>
+                                                                                <textarea class="form-control mb-3" id="focusedInput" name="activity" placeholder="Add Activity"></textarea>
+                                                                                @error('activity')
+                                                                                    <div class="alert alert-danger">
+                                                                                        {{ $message }}</div>
+                                                                                @enderror
+                                                                                <button type="submit"
+                                                                                    class="btn btn-primary">Add
+                                                                                    Activity</button>
+                                                                            </form>
+
+                                                                        </div>
+                                                                    </div>
+
+                                                                    {{-- uhuy --}}
+
+                                                                    <div style="width: 35%">
+                                                                        <form
+                                                                            action="{{ route('task.update', $task->id) }}"
+                                                                            method="POST"
+                                                                            enctype="multipart/form-data"
+                                                                            id="formUpdate-{{ $task->id }}">
+                                                                            @csrf
+                                                                            @method('PUT')
+                                                                            <input type="text"
+                                                                                class="form-control border-0"
+                                                                                id="hiddenName" name="name"
+                                                                                value="{{ $task->name }}" hidden>
+
+                                                                            <label for="board_id"
+                                                                                class="form-label">Task
+                                                                                Board</label>
+                                                                            <select name="board_id" id="board_id"
+                                                                                class="form-select mb-3" disabled>
+                                                                                @foreach ($board as $items)
+                                                                                    <option
+                                                                                        value="{{ $items->id }}"
+                                                                                        {{ old('board_id', $task->board_id) == $items->id ? 'selected' : '' }}>
+                                                                                        {{ $items->board_name ?? ' ' }}
+                                                                                    </option>
+                                                                                @endforeach
+                                                                            </select>
+
+                                                                            <label for="status_id"
+                                                                                class="form-label">Task
+                                                                                Status</label>
+                                                                            <select name="status_id" id="status_id"
+                                                                                class="form-select mb-3" disabled>
+                                                                                @foreach ($status as $items)
+                                                                                    <option
+                                                                                        value="{{ $items->id }}"
+                                                                                        {{ old('status_id', $task->status_id) == $items->id ? 'selected' : '' }}>
+                                                                                        {{ $items->name ?? ' ' }}
+                                                                                    </option>
+                                                                                @endforeach
+                                                                            </select>
+
+                                                                            <label for="priority_id"
+                                                                                class="form-label">Task
+                                                                                Priority</label>
+                                                                            <select name="priority_id"
+                                                                                id="priority_id"
+                                                                                class="form-select mb-3" disabled>
+                                                                                @foreach ($priority as $items)
+                                                                                    <option
+                                                                                        value="{{ $items->id }}"
+                                                                                        {{ old('priority_id', $task->priority_id) == $items->id ? 'selected' : '' }}>
+                                                                                        {{ $items->name ?? ' ' }}
+                                                                                    </option>
+                                                                                @endforeach
+                                                                            </select>
+
+                                                                            <label for="task_label_id"
+                                                                                class="form-label">Task
+                                                                                Label</label>
+                                                                            <select name="task_label_id"
+                                                                                id="task_label_id"
+                                                                                class="form-select mb-3" disabled>
+                                                                                @foreach ($label as $items)
+                                                                                    <option
+                                                                                        value="{{ $items->id }}"
+                                                                                        {{ old('task_label_id', $task->task_label_id) == $items->id ? 'selected' : '' }}>
+                                                                                        {{ $items->name ?? ' ' }}
+                                                                                    </option>
+                                                                                @endforeach
+                                                                            </select>
+
+                                                                            <label for="project_id"
+                                                                                class="form-label">Task
+                                                                                Project</label>
+                                                                            <select name="project_id" id="project_id"
+                                                                                class="form-select mb-3" disabled>
+                                                                                @foreach ($project as $items)
+                                                                                    <option
+                                                                                        value="{{ $items->id }}"
+                                                                                        {{ old('project_id', $task->project_id) == $items->id ? 'selected' : '' }}>
+                                                                                        {{ $items->name ?? ' ' }}
+                                                                                    </option>
+                                                                                @endforeach
+                                                                            </select>
+
+                                                                            <!-- Assignees (Multi-Select) -->
+                                                                            <label for="assignees"
+                                                                                class="form-label">Assignees</label>
+                                                                            <select name="assignees[]" id="assignees"
+                                                                                class="form-select mb-3" disabled>
+                                                                                @foreach ($users as $user)
+                                                                                    <option
+                                                                                        value="{{ $user->id }}"
+                                                                                        {{ in_array($user->id, old('assignees', $task->users->pluck('id')->toArray())) ? 'selected' : '' }}>
+                                                                                        {{ $user->username }}
+                                                                                    </option>
+                                                                                @endforeach
+                                                                            </select>
+
+                                                                            <!-- Tempat untuk menampilkan hasil pilihan -->
+                                                                            {{-- <div id="selected-assignees">
+                                                                            <p>Selected Assignees:</p>
+                                                                            <ul
+                                                                                class="d-flex flex-wrap gap-2 list-unstyled">
+                                                                              @foreach ($task->users as $user)
+                                                                                    <li
+                                                                                        class="d-flex align-items-center border rounded px-2 py-1">
+                                                                                        {{ $user->username }}
+                                                                                    </li>
+                                                                                @endforeach
+                                                                            </ul>
+                                                                        </div> --}}
+
+                                                                            <div class="task-row"
+                                                                            data-task-id="{{ $task->id }}">
+                                                                            <p for="time_count_{{ $task->id }}"
+                                                                                class="form-label">Time Count</p>
+                                                                            @php
+                                                                                $totalSeconds = $task->totalTime; // Total waktu dalam detik
+                                                                                $hours = floor(
+                                                                                    $totalSeconds / 3600,
+                                                                                ); // Hitung jam
+                                                                                $minutes = floor(
+                                                                                    ($totalSeconds % 3600) / 60,
+                                                                                ); // Hitung menit
+                                                                                $seconds = $totalSeconds % 60; // Hitung detik
+                                                                            @endphp
+                                                                            <p>{{ sprintf('%02d:%02d:%02d', $hours, $minutes, $seconds) }}
+                                                                            </p>
+
+                                                                        </div>
+                                                                        <label for="due_date"
+                                                                            class="form-label">Due
+                                                                            Date</label>
+                                                                        <input type="datetime-local"
+                                                                            name="due_date" id="due_date"
+                                                                            class="form-control mb-3"
+                                                                            value="{{ old('due_date', $task->due_date) }}"
+                                                                            disabled>
+
+                                                                    </form>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <form action="{{ route('task.destroy', $task->id) }}"
+                                                            method="POST" class="d-none"
+                                                            id="deleteForm-{{ $task->id }}">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                        </form>
+
+                                                        <form action="{{ route('attachments.store') }}"
+                                                            method="POST" enctype="multipart/form-data">
+                                                            @csrf
+                                                            <input type="text" name="task_id"
+                                                                value="{{ $task->id }}" hidden>
+                                                            <div>
+                                                                <input type="file" name="file_name"
+                                                                    id="file_name_{{ $task->id }}"
+                                                                    class="form-control @error('file') is-invalid @enderror"
+                                                                    style="display: none;"
+                                                                    onchange="this.form.submit();">
+                                                                @error('file')
+                                                                    <div class="alert alert-danger">
+                                                                        {{ $message }}
+                                                                    </div>
+                                                                @enderror
+                                                            </div>
+                                                        </form>
+
+                                                        @foreach ($task->attachments as $img)
+                                                            <div>
+                                                                <form
+                                                                    action="{{ route('attachments.destroy', ['task_id' => $task->id, 'file_name' => $img->file_name]) }}"
+                                                                    method="POST"
+                                                                    id="deleteGambar-{{ $img->id }}"
+                                                                    onsubmit="return confirm('Are you sure you want to delete this attachment?');">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                </form>
+                                                            </div>
+                                                        @endforeach
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        @else
+                                        @endif
+                                    @empty
+                                        <tr>
+                                            <td colspan="2" class="text-center">No tasks assigned to you.</td>
+                                        </tr>
+                                    @endforelse
+
+                                </tbody>
+                            </table>
+                                </table>
+                                @elseif (auth()->user()->role && in_array('viewTaskPerUser', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                <table id="example" class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Task Name</th>
+                                            <th scope="col">Project Name</th>
+                                            <th scope="col">Status</th>
+                                            <th scope="col">Task Priorities</th>
+                                            <th scope="col">Total Time</th>
+                                            {{-- <th scope="col">Elapsed Time</th> --}}
+                                            <th scope="col">Due Date</th>
+                                            <th scope="col">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @forelse ($tasksWithTime as $task)
+                                            @if ($task->count() > 0)
+                                                <tr>
+                                                    <td>{{ $task->name }}</td>
+                                                    <td>
+                                                        <a href="{{ route('projects.tasks', $task->project->id) }}"
+                                                            class="fw-bold">{{ $task->project->name }}</a>
+                                                        <!-- Tambahkan link untuk redirect ke TaskInProject -->
+                                                    </td>
+                                                    <td>
+                                                        @if ($task->timer_status == 'Paused')
+                                                            <p class="badge bg-secondary">Paused</p>
+                                                        @elseif ($task->timer_status == 'Playing')
+                                                            <p class="badge bg-warning">Playing</p>
+                                                        @else
+                                                            <p class="badge bg-success">Finished</p>
+                                                        @endif
+                                                    </td>
+                                                    <td title="{{ $task->priority->name ?? ' ' }}" style="">
+                                                        @if (filter_var($task->priority->icon, FILTER_VALIDATE_URL))
+                                                            <img src="{{ asset($task->priority->icon) }}" alt="{{ $task->priority->name ?? ' ' }}" class="icon-size" />
+                                                        @else
+                                                            <span>{{ $task->priority->icon }}</span>
+                                                        @endif
                                                     </td>
                                                     <td>
                                                         @php
@@ -785,6 +1346,7 @@
 
                                     </tbody>
                                 </table>
+                                @endif  
                                 <!-- Menampilkan Total Waktu Pengerjaan -->
                             </div>
                         </div>
