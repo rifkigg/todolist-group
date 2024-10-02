@@ -11,6 +11,8 @@ use App\Models\TaskStatus;
 use App\Models\History;
 use App\Models\TaskPriority;
 use App\Models\TaskLabel;
+use App\Models\Role;
+use Spatie\Permission\Models\Permission;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,7 +33,23 @@ class DashboardController extends Controller
             $request->session()->regenerateToken();
             return redirect('/');
         }
-        // Mengambil data dari berbagai model
+
+        // $user = Auth::user();
+        // if ($user->role) {
+        //     $rolePermissions = $user->role->permissions->pluck('name')->toArray(); // Mendapatkan permissions dari role
+        //     // Tambahkan kondisi untuk memeriksa izin viewAny
+        //     if (in_array('viewAny', $rolePermissions)) {
+        //         // Tampilkan permissions yang dimiliki oleh user
+        //         return response()->json([
+        //             'username' => $user->username,
+        //             'permissions' => $rolePermissions
+        //         ]); // Mengembalikan data dalam format JSON
+        //     }
+        // }
+        
+        
+        
+        
 
         $project = Project::all();
         $board = Board::all();
@@ -42,13 +60,13 @@ class DashboardController extends Controller
 
         
         // Ambil tasks yang ditugaskan ke user yang sedang login
-        $tasks = app(DashboardController::class)->getTasksByUser(auth()->id())
+        $tasks = app(DashboardController::class)->getTasksByUser(Auth::id())
         ->sortBy(function ($task) {
             return Carbon::parse($task->due_date);
         })
         ;
         // $tasks = app(DashboardController::class)->getTasksByUser(auth()->id());
-        $projects = app(ProjectController::class)->getProjectByUser(auth()->id());
+        $projects = app(ProjectController::class)->getProjectByUser(Auth::id());
         $total_tasknya = $tasks->count();
         $total_selesai = $tasks->where('timer_status', 'Finished')->count();
         $total_belum_selesai = $tasks->where('timer_status', '!=', 'Finished')->count();

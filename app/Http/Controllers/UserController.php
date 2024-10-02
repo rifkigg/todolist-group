@@ -34,15 +34,15 @@ class UserController extends Controller
     {
         $request->validate([
             'username' => 'required',
-            'email' => 'required',
-            'role' => 'required',
+            'email' => 'required|email',
+            'role_id' => 'required', // Memastikan role_id divalidasi
             'password' => 'required',
         ]);
 
         User::create([
             'username' => $request->username,
             'email' => $request->email,
-            'role' => $request->role,
+            'role_id' => $request->role_id, // Mengirimkan role_id ke database
             'password' => Hash::make($request->password),
         ]);
 
@@ -54,7 +54,7 @@ class UserController extends Controller
         $request->validate([
             'username' => 'required',
             'email' => 'required',
-            'role' => 'required',
+            'role_id' => 'required',
             'password' => 'nullable', // Ubah menjadi nullable
         ]);
         $user = User::find($id);
@@ -62,7 +62,7 @@ class UserController extends Controller
         $dataToUpdate = [
             'username' => $request->username,
             'email' => $request->email,
-            'role' => $request->role,
+            'role_id' => $request->role_id,
         ];
 
         // Cek jika password diisi
@@ -73,7 +73,6 @@ class UserController extends Controller
         $user->update($dataToUpdate);
         return redirect()->route('manage_user.index');
     }
-
     public function destroy($id)
     {
         $user = User::find($id);

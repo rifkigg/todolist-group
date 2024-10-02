@@ -1,16 +1,18 @@
-@if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+{{-- @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer') --}}
     <x-layout>
         <!-- Page Wrapper -->
         <div id="wrapper">
             <x-navbar>
                 <x-slot name="dashboard">
-                    <li class="nav-item ">
-
-                        <a class="nav-link " href="/dashboard">
-                            <i class="fas fa-fw fa-tachometer-alt"></i>
-                            <span>Dashboard</span></a>
-                    </li>
-                    @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                    @if (auth()->user()->role && in_array('viewDashboard', auth()->user()->role->permissions->pluck('name')->toArray()))
+                        <li class="nav-item active">
+                            <a class="nav-link active" href="/dashboard">
+                                <i class="fas fa-fw fa-tachometer-alt"></i>
+                                <span>Dashboard</span></a>
+                        </li>
+                    @else
+                    @endif
+                    @if (auth()->user()->role && in_array('viewOnGoing', auth()->user()->role->permissions->pluck('name')->toArray()))
                         <li class="nav-item">
                             <a class="nav-link" href="{{ route('ongoing.index') }}" aria-bs-expanded="true"
                                 aria-bs-controls="collapseTwo">
@@ -20,18 +22,23 @@
                         </li>
                     @else
                     @endif
+    
                 </x-slot>
-                <li class="nav-item">
-                    <a class="nav-link active" href="/boards">
-                        <i class="fa-solid fa-chess-board"></i>
-                        <span>Boards</span>
-                    </a>
-                </li>
-
-                @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                @if (auth()->user()->role && in_array('viewBoard', auth()->user()->role->permissions->pluck('name')->toArray()))
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/boards">
+                            <i class="fa-solid fa-chess-board"></i>
+                            <span>Boards</span>
+                        </a>
+                    </li>
+                @else
+                @endif
+    
+    
+                @if (auth()->user()->role && in_array('viewProject', auth()->user()->role->permissions->pluck('name')->toArray()))
                     <li class="nav-item ">
-                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                            data-bs-target="#collapseTwo" aria-bs-expanded="true" aria-bs-controls="collapseTwo">
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
+                            aria-bs-expanded="true" aria-bs-controls="collapseTwo">
                             <i class="fa-solid fa-list-check"></i>
                             <span>Project</span>
                         </a>
@@ -39,53 +46,77 @@
                             data-bs-parent="#accordionSidebar">
                             <div class="bg-white py-2 collapse-inner rounded">
                                 <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
-                                <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
-                                <a class="collapse-item " href="{{ route('projectcategories.index') }}">Categories</a>
-                                <a class="collapse-item" href="{{ route('project_status.index') }}">Project Status</a>
+                                @if (auth()->user()->role && in_array('addProject', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                    <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
+                                @else
+                                @endif
+                                @if (auth()->user()->role &&
+                                        in_array('viewProjectCategories', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                    <a class="collapse-item " href="{{ route('projectcategories.index') }}">Categories</a>
+                                @else
+                                @endif
+                                @if (auth()->user()->role && in_array('viewProjectStatus', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                    <a class="collapse-item" href="{{ route('project_status.index') }}">Project Status</a>
+                                @else
+                                @endif
                             </div>
                         </div>
                     </li>
+                @else
                 @endif
-                <li class="nav-item ">
-                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                        data-bs-target="#collapseThree" aria-bs-expanded="true" aria-bs-controls="collapseTwo">
-                        <i class="fas fa-clipboard-list "></i>
-                        <span>Task</span>
-                    </a>
-                    <div id="collapseThree" class="collapse" aria-labelledby="headingTwo"
-                        data-bs-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
-                                <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
-                                <a class="collapse-item" href="{{ route('task_status.index') }}">Task Status</a>
-                                <a class="collapse-item " href="{{ route('priorities.index') }}">Task Priorities</a>
-                                <a class="collapse-item" href="{{ route('labels.index') }}">Task Labels/Tags</a>
-                            @else
-                                <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
-                            @endif
+                @if (auth()->user()->role && in_array('viewTask', auth()->user()->role->permissions->pluck('name')->toArray()))
+                    <li class="nav-item ">
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                            data-bs-target="#collapseThree" aria-bs-expanded="true" aria-bs-controls="collapseTwo">
+                            <i class="fas fa-clipboard-list "></i>
+                            <span>Task</span>
+                        </a>
+                        <div id="collapseThree" class="collapse" aria-labelledby="headingTwo"
+                            data-bs-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                @if (auth()->user()->role && in_array('viewTask', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                    <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
+                                @else
+                                @endif
+                                @if (auth()->user()->role && in_array('viewTaskStatus', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                    <a class="collapse-item" href="{{ route('task_status.index') }}">Task Status</a>
+                                @else
+                                @endif
+                                @if (auth()->user()->role && in_array('viewTaskPriorities', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                    <a class="collapse-item " href="{{ route('priorities.index') }}">Task Priorities</a>
+                                @else
+                                @endif
+                                @if (auth()->user()->role && in_array('viewTaskLabels', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                    <a class="collapse-item" href="{{ route('labels.index') }}">Task Labels/Tags</a>
+                                @else
+                                @endif
+                            </div>
                         </div>
-                    </div>
-                </li>
-                @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
-                <li class="nav-item active">
-                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
-                        data-bs-target="#collapseManageUser" aria-bs-expanded="true"
-                        aria-bs-controls="collapseManageUser">
-                        <i class="fa-solid fa-users-gear"></i>
-                        <span>Manage User</span>
-                    </a>
-                    <div id="collapseManageUser" class="collapse" aria-labelledby="collapseManageUser"
-                        data-bs-parent="#accordionSidebar">
-                        <div class="bg-white py-2 collapse-inner rounded">
-                            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
-                                <a class="collapse-item active" href="{{ route('manage_user.index') }}">Manage User</a>
-                                <a class="collapse-item" href="{{ route('roles.index') }}">Add Role</a>
-                            @else
-                            @endif
+                    </li>
+                @else
+                @endif
+                @if (auth()->user()->role && in_array('viewManageUser', auth()->user()->role->permissions->pluck('name')->toArray()))
+                    <li class="nav-item ">
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                            data-bs-target="#collapseManageUser" aria-bs-expanded="true"
+                            aria-bs-controls="collapseManageUser">
+                            <i class="fa-solid fa-users-gear"></i>
+                            <span>Manage User</span>
+                        </a>
+                        <div id="collapseManageUser" class="collapse" aria-labelledby="collapseManageUser"
+                            data-bs-parent="#accordionSidebar">
+                            <div class="bg-white py-2 collapse-inner rounded">
+                                @if (auth()->user()->role && in_array('viewManageUser', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                    <a class="collapse-item" href="{{ route('manage_user.index') }}">Manage User</a>
+                                @else
+                                @endif
+                                @if (auth()->user()->role && in_array('viewRole', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                    <a class="collapse-item" href="{{ route('roles.index') }}">Add Role</a>
+                                @else
+                                @endif
+                            </div>
                         </div>
-                    </div>
-                </li>
-                
+                    </li>
                 @else
                 @endif
             </x-navbar>
@@ -127,7 +158,7 @@
                                         @foreach ($users as $user)
                                             <tr>
                                                 <td>{{ $user->username }}</td>
-                                                <td>{{ $user->role }}</td>
+                                                <td>{{ $user->role->name ?? ' ' }}</td>
                                                 <td class="d-flex">
                                                     <button type="button" class="btn" data-bs-toggle="modal"
                                                         data-bs-target="#updateUser_{{ $user->id }}">
@@ -190,13 +221,13 @@
                                                                 <div class="mb-3">
                                                                     <label for="field_name" class="form-label">
                                                                         Choose Role</label>
-                                                                    <select id="role" name="role"
+                                                                    <select id="role_id" name="role_id"
                                                                         class="form-control"
                                                                         required>
                                                                         <option value="" selected disabled>Choose
                                                                             Role:</option>
                                                                             @foreach ($roles as $role) {{-- Menggunakan $roles untuk menampilkan semua role --}}
-                                                                            <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                                                            <option value="{{ $role->id }}">{{ $role->name }} {{ $role->id }}</option>
                                                                         @endforeach
                                                                     </select>
                                                                 </div>
@@ -266,10 +297,10 @@
                                                     <div class="mb-3">
                                                         <label for="field_name" class="form-label">
                                                             Choose Role</label>
-                                                        <select id="role" name="role" class="form-control" required>
+                                                        <select id="role_id" name="role_id" class="form-control" required>
                                                             <option value="" selected disabled>Choose Role:</option>
                                                             @foreach ($roles as $role) {{-- Menggunakan $roles untuk menampilkan semua role --}}
-                                                                <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                                                <option value="{{ $role->id }}">{{ $role->name }}</option> {{-- Pastikan value di sini benar --}}
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -333,7 +364,7 @@
                 </div>
             </div>
     </x-layout>
-@else
+{{-- @else
     <p>Mo Ngapain Bang</p>
     <a href="/">Balek sana bang</a>
-@endif
+@endif --}}

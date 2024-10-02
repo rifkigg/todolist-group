@@ -126,8 +126,8 @@ class TaskController extends Controller
         $total_task = Task::count();
 
         // Pastikan pengguna terautentikasi
-        if (auth()->check()) {
-            $user = auth()->user(); // Ambil pengguna yang terautentikasi
+        if (Auth::check()) {
+            $user = Auth::user(); // Ambil pengguna yang terautentikasi
             $userRole = $user->role; // Ambil role pengguna
 
             $boards = $board->map(function ($board) use ($userRole, $user) {
@@ -195,7 +195,7 @@ class TaskController extends Controller
         ]);
 
         // Tambahkan created_by ke data yang akan disimpan
-        $validatedData['created_by'] = auth()->user()->username; // atau auth()->user()->id jika menggunakan ID
+        $validatedData['created_by'] = Auth::user()->username; // atau auth()->user()->id jika menggunakan ID
 
         // Simpan tugas
         $task = Task::create($validatedData);
@@ -219,7 +219,7 @@ class TaskController extends Controller
             'assignees' => 'array',
             'assignees.*' => 'integer',
         ]);
-        $validatedData['created_by'] = auth()->user()->username;
+        $validatedData['created_by'] = Auth::user()->username;
 
         $task = Task::create($validatedData);
         // Simpan relasi ke task_user
@@ -285,7 +285,7 @@ class TaskController extends Controller
         $task = Task::where('name', $taskName)->first();
 
         // Pause all other tasks and save their time
-        $playingTasks = app(TaskController::class)->getTasksByUser(auth()->id());
+        $playingTasks = app(TaskController::class)->getTasksByUser(Auth::id());
         // app(TaskController::class)->getTasksByUser(auth()->id());
         // Task::where('timer_status', 'Playing')->get();
         foreach ($playingTasks as $playingTask) {
@@ -348,9 +348,7 @@ class TaskController extends Controller
             $totalTime = History::calculateTotalTime($task->name);
             $startOfDay = Carbon::today()->startOfDay();
             $endOfDay = Carbon::today()->endOfDay();
-            $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
             $task->totalTime = $totalTime;
-            $task->remainingTime = $remainingTime;
             $task->isPlaying = $task->timer_status == 'Playing';
             $task->isPaused = $task->timer_status == 'Paused';
             return $task;

@@ -1,9 +1,5 @@
 <?php
 
-use App\Models\task;
-use App\Models\User;
-use App\Models\board;
-use App\Models\project;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\BoardController;
@@ -23,6 +19,9 @@ use App\Http\Controllers\ProjectCategoriesController;
 use App\Http\Controllers\TaskInProjectController;
 use App\Http\Controllers\TaskPerUserController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\RolePermissionController;
+use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\UserPermissionController;
 use App\Http\Controllers\RoleController;
 use App\Models\TaskChecklist;
 
@@ -148,12 +147,29 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/projects/{id}/tasks', [TaskInProjectController::class, 'show'])->name('projects.tasks'); // Tambahkan route untuk menampilkan task dalam project
     Route::get('/tasks/users/{id}', [TaskPerUserController::class, 'show'])->name('tasks.perUser.show');
 
-    Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
-    Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
-    Route::get('/roles/{id}/edit', [RoleController::class, 'edit'])->name('roles.edit');
-    Route::put('/roles/{id}', [RoleController::class, 'update'])->name('roles.update');
-    Route::delete('/roles/{id}', [RoleController::class, 'destroy'])->name('roles.destroy');
-    Route::get('/roles/create', [RoleController::class, 'create'])->name('roles.create');
+    // Route::get('/roles', [RoleController::class, 'index'])->name('roles.index');
+    // Route::post('/roles', [RoleController::class, 'store'])->name('roles.store');
+    // Route::get('/roles/{id}/edit', [RoleController::class, 'edit'])->name('roles.edit');
+    // Route::put('/roles/{id}', [RoleController::class, 'update'])->name('roles.update');
+    // Route::delete('/roles/{id}', [RoleController::class, 'destroy'])->name('roles.destroy');
+    // Route::get('/roles/create', [RoleController::class, 'create'])->name('roles.create');
+
+    Route::get('/roles', [RolePermissionController::class, 'index'])->name('roles.index');
+    Route::post('/roles', [RolePermissionController::class, 'store'])->name('roles.store');
+    Route::post('/roles/assign-permission', [RolePermissionController::class, 'assignPermission'])->name('roles.assign-permission');
+    Route::get('/roles/{id}/permissions', [RolePermissionController::class, 'edit'])->name('roles.permissions.edit');
+    Route::post('/roles/{id}/permissions', [RolePermissionController::class, 'update'])->name('roles.permissions.update');
+
+    Route::get('/permissions', [PermissionController::class, 'index'])->name('permissions.index');
+    Route::get('/permissions/create', [PermissionController::class, 'create'])->name('permissions.create');
+    Route::post('/permissions', [PermissionController::class, 'store'])->name('permissions.store');
+    Route::get('/permissions/{permission}/edit', [PermissionController::class, 'edit'])->name('permissions.edit');
+    Route::put('/permissions/{permission}', [PermissionController::class, 'update'])->name('permissions.update');
+    Route::delete('/permissions/{permission}', [PermissionController::class, 'destroy'])->name('permissions.destroy');
+
+    Route::get('/users', [UserPermissionController::class, 'index'])->name('users.index');
+    Route::get('/users/{user}/edit-permissions', [UserPermissionController::class, 'editPermissions'])->name('users.edit-permissions');
+    Route::put('/users/{user}/update-permissions', [UserPermissionController::class, 'updatePermissions'])->name('users.update-permissions');
 });
 
 require __DIR__ . '/auth.php';

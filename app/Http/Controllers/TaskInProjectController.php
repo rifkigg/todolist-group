@@ -30,7 +30,7 @@ class TaskInProjectController extends Controller
             $tasks = Task::where('project_id', $id)->get();
         } else {
             // Ambil task sesuai dengan akun pengguna
-            $tasks = app(DashboardController::class)->getTasksByUser(auth()->id());
+            $tasks = app(DashboardController::class)->getTasksByUser(Auth::id());
         }
 
         // Hitung waktu dari 00:00:00 dan tambahkan totalTime

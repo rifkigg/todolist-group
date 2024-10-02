@@ -4,13 +4,15 @@
     <div id="wrapper">
         <x-navbar>
             <x-slot name="dashboard">
-                <li class="nav-item ">
-
-                    <a class="nav-link " href="/dashboard">
-                        <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Dashboard</span></a>
-                </li>
-                @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                @if (auth()->user()->role && in_array('viewDashboard', auth()->user()->role->permissions->pluck('name')->toArray()))
+                    <li class="nav-item active">
+                        <a class="nav-link active" href="/dashboard">
+                            <i class="fas fa-fw fa-tachometer-alt"></i>
+                            <span>Dashboard</span></a>
+                    </li>
+                @else
+                @endif
+                @if (auth()->user()->role && in_array('viewOnGoing', auth()->user()->role->permissions->pluck('name')->toArray()))
                     <li class="nav-item">
                         <a class="nav-link" href="{{ route('ongoing.index') }}" aria-bs-expanded="true"
                             aria-bs-controls="collapseTwo">
@@ -20,16 +22,20 @@
                     </li>
                 @else
                 @endif
+
             </x-slot>
-            <li class="nav-item">
-                <a class="nav-link active" href="/boards">
-                    <i class="fa-solid fa-chess-board"></i>
-                    <span>Boards</span>
-                </a>
-            </li>
+            @if (auth()->user()->role && in_array('viewBoard', auth()->user()->role->permissions->pluck('name')->toArray()))
+                <li class="nav-item">
+                    <a class="nav-link active" href="/boards">
+                        <i class="fa-solid fa-chess-board"></i>
+                        <span>Boards</span>
+                    </a>
+                </li>
+            @else
+            @endif
 
 
-            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+            @if (auth()->user()->role && in_array('viewProject', auth()->user()->role->permissions->pluck('name')->toArray()))
                 <li class="nav-item ">
                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseTwo"
                         aria-bs-expanded="true" aria-bs-controls="collapseTwo">
@@ -40,35 +46,57 @@
                         data-bs-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
                             <a class="collapse-item " href="{{ route('project.index') }}">Project</a>
-                            <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
-                            <a class="collapse-item " href="{{ route('projectcategories.index') }}">Categories</a>
-                            <a class="collapse-item" href="{{ route('project_status.index') }}">Project Status</a>
+                            @if (auth()->user()->role && in_array('addProject', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                <a class="collapse-item" href="{{ route('project.create') }}">Add New</a>
+                            @else
+                            @endif
+                            @if (auth()->user()->role &&
+                                    in_array('viewProjectCategories', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                <a class="collapse-item " href="{{ route('projectcategories.index') }}">Categories</a>
+                            @else
+                            @endif
+                            @if (auth()->user()->role && in_array('viewProjectStatus', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                <a class="collapse-item" href="{{ route('project_status.index') }}">Project Status</a>
+                            @else
+                            @endif
                         </div>
                     </div>
                 </li>
+            @else
             @endif
-            <li class="nav-item ">
-                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseThree"
-                    aria-bs-expanded="true" aria-bs-controls="collapseTwo">
-                    <i class="fas fa-clipboard-list"></i>
-                    <span>Task</span>
-                </a>
-                <div id="collapseThree" class="collapse" aria-labelledby="headingTwo"
-                    data-bs-parent="#accordionSidebar">
-                    <div class="bg-white py-2 collapse-inner rounded">
-                        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
-                            <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
-                            <a class="collapse-item" href="{{ route('task_status.index') }}">Task Status</a>
-                            <a class="collapse-item " href="{{ route('priorities.index') }}">Task Priorities</a>
-                            <a class="collapse-item" href="{{ route('labels.index') }}">Task Labels/Tags</a>
-                        @else
-                            <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
-                        @endif
+            @if (auth()->user()->role && in_array('viewTask', auth()->user()->role->permissions->pluck('name')->toArray()))
+                <li class="nav-item ">
+                    <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
+                        data-bs-target="#collapseThree" aria-bs-expanded="true" aria-bs-controls="collapseTwo">
+                        <i class="fas fa-clipboard-list "></i>
+                        <span>Task</span>
+                    </a>
+                    <div id="collapseThree" class="collapse" aria-labelledby="headingTwo"
+                        data-bs-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            @if (auth()->user()->role && in_array('viewTask', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                <a class="collapse-item " href="{{ route('task.index') }}">Task</a>
+                            @else
+                            @endif
+                            @if (auth()->user()->role && in_array('viewTaskStatus', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                <a class="collapse-item" href="{{ route('task_status.index') }}">Task Status</a>
+                            @else
+                            @endif
+                            @if (auth()->user()->role && in_array('viewTaskPriorities', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                <a class="collapse-item " href="{{ route('priorities.index') }}">Task Priorities</a>
+                            @else
+                            @endif
+                            @if (auth()->user()->role && in_array('viewTaskLabels', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                <a class="collapse-item" href="{{ route('labels.index') }}">Task Labels/Tags</a>
+                            @else
+                            @endif
+                        </div>
                     </div>
-                </div>
-            </li>
-            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
-                <li class="nav-item active">
+                </li>
+            @else
+            @endif
+            @if (auth()->user()->role && in_array('viewManageUser', auth()->user()->role->permissions->pluck('name')->toArray()))
+                <li class="nav-item ">
                     <a class="nav-link collapsed" href="#" data-bs-toggle="collapse"
                         data-bs-target="#collapseManageUser" aria-bs-expanded="true"
                         aria-bs-controls="collapseManageUser">
@@ -78,9 +106,12 @@
                     <div id="collapseManageUser" class="collapse" aria-labelledby="collapseManageUser"
                         data-bs-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                            @if (auth()->user()->role && in_array('viewManageUser', auth()->user()->role->permissions->pluck('name')->toArray()))
                                 <a class="collapse-item" href="{{ route('manage_user.index') }}">Manage User</a>
-                                <a class="collapse-item active" href="{{ route('roles.index') }}">Add Role</a>
+                            @else
+                            @endif
+                            @if (auth()->user()->role && in_array('viewRole', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                <a class="collapse-item" href="{{ route('roles.index') }}">Add Role</a>
                             @else
                             @endif
                         </div>
@@ -102,7 +133,7 @@
 
                 <!-- Begin Page Content -->
                 <div class="container-fluid">
-                    <div class="card shadow mb-4">
+                    {{-- <div class="card shadow mb-4">
                         <div class="card-header py-3">
                             <h6 class="m-0 font-weight-bold text-primary">Create Role</h6>
                         </div>
@@ -198,6 +229,99 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div> --}}
+                    <div class="container">
+                        <h2>Manajemen Role & Permission</h2>
+                    
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4>Tambah Role Baru</h4>
+                                <form action="{{ route('roles.store') }}" method="POST">
+                                    @csrf
+                                    <div class="form-group">
+                                        <label for="name">Nama Role</label>
+                                        <input type="text" name="name" class="form-control" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Tambah Role</button>
+                                </form>
+                            </div>
+                    
+                            <div class="col-md-6">
+                                <h4>Berikan Permission ke Role</h4>
+                                <form action="{{ route('roles.assign-permission') }}" method="POST">
+                                    @csrf
+                                    <div class="form-group">
+                                        <label for="role_id">Role</label>
+                                        <select name="role_id" class="form-control" required>
+                                            @foreach($roles as $role)
+                                                <option value="{{ $role->id }}">{{ $role->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                    
+                                    <div class="form-group">
+                                        <label for="permission_id">Permission</label>
+                                        <select name="permission_id" class="form-control" required>
+                                            @foreach($permissions as $permission)
+                                                <option value="{{ $permission->id }}">{{ $permission->name }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                    
+                                    <button type="submit" class="btn btn-success">Assign Permission</button>
+                                </form>
+                            </div>
+                        </div>
+                    
+                        <div class="row mt-4">
+                            <div class="col-md-6">
+                                <h4>Tambah Permission Baru</h4>
+                                <form action="{{ route('permissions.store') }}" method="POST">
+                                    @csrf
+                                    <div class="form-group">
+                                        <label for="name">Nama Permission</label>
+                                        <input type="text" name="name" class="form-control" required>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Tambah Permission</button>
+                                </form>
+                            </div>
+                    
+                            <div class="col-md-6">
+                                <h4>Daftar Role dan Permissions</h4>
+                                <ul class="list-group">
+                                    @foreach($roles as $role)
+                                        <li class="list-group-item">
+                                            <strong>{{ $role->name }}</strong>
+                                            <ul>
+                                                @foreach($role->permissions as $permission)
+                                                    <li>{{ $permission->name }}</li>
+                                                @endforeach
+                                            </ul>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Nama Role</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach($roles as $role)
+                                            <tr>
+                                                <td>{{ $role->name }}</td>
+                                                <td>
+                                                    <a href="{{ route('roles.permissions.edit', $role->id) }}" class="btn btn-warning">Edit Permissions</a>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <a href="{{ route('permissions.index') }}" class="btn btn-primary">Permission</a>
+                        <a href="{{ route('users.index') }}" class="btn btn-primary">users</a>
                     </div>
                 </div>
 

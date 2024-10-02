@@ -1,3 +1,4 @@
+{{-- @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer') --}}
     <x-layout>
         <!-- Page Wrapper -->
         <div id="wrapper">
@@ -132,72 +133,46 @@
 
                     <!-- Begin Page Content -->
                     <div class="container-fluid">
-
-
-                        <div class="card shadow">
-                            <div class="card-header">
-                                <h6 class="m-0 font-weight-bold text-primary">On Going</h6>
-                            </div>
-                            <div class="card-body">
-                                @if (count($activeTasks) > 0)
-                                    <table id="example" class="table table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th>Username</th>
-                                                <th>Task</th>
-                                                <th>Status</th>
-                                                <th>Duration</th>
-                                                <th>Task Created</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            @foreach ($activeTasks as $activeTask)
-                                                <tr>
-                                                    <td><a href="{{ route('tasks.perUser.show', ['id' => $activeTask['user_id']]) }}" class="fw-bold">{{ $activeTask['user'] }}</a></td> <!-- Ubah username menjadi link -->
-                                                    <td>{{ $activeTask['task'] }}</td>
-                                                    <td>
-                                                        @if (!$activeTask['status'] == null)
-                                                            @if ($activeTask['status'] == 'Paused')
-                                                                <p class="badge bg-secondary">Paused</p>
-                                                            @elseif ($activeTask['status'] == 'Playing')
-                                                                <p class="badge bg-warning">Playing</p>
-                                                            @else
-                                                                <p class="badge bg-success">Finished</p>
-                                                            @endif
-                                                        @else
-                                                        @endif
-                                                    </td>
-                                                    {{-- <td>
-                                                        @if (!$activeTask['total_time'] == null)
-                                                            {{ \Carbon\Carbon::parse($activeTask['total_time']['totaltime'])->format('H:i:s') }}
-                                                        @elseif ($activeTask['total_time']['totaltime'] == '0')
-                                                            <p>00:00:00</p>
-                                                        @else   
-                                                        @endif  
-                                                    </td> --}}
-                                                    <td>
-                                                        @if($activeTask['total_time'])
-                                                            {{ \Carbon\Carbon::createFromTimestamp($activeTask['total_time']['totalTime'])->format('H:i:s') }}<br> <!-- Format totalTime menjadi hh:mm:ss -->
-                                                            
-                                                        @else
-                                                            
-                                                        @endif
-                                                    </td>
-                                                    <td>{{ $activeTask['created_at'] }} </td>
-                                                </tr>
-                                            @endforeach
-                                        </tbody>
-                                    </table>
-                                @else
-                                    <p>Tidak ada tugas yang sedang dimainkan.</p>
-                                @endif
-                            </div>
+                        <div class="container">
+                            <h2>Daftar Permissions</h2>
+                        
+                            @if (session('success'))
+                                <div class="alert alert-success">
+                                    {{ session('success') }}
+                                </div>
+                            @endif
+                        
+                            <a href="{{ route('permissions.create') }}" class="btn btn-primary mb-3">Tambah Permission</a>
+                        
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Nama Permission</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach($permissions as $permission)
+                                        <tr>
+                                            <td>{{ $permission->name }}</td>
+                                            <td>
+                                                <a href="{{ route('permissions.edit', $permission->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                        
+                                                <form action="{{ route('permissions.destroy', $permission->id) }}" method="POST" style="display:inline-block;">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Anda yakin ingin menghapus permission ini?')">Hapus</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                    @endforeach
+                                </tbody>
+                            </table>
                         </div>
+                        
                     </div>
                     <!-- End of Main Content -->
 
-
-                    <!-- End of Content Wrapper -->
 
                 </div>
                 <!-- End of Content Wrapper -->
@@ -211,8 +186,8 @@
             </a>
 
             <!-- Logout Modal-->
-            <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
+            <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog" role="document">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -231,3 +206,7 @@
                 </div>
             </div>
     </x-layout>
+{{-- @else
+    <p>Mo Ngapain Bang</p>
+    <a href="/">Balek sana bang</a>
+@endif --}}
