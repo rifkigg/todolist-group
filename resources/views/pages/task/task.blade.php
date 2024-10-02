@@ -246,60 +246,50 @@
                                             <td>{{ $item->name }}</td>
                                             <td>{{ $item->project->name ?? ' ' }}</td>
                                             <td>{{ $item->status->name ?? ' ' }}</td>
-                                            <td title="{{ $item->priority->name ?? ' ' }}" style="cursor: default">
-                                                {{ $item->priority->icon ?? ' ' }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($item->due_date)->format('d/m/Y H:i:s') }}
+                                            <td title="{{ $item->priority->name ?? ' ' }}" style="">
+                                                @if (filter_var($item->priority->icon, FILTER_VALIDATE_URL))
+                                                    <img src="{{ asset($item->priority->icon) }}" alt="{{ $item->priority->name ?? ' ' }}" class="icon-size" />
+                                                @else
+                                                    <span>{{ $item->priority->icon }}</span>
+                                                @endif
                                             </td>
+                                            <td>{{ \Carbon\Carbon::parse($item->due_date)->format('d/m/Y H:i:s') }}</td>
                                             <td>{{ $item->created_by ?? ' ' }}</td>
-                                            <td>{{ \Carbon\Carbon::parse($item->created_at)->setTimezone('Asia/Jakarta')->format('d/m/Y H:i:s') }}
-                                            </td>
+                                            <td>{{ \Carbon\Carbon::parse($item->created_at)->setTimezone('Asia/Jakarta')->format('d/m/Y H:i:s') }}</td>
                                             <td>
                                                 <div class="dropdown">
-                                                    <button class="btn" type="button" id="dropdownMenuButton"
-                                                        data-bs-toggle="dropdown" aria-expanded="false">
+                                                    <button class="btn" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
                                                         <i class="fa-solid fa-ellipsis fa-2xl"></i>
                                                     </button>
                                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                        @if (auth()->user()->role == 'admin' ||
-                                                                auth()->user()->role == 'manajer' ||
-                                                                auth()->user()->username == $item->created_by)
+                                                        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer' || auth()->user()->username == $item->created_by)
                                                             <li>
-                                                                <a class="dropdown-item" href="#"
-                                                                    onclick="event.preventDefault(); document.getElementById('duplicate-form-{{ $item->id }}').submit();">
+                                                                <a class="dropdown-item" href="#" onclick="event.preventDefault(); document.getElementById('duplicate-form-{{ $item->id }}').submit();">
                                                                     <i class="icon-action fa-solid fa-copy"></i>
                                                                     Duplicate
                                                                 </a>
                                                             </li>
-                                                            <form id="duplicate-form-{{ $item->id }}"
-                                                                action="{{ route('task.duplicate', $item->id) }}"
-                                                                method="POST" class="d-none">
+                                                            <form id="duplicate-form-{{ $item->id }}" action="{{ route('task.duplicate', $item->id) }}" method="POST" class="d-none">
                                                                 @csrf
                                                             </form>
                                                             <li>
-                                                                <button type="button" class="dropdown-item"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#view-{{ $item->id }}">
+                                                                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-{{ $item->id }}">
                                                                     <i class="fa-solid fa-pen-to-square"></i> Edit
                                                                 </button>
                                                             </li>
                                                             <li>
-                                                                <form action="{{ route('task.destroy', $item->id) }}"
-                                                                    method="POST" class="d-inline"
-                                                                    onsubmit="return confirm('Are you sure you want to delete this item?');">
+                                                                <form action="{{ route('task.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this item?');">
                                                                     @csrf
                                                                     @method('DELETE')
                                                                     <button type="submit" class="dropdown-item">
-                                                                        <i
-                                                                            class="icon-action fa-solid fa-trash-can"></i>
+                                                                        <i class="icon-action fa-solid fa-trash-can"></i>
                                                                         Delete
                                                                     </button>
                                                                 </form>
                                                             </li>
                                                         @else
                                                             <li>
-                                                                <button type="button" class="dropdown-item"
-                                                                    data-bs-toggle="modal"
-                                                                    data-bs-target="#view-{{ $item->id }}">
+                                                                <button type="button" class="dropdown-item" data-bs-toggle="modal" data-bs-target="#view-{{ $item->id }}">
                                                                     <i class="icon-action fa-solid fa-eye"></i> View
                                                                 </button>
                                                             </li>
