@@ -1,5 +1,5 @@
+@if (auth()->user()->role && in_array('viewTaskLabels', auth()->user()->role->permissions->pluck('name')->toArray()))
 <x-layout>
-
     <!-- Page Wrapper -->
     <div id="wrapper">
         <x-navbar>
@@ -139,6 +139,7 @@
                             <h6 class="m-0 font-weight-bold text-primary">Add New Label</h6>
                         </div>
                         <div class="card-body">
+                            @if (auth()->user()->role && in_array('addTaskLabels', auth()->user()->role->permissions->pluck('name')->toArray()))
                             <form action="{{ route('labels.store') }}" method="POST" enctype="multipart/form-data">
                                 @csrf
                                 <div class="form-group">
@@ -148,6 +149,8 @@
                                 </div>
                                 <button type="submit" class="btn btn-primary">Add New Label</button>
                             </form>
+                        @else
+                        @endif
                             <hr>
                             <h6 class="m-0 font-weight-bold text-primary">Current Labels</h6>
                             <table id="example" class="table table-striped" id="dataTable" width="100%"
@@ -165,11 +168,14 @@
                                                 {{ $item->name }}
                                             </td>
                                             <td class='d-flex'>
+                                                @if (auth()->user()->role && in_array('editTaskLabels', auth()->user()->role->permissions->pluck('name')->toArray()))
                                                 <button type="button" class="btn" data-bs-toggle="modal"
                                                     data-bs-target="#editModal{{ $item->id }}">
                                                     <i class="icon-action fa-solid fa-pencil"></i>
                                                 </button>
-
+                                                @else
+                                                @endif
+                                                @if (auth()->user()->role && in_array('deleteTaskLabels', auth()->user()->role->permissions->pluck('name')->toArray()))
                                                 <form action="{{ route('labels.destroy', $item->id) }}" method="POST">
                                                     @csrf
                                                     @method('DELETE')
@@ -177,6 +183,8 @@
                                                         onclick="return confirm('Are you sure you want to delete this item?');">
                                                         <i class="icon-action fa-solid fa-trash-can"></i></button>
                                                 </form>
+                                                @else
+                                                @endif
                                             </td>
                                         </tr>
                                         <div class="modal fade" id="editModal{{ $item->id }}" tabindex="-1"
@@ -250,3 +258,7 @@
             </div>
         </div>
 </x-layout>
+@else
+<p>Mo Ngapain Bang</p>
+<a href="/">Balek sana bang</a>
+@endif

@@ -1,4 +1,5 @@
-    <x-layout>
+@if (auth()->user()->role && in_array('viewOnGoing', auth()->user()->role->permissions->pluck('name')->toArray()))
+<x-layout>
         <!-- Page Wrapper -->
         <div id="wrapper">
             <x-navbar>
@@ -241,4 +242,8 @@
                     </div>
                 </div>
             </div>
-    </x-layout>
+</x-layout>
+@else
+<p>Mo Ngapain Km bang</p>
+<a href="/">balek sana</a>
+@endif

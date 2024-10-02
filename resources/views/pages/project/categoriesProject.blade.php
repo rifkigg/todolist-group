@@ -168,10 +168,14 @@
                                             <td>{{ $category->name }}</td>
                                             {{-- <td hidden>{{ $category->slug }}</td> --}}
                                             <td>
+                                                @if (auth()->user()->role && in_array('editProjectCategories', auth()->user()->role->permissions->pluck('name')->toArray()))
                                                 <button type="button" class="btn" data-bs-toggle="modal"
                                                     data-bs-target="#editModal{{ $category->id }}">
                                                     <i class="icon-action fa-solid fa-pencil"></i>
                                                 </button>
+                                                @else
+                                                @endif
+                                                @if (auth()->user()->role && in_array('deleteProjectCategories', auth()->user()->role->permissions->pluck('name')->toArray()))
                                                 <form action="{{ route('projectcategories.destroy', $category->id) }}"
                                                     method="POST" style="display:inline;">
                                                     @csrf
@@ -180,6 +184,8 @@
                                                         onclick="return confirm('Are you sure you want to delete this item?');">
                                                         <i class="icon-action fa-solid fa-trash-can"></i></button>
                                                 </form>
+                                                @else
+                                                @endif
                                             </td>
                                         </tr>
                                         <div class="modal fade" id="editModal{{ $category->id }}" tabindex="-1"

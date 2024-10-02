@@ -225,7 +225,7 @@
                             <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
                         </div>
                         <div class="card-body">
-                            @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                            @if (auth()->user()->role && in_array('addProject', auth()->user()->role->permissions->pluck('name')->toArray()))
                                 <form action="{{ route('project.create') }}" method="GET">
                                     <button type="submit" class="btn btn-primary d-flex gap-2 align-items-center"><i
                                             class="fa-solid fa-circle-plus fa-lg"></i> Add New</button>
@@ -278,7 +278,8 @@
                                                     </button>
                                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 
-                                                        @if (auth()->user()->role == 'admin' || auth()->user()->role == 'manajer')
+                                                        @if (auth()->user()->role &&
+                                                                in_array('duplicateProject', auth()->user()->role->permissions->pluck('name')->toArray()))
                                                             <!-- Form untuk duplikasi -->
                                                             <form id="duplicate-form-{{ $item->id }}"
                                                                 action="{{ route('project.duplicate', $item->id) }}"
@@ -293,55 +294,52 @@
                                                                     Duplicate
                                                                 </a>
                                                             </li>
-                                                            <li>
-
-                                                                <!-- Ikon view -->
-                                                                <a href="{{ route('project.show', $item->id) }}"
-                                                                    class="btn dropdown-item">
-                                                                    <i class="icon-action fa-solid fa-eye"></i> Show
-                                                                    Project
-                                                                </a>
-                                                            </li>
-                                                            <li>
-
-                                                                <!-- Ikon edit -->
-                                                                <a href="{{ route('project.edit', $item->id) }}"
-                                                                    class="btn dropdown-item">
-                                                                    <i class="icon-action fa-solid fa-pencil"></i> Edit
-                                                                    Project
-                                                                </a>
-                                                            </li>
-                                                            
-                                                                <!-- Form untuk delete -->
-                                                                <li>
-                                                                    <a href="#" class="btn dropdown-item" onclick="event.preventDefault(); alert('Are you sure you want to delete this item?'); document.getElementById('delete-form-{{ $item->id }}').submit();">
-                                                                        <i
-                                                                            class="icon-action fa-solid fa-trash-can"></i>
-                                                                        Delete Project
-                                                                    </a>
-                                                                </li>
-                                                                <form
-                                                                    action="{{ route('project.destroy', $item->id) }}"
-                                                                    method="POST"
-                                                                    id="delete-form-{{ $item->id }}"
-                                                                    onsubmit="return confirm('Are you sure you want to delete this item?');"
-                                                                    class="d-inline dropdown-item">
-                                                                    @csrf
-                                                                    @method('DELETE')
-
-                                                                </form>
                                                         @else
-                                                            <li>
-
-                                                                <!-- Ikon view -->
-                                                                <a href="{{ route('project.show', $item->id) }}"
-                                                                    class="btn dropdown-item">
-                                                                    <i class="icon-action fa-solid fa-eye"></i> Show
-                                                                    Project
-                                                                </a>
-                                                            </li>
                                                         @endif
+                                                        @if (auth()->user()->role &&
+                                                                in_array('showProject', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                                        <li>
+                                                            <!-- Ikon view -->
+                                                            <a href="{{ route('project.show', $item->id) }}"
+                                                                class="btn dropdown-item">
+                                                                <i class="icon-action fa-solid fa-eye"></i> Show
+                                                                Project
+                                                            </a>
+                                                        </li>
+                                                        @else
+                                                        @endif
+                                                        @if (auth()->user()->role &&
+                                                                in_array('editProject', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                                        <li>
+                                                            <!-- Ikon edit -->
+                                                            <a href="{{ route('project.edit', $item->id) }}"
+                                                                class="btn dropdown-item">
+                                                                <i class="icon-action fa-solid fa-pencil"></i> Edit
+                                                                Project
+                                                            </a>
+                                                        </li>
+                                                        @else
+                                                        @endif
+                                                        @if (auth()->user()->role &&
+                                                                in_array('deleteProject', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                                        <!-- Form untuk delete -->
+                                                        <li>
+                                                            <a href="#" class="btn dropdown-item"
+                                                                onclick="event.preventDefault(); alert('Are you sure you want to delete this item?'); document.getElementById('delete-form-{{ $item->id }}').submit();">
+                                                                <i class="icon-action fa-solid fa-trash-can"></i>
+                                                                Delete Project
+                                                            </a>
+                                                        </li>
+                                                        <form action="{{ route('project.destroy', $item->id) }}"
+                                                            method="POST" id="delete-form-{{ $item->id }}"
+                                                            onsubmit="return confirm('Are you sure you want to delete this item?');"
+                                                            class="d-inline dropdown-item">
+                                                            @csrf
+                                                            @method('DELETE')
 
+                                                        </form>
+                                                        @else
+                                                        @endif
                                                     </ul>
                                                 </div>
 
