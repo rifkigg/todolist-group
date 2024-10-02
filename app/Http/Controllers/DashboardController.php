@@ -19,112 +19,99 @@ use Illuminate\Support\Facades\Auth;
 class DashboardController extends Controller
 {
     public function index(Request $request)
-    {
-        if (now('Asia/Jakarta')->hour === 0 && now('Asia/Jakarta')->minute === 0) { //jam 12 malam
-            // Tambahkan refresh halaman satu kali sebelum logout
-            echo "<script>
-                if (!sessionStorage.getItem('reloaded')) {
-                    sessionStorage.setItem('reloaded', 'true');
-                    location.reload();
-                }
-            </script>";
-            Auth::guard('web')->logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-            return redirect('/');
-        }
+{
+    if (now('Asia/Jakarta')->hour === 0 && now('Asia/Jakarta')->minute === 0) { //jam 12 malam
+        // Tambahkan refresh halaman satu kali sebelum logout
+        echo "<script>
+            if (!sessionStorage.getItem('reloaded')) {
+                sessionStorage.setItem('reloaded', 'true');
+                location.reload();
+            }
+        </script>";
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        return redirect('/');
+    }
 
-        // $user = Auth::user();
-        // if ($user->role) {
-        //     $rolePermissions = $user->role->permissions->pluck('name')->toArray(); // Mendapatkan permissions dari role
-        //     // Tambahkan kondisi untuk memeriksa izin viewAny
-        //     if (in_array('viewAny', $rolePermissions)) {
-        //         // Tampilkan permissions yang dimiliki oleh user
-        //         return response()->json([
-        //             'username' => $user->username,
-        //             'permissions' => $rolePermissions
-        //         ]); // Mengembalikan data dalam format JSON
-        //     }
-        // }
-        
-        
-        
-        
+    $project = Project::all();
+    $board = Board::all();
+    $status = TaskStatus::all();
+    $priority = TaskPriority::all();
+    $label = TaskLabel::all();
+    $users = User::all();
 
-        $project = Project::all();
-        $board = Board::all();
-        $status = TaskStatus::all();
-        $priority = TaskPriority::all();
-        $label = TaskLabel::all();
-        $users = User::all();
-
-        
+    $user = Auth::user();
+    
+    if ($user->role->name == 'admin') {
+        // Ambil semua tugas jika pengguna adalah admin
+        $tasks = Task::with(['users', 'project', 'priority'])->get();
+    } else {
         // Ambil tasks yang ditugaskan ke user yang sedang login
-        $tasks = app(DashboardController::class)->getTasksByUser(Auth::id())
-        ->sortBy(function ($task) {
-            return Carbon::parse($task->due_date);
-        })
-        ;
-        // $tasks = app(DashboardController::class)->getTasksByUser(auth()->id());
-        $projects = app(ProjectController::class)->getProjectByUser(Auth::id());
-        $total_tasknya = $tasks->count();
-        $total_selesai = $tasks->where('timer_status', 'Finished')->count();
-        $total_belum_selesai = $tasks->where('timer_status', '!=', 'Finished')->count();
+        $tasks = $this->getTasksByUser($user->id)
+            ->sortBy(function ($task) {
+                return Carbon::parse($task->due_date);
+            });
+    }
 
-        // Cek apakah $total_tasknya tidak nol sebelum melakukan pembagian
-        if ($total_tasknya > 0) {
-            $persenan = ($total_selesai / $total_tasknya) * 100;
-        } else {
-            $persenan = 0;
-        }
-        $format_persenan = number_format($persenan, 0);
+    $projects = app(ProjectController::class)->getProjectByUser($user->id);
+    $total_tasknya = $tasks->count();
+    $total_selesai = $tasks->where('timer_status', 'Finished')->count();
+    $total_belum_selesai = $tasks->where('timer_status', '!=', 'Finished')->count();
 
-        $totalTime = 0; // Inisialisasi total waktu sebagai angka
+    // Cek apakah $total_tasknya tidak nol sebelum melakukan pembagian
+    if ($total_tasknya > 0) {
+        $persenan = ($total_selesai / $total_tasknya) * 100;
+    } else {
+        $persenan = 0;
+    }
+    $format_persenan = number_format($persenan, 0);
 
-        if ($tasks->isNotEmpty()) {
-            foreach ($tasks as $task) {
-                $taskTime = History::calculateTotalTime($task->name); // Hitung waktu total untuk tiap task
-                // dd($task->name, $taskTime); // Debugging
-                if (is_numeric($taskTime)) {
-                    $totalTime += $taskTime; // Tambahkan ke total waktu
-                }
+    $totalTime = 0; // Inisialisasi total waktu sebagai angka
+
+    if ($tasks->isNotEmpty()) {
+        foreach ($tasks as $task) {
+            $taskTime = History::calculateTotalTime($task->name); // Hitung waktu total untuk tiap task
+            if (is_numeric($taskTime)) {
+                $totalTime += $taskTime; // Tambahkan ke total waktu
             }
         }
+    }
 
-        // Hitung waktu dari 00:00:00 dan tambahkan totalTime
+    // Hitung waktu dari 00:00:00 dan tambahkan totalTime
+    $startOfDay = Carbon::today()->startOfDay();
+    $endOfDay = Carbon::today()->endOfDay();
+    $remainingTime = max(0, $endOfDay->diffInSeconds($startOfDay) - $totalTime); // Pastikan tidak negatif
+
+    $tasksWithTime = $tasks->map(function ($task) {
+        $timeData = History::calculateTotalTime($task->name); // Ambil totalTime dan elapsedTime
+        $totalTime = $timeData['totalTime'];
+        $elapsedTime = $timeData['elapsedTime'];
+
         $startOfDay = Carbon::today()->startOfDay();
         $endOfDay = Carbon::today()->endOfDay();
-        $remainingTime = max(0, $endOfDay->diffInSeconds($startOfDay) - $totalTime); // Pastikan tidak negatif
+        $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
 
-        $tasksWithTime = $tasks->map(function ($task) {
-            $timeData = History::calculateTotalTime($task->name); // Ambil totalTime dan elapsedTime
-            $totalTime = $timeData['totalTime'];
-            $elapsedTime = $timeData['elapsedTime'];
+        $task->remainingTime = $remainingTime; // Waktu tersisa dalam detik
+        $task->elapsed_time = $elapsedTime; // Waktu yang telah berlalu dalam detik
+        $task->totalTime = $totalTime + $elapsedTime; // Total waktu dalam detik
+        $task->isPlaying = $task->timer_status == 'Playing';
+        $task->isPaused = $task->timer_status == 'Paused';
+        return $task;
+    });
 
-            $startOfDay = Carbon::today()->startOfDay();
-            $endOfDay = Carbon::today()->endOfDay();
-            $remainingTime = $endOfDay->diffInSeconds($startOfDay) - $totalTime;
+    $total_project = $projects->count();
+    $total_task = $tasks->count();
+    // Mengirim data ke view
+    return view('pages.dashboard', compact('total_belum_selesai', 'total_project', 'total_task', 'tasks', 'total_tasknya', 'total_selesai', 'format_persenan', 'board', 'project', 'status', 'priority', 'label', 'users', 'totalTime', 'remainingTime', 'tasksWithTime'));
+}
 
-            $task->remainingTime = $remainingTime; // Waktu tersisa dalam detik
-            $task->elapsed_time = $elapsedTime; // Waktu yang telah berlalu dalam detik
-            $task->totalTime = $totalTime + $elapsedTime; // Total waktu dalam detik
-            $task->isPlaying = $task->timer_status == 'Playing';
-            $task->isPaused = $task->timer_status == 'Paused';
-            return $task;
-        });
+public function getTasksByUser($userId)
+{
+    $tasks = Task::whereHas('users', function ($query) use ($userId) {
+        $query->where('user_id', $userId);
+    })->get();
 
-        $total_project = $projects->count();
-        $total_task = $tasks->count();
-        // Mengirim data ke view
-        return view('pages.dashboard', compact('total_belum_selesai', 'total_project', 'total_task', 'tasks', 'total_tasknya', 'total_selesai', 'format_persenan', 'board', 'project', 'status', 'priority', 'label', 'users', 'totalTime', 'remainingTime', 'tasksWithTime'));
-    }
-
-    public function getTasksByUser($userId)
-    {
-        $tasks = Task::whereHas('users', function ($query) use ($userId) {
-            $query->where('user_id', $userId);
-        })->get();
-
-        return $tasks;
-    }
+    return $tasks;
+ }
 }

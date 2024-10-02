@@ -152,6 +152,16 @@ class UserSeeder extends Seeder
                 'name' => 'showTaskInDashboard',
                 'guard_name' => 'web',
             ],
+            [
+                'id' => 42,
+                'name' => 'viewAllTask',
+                'guard_name' => 'web',
+            ],
+            [
+                'id' => 43,
+                'name' => 'viewTaskPerUser',
+                'guard_name' => 'web',
+            ],
         ]);
 
         DB::table('role_has_permissions')->insert([
@@ -196,6 +206,8 @@ class UserSeeder extends Seeder
             ['permission_id' => 39, 'role_id' => 1],
             ['permission_id' => 40, 'role_id' => 1],
             ['permission_id' => 41, 'role_id' => 1],
+            ['permission_id' => 42, 'role_id' => 1],
+            ['permission_id' => 43, 'role_id' => 1],
         ]);
     }
 }
