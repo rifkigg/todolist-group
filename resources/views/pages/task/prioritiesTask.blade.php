@@ -259,7 +259,7 @@
                                                                 <input type="text" class="form-control" id="name{{ $priority->id }}" name="name" value="{{ old('name', $priority->name) }}">
                                                                 <label for="field_icon" class="form-label">Field Icon</label>
                                                                 <div class="icon-selection">
-                                                                    <div class="icon-options">
+                                                                    <div class="icon-options mt-2">
                                                                         <button type="button" class="btn btn-outline-primary mb-1" name="icon" value="😊" onclick="selectIcon('😊', '{{ $priority->id }}')">
                                                                             😊
                                                                         </button>
@@ -272,9 +272,6 @@
                                                                         <button type="button" class="btn btn-outline-primary mb-1" name="icon" value="🚀" onclick="selectIcon('🚀', '{{ $priority->id }}')">
                                                                             🚀
                                                                         </button>
-                                                                        <!-- Add more emoji buttons as needed -->
-                                                                    </div>
-                                                                    <div class="icon-options mt-2">
                                                                         <button type="button" class="btn btn-outline-primary mb-1" name="icon" value="{{ asset('assets/img/lowmeter.png') }}" onclick="selectIcon('{{ asset('assets/img/lowmeter.png') }}', '{{ $priority->id }}')">
                                                                             <img src="{{ asset('assets/img/lowmeter.png') }}" alt="Low Meter Icon" class="icon-size" />
                                                                         </button>
