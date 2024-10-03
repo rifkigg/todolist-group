@@ -13,10 +13,10 @@
 
                 <!-- Email Address or Username -->
                 <div>
-                    <label for="login" class="form-label">Username or Email</label>
+                    <x-input-label for="login" class="form-label" :value="__('Email or Username')" />
                     <input id="login" type="text" name="login"
                         class="form-control @error('login') is-invalid @enderror" value="{{ old('login') }}" required
-                        autofocus>
+                        placeholder="Example@example.com" />
                     @error('login')
                         <span class="invalid-feedback">{{ $message }}</span>
                     @enderror
@@ -28,7 +28,7 @@
                     <x-input-label for="password" :value="__('Password')" />
 
                     <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required
-                        autocomplete="current-password" />
+                        autocomplete="current-password" placeholder="Enter your password" />
 
                     <x-input-error :messages="$errors->get('password')" class="mt-2" />
                 </div>
