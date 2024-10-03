@@ -14,19 +14,20 @@
                 @if (auth()->user()->role && in_array('viewOnGoing', auth()->user()->role->permissions->pluck('name')->toArray()))
                     <li class="nav-item active">
                         <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOne"
-                            aria-bs-expanded="true" aria-bs-controls="collapseOne">
-                            <i class="fa-solid fa-hourglass-half"></i>
-                            <span>On Going</span>
-                        </a>
-                        <div id="collapseOne" class="collapse" aria-labelledby="headingTwo"
-                            data-bs-parent="#accordionSidebar">
-                            <div class="bg-white py-2 collapse-inner rounded">
-                                <a class="collapse-item " href="{{ route('ongoing.index') }}">On Going</a>
-                                @if (auth()->user()->role && in_array('addProject', auth()->user()->role->permissions->pluck('name')->toArray()))
-                                    <a class="collapse-item" href="{{ route('ongoing.index') }}">Deadline</a>
-                                @endif
-                            </div>
+                        aria-bs-expanded="true" aria-bs-controls="collapseOne">
+                        <i class="fa-solid fa-hourglass-half"></i>
+                        <span>On Going</span>
+                    </a>
+                    <div id="collapseOne" class="collapse" aria-labelledby="headingTwo"
+                        data-bs-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item " href="{{ route('ongoing.index') }}">On Going</a>
+                            @if (auth()->user()->role && in_array('viewDeadline', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                <a class="collapse-item active" href="{{ route('ongoingdeadline.index') }}">Deadline</a>
+                            @else
+                            @endif
                         </div>
+                    </div>
                     </li>
                 @endif
             </x-slot>

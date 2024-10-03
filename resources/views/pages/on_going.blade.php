@@ -23,9 +23,9 @@
                             <div id="collapseOne" class="collapse" aria-labelledby="headingTwo"
                                 data-bs-parent="#accordionSidebar">
                                 <div class="bg-white py-2 collapse-inner rounded">
-                                    <a class="collapse-item " href="{{ route('ongoing.index') }}">On Going</a>
-                                    @if (auth()->user()->role && in_array('addProject', auth()->user()->role->permissions->pluck('name')->toArray()))
-                                        <a class="collapse-item" href="{{ route('ongoingdeadline.index') }}">Deadline</a>
+                                    <a class="collapse-item active  " href="{{ route('ongoing.index') }}">On Going</a>
+                                    @if (auth()->user()->role && in_array('viewDeadline', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                        <a class="collapse-item " href="{{ route('ongoingdeadline.index') }}">Deadline</a>
                                     @else
                                     @endif
                                 </div>

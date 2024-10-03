@@ -12,11 +12,21 @@
                 @endif
                 @if (auth()->user()->role && in_array('viewOnGoing', auth()->user()->role->permissions->pluck('name')->toArray()))
                     <li class="nav-item">
-                        <a class="nav-link" href="{{ route('ongoing.index') }}" aria-bs-expanded="true"
-                            aria-bs-controls="collapseTwo">
-                            <i class="fa-solid fa-hourglass-half"></i>
-                            <span>On Going</span>
-                        </a>
+                        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                        aria-bs-expanded="true" aria-bs-controls="collapseOne">
+                        <i class="fa-solid fa-hourglass-half"></i>
+                        <span>On Going</span>
+                    </a>
+                    <div id="collapseOne" class="collapse" aria-labelledby="headingTwo"
+                        data-bs-parent="#accordionSidebar">
+                        <div class="bg-white py-2 collapse-inner rounded">
+                            <a class="collapse-item " href="{{ route('ongoing.index') }}">On Going</a>
+                            @if (auth()->user()->role && in_array('viewDeadline', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                <a class="collapse-item" href="{{ route('ongoingdeadline.index') }}">Deadline</a>
+                            @else
+                            @endif
+                        </div>
+                    </div>
                     </li>
                 @else
                 @endif
