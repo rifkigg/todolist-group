@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('username');
             $table->string('email')->unique();
             $table->string('password');
-            $table->foreignId('role_id')->nullable()->constrained('roles')->onDelete('set null'); // Kolom foreign key untuk role
+            $table->string('role');
             $table->rememberToken();
             $table->timestamps();
         });
