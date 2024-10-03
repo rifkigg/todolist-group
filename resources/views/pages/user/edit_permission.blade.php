@@ -137,8 +137,13 @@
 
                     <!-- Begin Page Content -->
                     <div class="container-fluid">
-                        <div class="container">
-                            <h2>Edit Permission</h2>
+                        <button onclick="window.location='{{ route('permissions.index') }}'" class="btn btn-primary w-auto mb-3"><i
+                            class="fa-solid fa-left-long"></i> Back</button>
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Edit Permission</h6>
+                            </div>
+                            <div class="card-body">
                         
                             @if ($errors->any())
                                 <div class="alert alert-danger">
@@ -154,11 +159,12 @@
                                 @csrf
                                 @method('PUT')
                                 <div class="form-group">
-                                    <label for="name">Nama Permission</label>
+                                    <label for="name">Permission Name</label>
                                     <input type="text" name="name" class="form-control" value="{{ $permission->name }}" required>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Update Permission</button>
+                                <button type="submit" class="btn btn-primary w-100">Update Permission</button>
                             </form>
+                            </div>
                         </div>
                         
                     </div>

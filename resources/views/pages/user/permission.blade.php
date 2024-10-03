@@ -187,7 +187,29 @@
                                             <td>{{ $permission->name }}</td>
                                             <td>
                                                 <a href="{{ route('permissions.edit', $permission->id) }}" class="btn btn-warning btn-sm"> <i class="fa-solid fa-pen-to-square"></i></a>
-                        
+
+                                                <div class="modal fade" id="addPermissionModal" tabindex="-1" role="dialog" aria-labelledby="addPermissionModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="addPermissionModalLabel">Add Permission</h5>
+                                                                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                                                                    <span aria-hidden="true">×</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form action="{{ route('permissions.store') }}" method="POST">
+                                                                    @csrf
+                                                                    <div class="form-group">
+                                                                        <label for="name">Permission Name</label>
+                                                                        <input type="text" name="name" class="form-control" placeholder="Enter permission name" required>
+                                                                    </div>
+                                                                    <button type="submit" class="btn btn-primary w-100">Add Permission</button>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <form action="{{ route('permissions.destroy', $permission->id) }}" method="POST" style="display:inline-block;">
                                                     @csrf
                                                     @method('DELETE')

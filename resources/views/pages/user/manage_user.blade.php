@@ -231,7 +231,7 @@
                                                                         <option value="" selected disabled>Choose
                                                                             Role:</option>
                                                                             @foreach ($roles as $role) {{-- Menggunakan $roles untuk menampilkan semua role --}}
-                                                                            <option value="{{ $role->id }}">{{ $role->name }} {{ $role->id }}</option>
+                                                                            <option value="{{ $role->id }}">{{ $role->name }}</option>
                                                                         @endforeach
                                                                     </select>
                                                                 </div>
