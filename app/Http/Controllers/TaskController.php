@@ -284,18 +284,29 @@ class TaskController extends Controller
         $taskName = $request->input('task_name');
         $task = Task::where('name', $taskName)->first();
 
-        // Pause all other tasks and save their time
-        $playingTasks = app(TaskController::class)->getTasksByUser(Auth::id());
-        // app(TaskController::class)->getTasksByUser(auth()->id());
-        // Task::where('timer_status', 'Playing')->get();
+        // Pastikan task ditemukan
+        if (!$task) {
+            return redirect()->back()->with('error', 'Task tidak ditemukan.');
+        }
+
+        // Ambil semua pengguna yang ditugaskan ke task ini
+        $assignedUsers = $task->users()->pluck('user_id'); // Ambil nama pengguna yang ditugaskan
+        // dd($assignedUsers);
+        // Cek apakah ada task lain yang ditugaskan kepada pengguna yang sama
+        $playingTasks = app(TaskController::class)->getTasksByUser($assignedUsers);
+        
         foreach ($playingTasks as $playingTask) {
-            // Simpan waktu total sebelum dipause
-            History::create([
-                'task_name' => $playingTask->name,
-                'paused' => now(),
-            ]);
-            $playingTask->timer_status = 'Paused';
-            $playingTask->save();
+            // Jika task yang sedang dimainkan memiliki assignees yang sama, pause task tersebut
+            // dd($playingTask->users()->pluck('username'));
+            if ($playingTask->users()->pluck('id') == $assignedUsers) {
+                // Simpan waktu total sebelum dipause hanya untuk task yang sesuai
+                History::create([
+                    'task_name' => $playingTask->name,
+                    'paused' => now(),
+                ]);
+                $playingTask->timer_status = 'Paused';
+                $playingTask->save();
+            }
         }
 
         $task->timer_status = 'Playing';

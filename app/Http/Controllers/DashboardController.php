@@ -42,16 +42,19 @@ class DashboardController extends Controller
     $users = User::all();
 
     $user = Auth::user();
-    
-    if ($user->role->name == 'admin') {
+    // dd($user->role->permissions->pluck('name')->toArray());
+    if ($user->role->permissions->pluck('name')->contains('viewAllTask')) {
         // Ambil semua tugas jika pengguna adalah admin
         $tasks = Task::with(['users', 'project', 'priority'])->get();
-    } else {
-        // Ambil tasks yang ditugaskan ke user yang sedang login
+    } else if ($user->role->permissions->pluck('name')->contains('viewTaskPerUser')) {
+        // Ambil tasks yang ditugaskan ke user yang sedang login       
         $tasks = $this->getTasksByUser($user->id)
             ->sortBy(function ($task) {
                 return Carbon::parse($task->due_date);
             });
+    } else {
+        // Jika tidak memiliki permission, kembalikan array kosong atau tangani sesuai kebutuhan
+        $tasks = collect(); // Mengembalikan koleksi kosong
     }
 
     $projects = app(ProjectController::class)->getProjectByUser($user->id);

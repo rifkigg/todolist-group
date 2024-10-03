@@ -230,7 +230,7 @@
                                         </div>
                                     </div>
                                 @endif
-                                @if (auth()->user()->role->name == 'admin' && in_array('viewAllTask', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                @if (auth()->user()->role && in_array('viewAllTask', auth()->user()->role->permissions->pluck('name')->toArray()))
                                 <table id="example" class="table table-striped">
                                     <thead>
                                         <tr>
@@ -304,7 +304,7 @@
                                                                     $isPlaying = $task->isPlaying;
                                                                     $isFinished = $task->status == 'finished';
                                                                 @endphp
-                                                                 @if (auth()->user()->role && in_array('startTask', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                                                @if (auth()->user()->role && in_array('startTask', auth()->user()->role->permissions->pluck('name')->toArray()))
                                                                 <li>
                                                                     <form action="{{ route('history.start') }}"
                                                                         method="POST"
@@ -789,8 +789,9 @@
 
                                 </tbody>
                             </table>
+                                @endif
                                 </table>
-                                @elseif (auth()->user()->role && in_array('viewTaskPerUser', auth()->user()->role->permissions->pluck('name')->toArray()))
+                                @if (auth()->user()->role && in_array('viewTaskPerUser', auth()->user()->role->permissions->pluck('name')->toArray()))
                                 <table id="example" class="table table-striped">
                                     <thead>
                                         <tr>
