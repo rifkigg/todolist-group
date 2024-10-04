@@ -11,10 +11,12 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('role'); // Hapus kolom 'role' terlebih dahulu
-            $table->foreignId('role_id')->nullable()->constrained('roles')->onDelete('set null'); // Tambahkan kolom 'role_id'
-        });
+        if (Schema::hasTable('users')) { // Cek apakah tabel 'users' ada
+            Schema::table('users', function (Blueprint $table) {
+                $table->dropColumn('role'); // Hapus kolom 'role' terlebih dahulu
+                $table->foreignId('role_id')->nullable()->constrained('roles')->onDelete('set null'); // Tambahkan kolom 'role_id'
+            });
+        }
     }
 
     /**
@@ -22,10 +24,12 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('role'); // Kembalikan kolom 'role'
-            $table->dropForeign(['role_id']); // Hapus foreign key jika ada
-            $table->dropColumn('role_id'); // Hapus kolom 'role_id'
-        });
+        if (Schema::hasTable('users')) { // Cek apakah tabel 'users' ada
+            Schema::table('users', function (Blueprint $table) {
+                $table->string('role'); // Kembalikan kolom 'role'
+                $table->dropForeign(['role_id']); // Hapus foreign key jika ada
+                $table->dropColumn('role_id'); // Hapus kolom 'role_id'
+            });
+        }
     }
 };
